@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block head_title %}Signup | {{ block.super }}{% endblock head_title %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="form">
+        <h2>Signup</h2>
+        <h3>{% if messages %}{% for m in messages %}{{ m }}{% endfor %}</h3>
+            <a href="{% url 'account:login' %}"> Go to Login Page</a><br><br>
+        {% endif %}
+        <form method="post" action="">{% csrf_token %}
+            {{ form.username }}
+            {{ form.username.errors }}
+            {{ form.first_name }}
+            {{ form.last_name }}
+            {{ form.email }}
+            {{ form.email.errors }}
+            {{ form.password }}
+            {{ form.password.errors }}
+            <ul>
+                <li>Your password must contain at least 8 characters.</li>
+                <li>Your password can&#39;t be a commonly used password.</li>
+                <li>Your password can&#39;t be entirely numeric.</li>
+                <li>Your password can&#39;t be too similar to your other personal information.</li>
+            </ul>
+            {{ form.confirm_password }}
+            {{ form.confirm_password.errors }}
+            <button type="submit">Signup</button>
+            <a href="{% url 'account:login' %}">Login</a>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="google-site-verification" content="eUL6D1CAMZ0aqHV1YfHCPV63d12U9iwq7RltC6M2BX4"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>{% block head_title %}Codebytes{% endblock head_title %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'index.css' %}">
+    {% block css %}{% endblock css %}
+</head>
+<body>
+<header>
+    <div class="frame_001">
+        <div class="frame_002">
+            <a href="{% url 'home' %}"><h1></h1>
+                <h3></h3></a>
+        </div>
+        <div class="frame_003">
+            <ul>
+                {% if user.is_authenticated %}
+                    <li>Welcome <font color="#1581C5">{{ user.first_name }}</font></li>
+                {% endif %}
+                <li><a href="{% url 'home' %}">Home</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'account:profile' %}">Profile</a></li>
+                    <li><a href="mailto:pranjal0819@gmail.com">Contact Us</a></li>
+                    <li><a href="{% url 'account:logout' %}" style="color: red">Logout</a></li>
+                {% else %}
+                    <li><a href="mailto:pranjal0819@gmail.com">Contact Us</a></li>
+                    <li><a href="{% url 'account:login' %}">Login</a>/<a href="{% url 'account:signup' %}">Signup</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</header>
+<div class="frame_topic" style="clear:both;">
+    <!-- - - - - - - - - - START - - - - - - - - - - - - -->
+    {% block content %}{% endblock content %}
+    <!-- - - - - - - - - - - END - - - - - - - - - - - -->
+</div>
+<!--<footer style="clear:both;">
+	<div class="frame_104">
+		<div class="frame_105">
+			<div class="frame_101">
+				<a href="{% url 'home' %}"><h1>CodeBytes</h1><h3>Intresting Facts</h3></a>
+			</div>
+			<div class="frame_102">
+				<ul>
+					<li>Contact Us:<a href="mailto:pranjal0819@gmail.com"><font color="#1581C5">pranjal0819@gmail.com</font></a></li><br>
+				</ul>
+			</div>
+		</div>
+		<div class="frame_103">
+			<ul>
+				<li><a href="">About Us</a></li><br>
+				<li><a href="{% url 'feedback' %}">Feedback</a></li><br>
+				<li><a href="mailto:pranjal0819@gmail.com">Contact Us</a></li><br>
+				<li><a href="">Codebytes Team</a></li><br>
+				<li><a href="">Privacy Policy</a></li><br>
+			</ul>
+		</div>
+	</div>
+	<small>&copy; 2018 Codebytes</small>
+	</footer>-->
+</body>
+</html>

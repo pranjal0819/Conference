@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block head_title %}View Paper | {{ block.super }}{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style1.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="frame_artical">
+        <h3>Welcome {{ user.first_name }}</h3>
+        {% if user.is_staff %}<h3>You login as a Staff</h3>{% endif %}
+        <a href="{% url 'conference:welcome' %}">Conference Page</a><br>
+        <a href="{% url 'conference:submit_paper' %}">Submit Paper</a><br><br>
+
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi architecto at commodi eaque illo, ipsum iure
+        nesciunt numquam odio officiis possimus praesentium quisquam repellat repudiandae, saepe sequi ullam, ut
+        voluptate!<br>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores corporis culpa fugiat harum iusto labore
+        necessitatibus porro sequi veritatis! Adipisci aliquid itaque necessitatibus voluptate. Aut debitis error et
+        veritatis voluptate.
+
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at convallis ante. Morbi pulvinar neque sit amet
+        ligula tempus, eget euismod mi sagittis. Donec blandit tempor ante, vitae tristique nulla varius vel. Proin
+        volutpat consequat tortor eu vulputate. Sed eu mauris sit amet sem consequat egestas. Nunc lobortis sagittis
+        pretium. Etiam quis gravida risus.
+
+        Mauris id dui mauris. Nam sollicitudin mattis vulputate. Aliquam mollis ullamcorper laoreet. Aliquam luctus nisi
+        blandit, tincidunt magna at, tristique magna. In varius eros sed tincidunt egestas. Quisque eu nunc in metus
+        iaculis sollicitudin ut eu ante. Donec non dapibus diam.
+
+        Cras rutrum id nunc vel suscipit. Quisque varius tincidunt pulvinar. In egestas, dolor vel placerat malesuada,
+        massa tortor efficitur purus, sit amet faucibus nisi sapien vitae lorem. In fermentum arcu euismod, bibendum leo
+        sit amet, placerat justo. Maecenas sit amet tristique ipsum. Curabitur malesuada nisi nulla, eget imperdiet nisl
+        porttitor non. Vivamus at massa in nunc pharetra interdum. Curabitur sollicitudin libero imperdiet ligula
+        aliquam pretium. Cras mattis auctor est. In hac habitasse platea dictumst.
+
+        Donec porttitor lorem purus, et laoreet nibh tristique quis. Curabitur non viverra turpis. Duis tristique quis
+        orci at malesuada. Duis dignissim quis odio at sagittis. Cras vulputate nisl sit amet mattis euismod. Aenean
+        quis felis quis ex interdum aliquam. Curabitur dapibus mi pellentesque metus venenatis iaculis. Aenean auctor
+        orci nec mauris vulputate, id consectetur neque efficitur. Vivamus pharetra ut dolor in feugiat. In feugiat
+        dignissim elit quis ultricies.
+
+        {% if messages %}
+            {% for m in messages %}{{ m }}<br>{% endfor %}
+        {% else %}
+            <h1><b>List of Paper</b></h1>
+        {% endif %}
+        <div class="table-users">
+            <div class="header">
+                <ul>
+                    <li style="display: inline;">List of Paper</li>
+                    <li style="display: inline; float: right;"><input type="text" id="search" onkeyup="myFunction()"
+                                                                      placeholder="Search for title.."
+                                                                      title="Type in a name"></li>
+                </ul>
+            </div>
+            <table cellspacing="0" id="myTable">
+                <tr>
+                    <th>#</th>
+                    <th width="15%">Author Name</th>
+                    <th width="25%">Title</th>
+                    <th width="15%">Category</th>
+                    <th>Detail</th>
+                    <th>Download</th>
+                    {% if user.is_staff %}
+                        <th>
+                            <small>Assignment</small>
+                        </th>
+                        <th>
+                            <small>Update</small>
+                        </th>
+                    {% endif %}
+                    <th>Status</th>
+                    <th>Time</th>
+                </tr>
+                {% for list in paperlist %}
+                    <tr>
+                        <td>{{ list.id }}</td>
+                        <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
+                        <td>{{ list.title }}</td>
+                        <td>{{ list.keywords }}</td>
+                        <td><a href="{% url 'conference:view_detail' pk=list.pk %}">View Detatil</a></td>
+                        <td><a href="/media/{{ list.file }}" target="_blank">Download</a></td>
+                        {% if user.is_staff %}
+                            <td><a href="{% url 'conference:select_user' pk=list.pk %}">Ass</a></td>
+                            <td>update</td>
+                        {% endif %}
+                        <td>{% if list.status %}Accepted
+                        {% else %}Not Accepted
+                        {% endif %}</td>
+                        <td>{{ list.timestamp }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <script>
+            function myFunction() {
+                var input, filter, table, tr, td, i;
+                input = document.getElementById("search");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("myTable");
+                tr = table.getElementsByTagName("tr");
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[2];
+                    if (td) {
+                        if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+        </script>
+
+    </div>
+{% endblock %}

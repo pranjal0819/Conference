@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+List of paper<br>
+{% for l in list %}
+    <a href="{% url 'conference:review_paper' pk=l.id %}">{{ l.paper.title }}</a><br>
+{% endfor %}
+
+</body>
+</html>

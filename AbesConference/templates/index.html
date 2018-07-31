@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block head_title %}Home | {{ block.super }}{% endblock head_title %}
+
+{% block content %}
+    <div class="frame_artical" style="order: 1;">
+        <a href="{% url 'conference:welcome' %}">Conference Page</a>
+        <br>
+        <a href="{% url 'pages:email' %}">Email</a>
+    </div>
+    <!--<div class="frame_artical" style="order: 3;">
+        <small>Initiant Deletion for Windows</small>
+        <h3>Now you can <span style="font-size:22px;">Delete</span> Any File or Folder in second</h3>
+        <p>This app is designed to delete large files and empty folders in seconds. If you have removed, you can’t back up any folders or files at any time.<br>
+        Antivirus can’t recognize this application as harmful software
+        </p>
+        <a href="#">Download Zip File</a><br>
+        <a href="#"></a>Download Source Code
+    </div>-->
+    <div class="frame_artical" style="order: 2;">
+        <small>Interesting Article in C</small>
+        <h3><a href="{% url 'pages:spreadingnumber' %}">Spread the Digit from a Number without using any Arithmetic
+            Operator or String</a></h3>
+        <p>Spread out all of the digits from the given number, without using any Arithmetic Operator or String.<b>
+            Example:</b> Take the number <i>123456</i> and it became <i>1, 2, 3, 4, 5 and 6.</i><br>
+            <a href="{% url 'pages:spreadingnumber' %}">Read more...</a></p>
+    </div>
+    <div class="frame_artical" style="order: 4;">
+        <small>Interesting Article</small>
+        <h3><a href="#"></a>Complexity Between Square Root, Multiplication and Division</a></h3>
+    </div>
+{% endblock %}
