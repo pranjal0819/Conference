@@ -4,21 +4,21 @@
 {% block head_title %}Login | {{ block.super }}{% endblock head_title %}
 
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 {% endblock %}
 
 {% block content %}
-    <div class="form">
-        <h2>Login To Your Account</h2>{% if request.GET.next %}<h2>Required</h2>{% endif %}
-        <h3>{% if messages %}{% for m in messages %}{{ m }}{% endfor %}{% endif %}</h3>
-        <form method="post" action="">{% csrf_token %}
-            <input type="text" name="user" placeholder="Username"></input>
-            <input type="password" name="pass" placeholder="Password"></input>
-            {% if request.GET.next %}
-                <input type="hidden" name="next" value="{{ request.GET.next }}">
-            {% endif %}
-            <button type="submit">Login</button>
-            <a href="{% url 'account:signup' %}">Signup</a>
-        </form>
-    </div>
+<div class="form">
+    <h2>Login To Your Account</h2>{% if request.GET.next %}<h2>Required</h2>{% endif %}
+    <h3>{% if messages %}{% for m in messages %}{{ m }}{% endfor %}{% endif %}</h3>
+    <form method="post" action="">{% csrf_token %}
+        <input type="text" name="user" placeholder="Username"></input>
+        <input type="password" name="pass" placeholder="Password"></input>
+        {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+        {% endif %}
+        <button type="submit">Login</button>
+        <a href="{% url 'account:signup' %}">Signup</a>
+    </form>
+</div>
 {% endblock %}

@@ -6,7 +6,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -48,8 +47,11 @@ class Migration(migrations.Migration):
                 ('overallEvaluation', models.TextField()),
                 ('point', models.IntegerField()),
                 ('remark', models.CharField(max_length=100)),
-                ('paper', models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, related_name='paper', to='conference.PaperRecord')),
-                ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, related_name='user', to=settings.AUTH_USER_MODEL)),
+                ('paper',
+                 models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, related_name='paper',
+                                   to='conference.PaperRecord')),
+                ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, related_name='user',
+                                           to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]
