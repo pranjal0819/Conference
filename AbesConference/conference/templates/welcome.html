@@ -6,17 +6,54 @@
 {% endblock %}
 
 {% block content %}
-<div class="frame_artical">
-    <h3>Welcome {{ user.first_name }}</h3>
-    {% if user.is_staff %}<h3>You login as a Staff</h3>{% endif %}
-    <a href="{% url 'conference:view_all_paper' %}">View Paper</a><br>
-    {% if user.is_authenticated %}
-    <a href="{% url 'conference:submit_paper' %}">Submit Paper</a>
-    <a href="{% url 'conference:review_list' %}">Review List</a>
-    {% endif %}<br>
-    {% if messages %}
-    {% for m in messages %}{{ m }}<br>{% endfor %}
-    {% endif %}
-
+<div id="main" class="wrapper inner">
+    <div class="content" style="text-align: center;">
+        <h1>Welcome to 5th CICT 2019 </h1>
+        <h2>(Sponsored by IEEE-UP Section)</h2>
+        <p>The International Conference on Computational intelligence and communication technology (CICT-2019) is
+            organized to address various issues to prosper the creation of intelligent solutions in future. The aim
+            is to bring together worldwide leading researchers, developers, practitioners and educators interested
+            in advancing the state of the art in computational intelligence and communication technology for
+            exchanging knowledge that encompasses a broad range of disciplines among various distinct communities.
+            It is expected that researchers will bring new prospect for collaboration across disciplines and gain
+            idea facilitating novel breakthrough. The theme for this conference is innovating and inspiring the
+            researchers to adopt the outcome for implementation. The conference will provide an exceptional platform
+            to the researchers to meet and discuss the utmost solutions, scientific results and methods in solving
+            intriguing problems with people that actively involved in these evergreen fields. The 2-day conference
+            commencing on 08-09th Feb, 2019, will feature prominent keynote speakers, tutorials and paper
+            presentation in parallel sessions. CICT 2019 will no doubt be proven to be exciting and educative.</p>
+    </div>
+    <div class="highlights">
+        <section>
+            <div class="content">
+                <header>
+                    <a href="{% url 'conference:view_all_paper' %}" class="icon fa-floppy-o"><span
+                            class="label">Icon</span>
+                        <h3>List of Submitted Paper</h3></a>
+                </header>
+                <p> All the papers must be submitted through on-line paper submission process only.</p>
+            </div>
+        </section>
+        <section>
+            <div class="content">
+                <header>
+                    <a href="{% url 'conference:submit_paper' %}" class="icon fa-floppy-o"><span
+                            class="label">Icon</span>
+                        <h3>Submit Paper</h3></a>
+                </header>
+                <p> All the papers must be submitted through on-line paper submission process only.</p>
+            </div>
+        </section>
+        <section>
+            <div class="content">
+                <header>
+                    <a href="{% url 'conference:review_list' %}" class="icon fa-floppy-o"><span
+                            class="label">Icon</span>
+                        <h3>Review List</h3></a>
+                </header>
+                <p> All the papers must be submitted through on-line paper submission process only.</p>
+            </div>
+        </section>
+    </div>
 </div>
 {% endblock %}
