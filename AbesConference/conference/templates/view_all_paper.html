@@ -18,52 +18,51 @@
                 <input type="text" id="search" onkeyup="myFunction()"
                        placeholder="Search for title.." title="Type in a name"></div>
         </div>
-        <div class="table-wrapper">
-            <table class="alt" id="myTable">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th width="15%">Author Name</th>
-                    <th width="25%">Title</th>
-                    <th width="10%">Category</th>
-                    <th>Detail</th>
-                    <th>Download</th>
-                    {% if user.is_staff %}
-                    <th>
-                        <small>Assignment</small>
-                    </th>
-                    <th>
-                        <small>Update</small>
-                    </th>
+        <table class="alt table-wrapper" id="myTable">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th width="15%">Author Name</th>
+                <th width="25%">Title</th>
+                <th width="10%">Category</th>
+                <th>Detail</th>
+                <th>Download</th>
+                {% if user.is_staff %}
+                <th>
+                    <small>Assignment</small>
+                </th>
+                <th>
+                    <small>Update</small>
+                </th>
+                {% endif %}
+                <th>Status</th>
+                <th>Submitted Time</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for list in paperlist %}
+            <tr>
+                <td>{{ list.id }}</td>
+                <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
+                <td>{{ list.title }}</td>
+                <td>{{ list.keywords }}</td>
+                <td><a href="{% url 'conference:view_detail' pk=list.pk %}">View Detatil</a></td>
+                <td><a href="/media/{{ list.file }}" target="_blank">Download</a></td>
+                {% if user.is_staff %}
+                <td><a href="{% url 'conference:select_user' pk=list.pk %}">Ass</a></td>
+                <td>update</td>
+                {% endif %}
+                <td>{% if list.status %}<span style="color: green">Accepted</span>{% else %}<span style="color: red">Not Accepted</span>
                     {% endif %}
-                    <th>Status</th>
-                    <th>Submitted Time</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for list in paperlist %}
-                <tr>
-                    <td>{{ list.id }}</td>
-                    <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
-                    <td>{{ list.title }}</td>
-                    <td>{{ list.keywords }}</td>
-                    <td><a href="{% url 'conference:view_detail' pk=list.pk %}">View Detatil</a></td>
-                    <td><a href="/media/{{ list.file }}" target="_blank">Download</a></td>
-                    {% if user.is_staff %}
-                    <td><a href="{% url 'conference:select_user' pk=list.pk %}">Ass</a></td>
-                    <td>update</td>
-                    {% endif %}
-                    <td>{% if list.status %}Accepted
-                        {% else %}Not Accepted
-                        {% endif %}
-                    </td>
-                    <td>{{ list.timestamp }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                </td>
+                <td>{{ list.timestamp }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
         {% endif %}
+        <a href="{% url 'conference:welcome' %}" class="button primary">Back to Home Page</a>
     </div>
 </div>
 <script>
