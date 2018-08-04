@@ -7,20 +7,20 @@
 {% endblock %}
 
 {% block content %}
-	<div class="frame_artical">
-		<h3>Welcome {{ user.first_name }}</h3>
-		{% if user.is_staff %}<h3>You login as a Staff</h3>{% endif %}
-		<a href="{% url 'conference:welcome' %}">Conference Page</a><br>
-		<a href="{% url 'conference:view_all_paper' %}">View All Paper</a><br>
-		<a href="{% url 'conference:submit_paper' %}">Submit Paper</a><br>
-		{% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
-		{{ record.paper.title }}<br>
-		{{ record.paper.abstract }}<br><br>
-		<form action="" method="post">{% csrf_token %}
-			{{ form.overallEvaluation }}<br>
-			{{ form.point }}<br>
-			{{ form.remark }}<br>
-			<button type="submit">Save</button>
-		</form>
-	</div>
+    <div class="frame_artical">
+        <h3>Welcome {{ user.first_name }}</h3>
+        {% if user.is_staff %}<h3>You login as a Staff</h3>{% endif %}
+        <a href="{% url 'conference:welcome' %}">Conference Page</a><br>
+        <a href="{% url 'conference:view_all_paper' %}">View All Paper</a><br>
+        <a href="{% url 'conference:submit_paper' %}">Submit Paper</a><br>
+        {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
+        {{ record.paper.title }}<br>
+        {{ record.paper.abstract }}<br><br>
+        <form action="" method="post">{% csrf_token %}
+            {{ form.overallEvaluation }}<br>
+            {{ form.point }}<br>
+            {{ form.remark }}<br>
+            <button type="submit">Save</button>
+        </form>
+    </div>
 {% endblock %}

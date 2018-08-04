@@ -3,62 +3,62 @@
 {% block head_title %}Submit Paper | {{ block.super }}{% endblock %}
 
 {% block css %}
-	<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 {% endblock %}
 
 {% block content %}
-	<div id="main" class="wrapper inner">
-		<div class="content">
-			<h2>Welcome {{ user.first_name }}</h2>
-			{% if user.is_staff %}<h3>You login as a Chairperson</h3>{% endif %}
-			{% if messages %}
-				{% for m in messages %}{{ m }}<br>{% endfor %}
-			{% endif %}
-			<h2>Submit Author Information</h2>
-			<form enctype="multipart/form-data" action="" method="post" class="highlights">{% csrf_token %}
-				<section>
-					<h2>Author 1*</h2>
-					<input type="text" name="name1" placeholder="Full Name*" required="True" maxlength="50"></input><br>
-					<input type="email" name="email1" placeholder="Email*" required="True" maxlength="50"
-					       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"></input><br>
-					<input type="text" name="mobile1" placeholder="Mobile Number*" maxlength="10"
-					       required="True"></input><br>
-					<input type="text" name="country1" placeholder="Country*" maxlength="50"
-					       required="True"></input><br>
-					<input type="text" name="org1" placeholder="Organization*" maxlength="100"
-					       required="True"></input><br>
-					<input type="url" name="url1" placeholder="http://example.com/" maxlength="50"></input><br>
-				</section>
-				<section>
-					<h2>Author 2</h2>
-					<input type="text" name="name2" placeholder="Full Name" maxlength="50"></input><br>
-					<input type="email" name="email2" placeholder="Email" maxlength="50"
-					       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"></input><br>
-					<input type="text" name="mobile2" placeholder="Mobile Number" maxlength="10"></input><br>
-					<input type="text" name="country2" placeholder="Country" maxlength="50"></input><br>
-					<input type="text" name="org2" placeholder="Organization" maxlength="100"></input><br>
-					<input type="url" name="url2" placeholder="http://example.com/" maxlength="50"></input><br>
-				</section>
-				<section style="padding: 0 0 22px 22px;">
-					<h2>Author 3</h2>
-					<input type="text" name="name3" placeholder="Full Name" maxlength="50"></input><br>
-					<input type="email" name="email3" placeholder="Email" maxlength="50"
-					       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"></input><br>
-					<input type="text" name="mobile3" placeholder="Mobile Number" maxlength="10"></input><br>
-					<input type="text" name="country3" placeholder="Country" maxlength="50"></input><br>
-					<input type="text" name="org3" placeholder="Organization" maxlength="100"></input><br>
-					<input type="url" name="url3" placeholder="http://example.com/" maxlength="50"></input><br>
-				</section>
-				<div style="width: 85%; margin: 0; padding: 10px; ">
-					<h2>Upload File*</h2>
-					{{ paperform.title }}<br>
-					{{ paperform.keywords }}<br>
-					{{ paperform.abstract }}<br>
-					{{ paperform.file }}<br><br>
-					<button type="submit" class="primary wide">Submit</button>
-					<button type="reset">Reset</button>
-				</div>
-			</form>
-		</div>
-	</div>
+    <div id="main" class="wrapper inner">
+        <div class="content">
+            <h2>Welcome {{ user.first_name }}</h2>
+            {% if user.is_staff %}<h3>You login as a Chairperson</h3>{% endif %}
+            {% if messages %}
+                {% for m in messages %}{{ m }}<br>{% endfor %}
+            {% endif %}
+            <h2>Submit Author Information</h2>
+            <form enctype="multipart/form-data" action="" method="post" class="highlights">{% csrf_token %}
+                <section>
+                    <h2>Author 1*</h2>
+                    <input type="text" name="name1" placeholder="Full Name*" required="True" maxlength="50"></input><br>
+                    <input type="email" name="email1" placeholder="Email*" required="True" maxlength="50"
+                           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"></input><br>
+                    <input type="text" name="mobile1" placeholder="Mobile Number*" maxlength="10"
+                           required="True"></input><br>
+                    <input type="text" name="country1" placeholder="Country*" maxlength="50"
+                           required="True"></input><br>
+                    <input type="text" name="org1" placeholder="Organization*" maxlength="100"
+                           required="True"></input><br>
+                    <input type="url" name="url1" placeholder="http://example.com/" maxlength="50"></input><br>
+                </section>
+                <section>
+                    <h2>Author 2</h2>
+                    <input type="text" name="name2" placeholder="Full Name" maxlength="50"></input><br>
+                    <input type="email" name="email2" placeholder="Email" maxlength="50"
+                           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"></input><br>
+                    <input type="text" name="mobile2" placeholder="Mobile Number" maxlength="10"></input><br>
+                    <input type="text" name="country2" placeholder="Country" maxlength="50"></input><br>
+                    <input type="text" name="org2" placeholder="Organization" maxlength="100"></input><br>
+                    <input type="url" name="url2" placeholder="http://example.com/" maxlength="50"></input><br>
+                </section>
+                <section style="padding: 0 0 22px 22px;">
+                    <h2>Author 3</h2>
+                    <input type="text" name="name3" placeholder="Full Name" maxlength="50"></input><br>
+                    <input type="email" name="email3" placeholder="Email" maxlength="50"
+                           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"></input><br>
+                    <input type="text" name="mobile3" placeholder="Mobile Number" maxlength="10"></input><br>
+                    <input type="text" name="country3" placeholder="Country" maxlength="50"></input><br>
+                    <input type="text" name="org3" placeholder="Organization" maxlength="100"></input><br>
+                    <input type="url" name="url3" placeholder="http://example.com/" maxlength="50"></input><br>
+                </section>
+                <div style="width: 85%; margin: 0; padding: 10px; ">
+                    <h2>Upload File*</h2>
+                    {{ paperform.title }}<br>
+                    {{ paperform.keywords }}<br>
+                    {{ paperform.abstract }}<br>
+                    {{ paperform.file }}<br><br>
+                    <button type="submit" class="primary wide">Submit</button>
+                    <button type="reset">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}
