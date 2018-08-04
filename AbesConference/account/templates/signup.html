@@ -4,49 +4,49 @@
 {% block head_title %}Signup | {{ block.super }}{% endblock head_title %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 {% endblock %}
 
 {% block content %}
-<!-- Heading -->
-<div id="heading">
-    <h1>5TH INTERNATIONAL CONFERENCE ON CICT 2019</h1>
-</div>
+	<!-- Heading -->
+	<div id="heading">
+		<h1>5TH INTERNATIONAL CONFERENCE ON CICT 2019</h1>
+	</div>
 
-<!-- Main -->
-<div class="inner">
-    <br>
-    <div class="form" style="margin: auto;">
-        <section>
-            <div class="content">
-                <h2>Create a Account</h2>
-                <h3>{% if messages %}{% for m in messages %}{{ m }}{% endfor %}
-                <a href="{% url 'account:login' %}"> Go to Login Page</a></h3>{% endif %}
-                <form method="post" action="" style="text-align: left;">{% csrf_token %}
-                    {{ form.username }}
-                    {{ form.username.errors }}<br>
-                    {{ form.first_name }}<br>
-                    {{ form.last_name }}<br>
-                    {{ form.email }}
-                    {{ form.email.errors }}<br>
-                    {{ form.password }}
-                    {{ form.password.errors }}<br>
-                    <ul>
-                        <li>Your password must contain at least 8 characters.</li>
-                        <li>Your password can&#39;t be a commonly used password.</li>
-                        <li>Your password can&#39;t be entirely numeric.</li>
-                        <li>Your password can&#39;t be too similar to your other personal information.</li>
-                    </ul>
-                    {{ form.confirm_password }}
-                    {{ form.confirm_password.errors }}<br>
-                    <button type="submit" class="primary button fit">Signup</button>
-                    <br><br>
-                    <a href="{% url 'account:login' %}" class="button fit">Login</a>
-                </form>
-            </div>
-        </section>
-    </div>
-    <br>
-</div>
+	<!-- Main -->
+	<div class="inner">
+		<br>
+		<div class="form" style="margin: auto;">
+			<section>
+				<div class="content">
+					<h2>Create a Account</h2>
+					<h3>{% if messages %}{% for m in messages %}{{ m }}{% endfor %}
+						<a href="{% url 'account:login' %}"> Go to Login Page</a></h3>{% endif %}
+					<form method="post" action="" style="text-align: left;">{% csrf_token %}
+						{{ form.username }}
+						{{ form.username.errors }}<br>
+						{{ form.first_name }}<br>
+						{{ form.last_name }}<br>
+						{{ form.email }}
+						{{ form.email.errors }}<br>
+						{{ form.password }}
+						{{ form.password.errors }}<br>
+						<ul>
+							<li>Your password must contain at least 8 characters.</li>
+							<li>Your password can&#39;t be a commonly used password.</li>
+							<li>Your password can&#39;t be entirely numeric.</li>
+							<li>Your password can&#39;t be too similar to your other personal information.</li>
+						</ul>
+						{{ form.confirm_password }}
+						{{ form.confirm_password.errors }}<br>
+						<button type="submit" class="primary button fit">Signup</button>
+						<br><br>
+						<a href="{% url 'account:login' %}" class="button fit">Login</a>
+					</form>
+				</div>
+			</section>
+		</div>
+		<br>
+	</div>
 
 {% endblock %}

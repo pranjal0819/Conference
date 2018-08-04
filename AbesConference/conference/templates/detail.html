@@ -7,64 +7,67 @@
 {% endblock %}
 
 {% block content %}
-<div id="main" class="wrapper inner">
-    <div class="content">
-        <h2>Welcome {{ user.first_name }}</h2>
-        {% if user.is_staff %}<h3>You login as a Chairperson</h3>{% endif %}
-        {% if messages %}
-        {% for m in messages %}{{ m }}<br>{% endfor %}
-        {% endif %}
-        {% if record is not None %}
-        <h2>Detail Of Paper</h2>
-        <dl>
-            <dt>Title</dt>
-            <dd>
-                <blockquote>{{ record.title }}</blockquote>
-            </dd>
-            <dt>Keywords</dt>
-            <dd>
-                <blockquote>{{ record.keywords }}</blockquote>
-            </dd>
-            <dt>Abstract</dt>
-            <dd>
-                <blockquote>{{ record.abstract }}</blockquote>
-            </dd>
-            Status: {% if record.status %}<span style="color: green">Accepted</span>{% else %}
-            <span style="color: red">Not Accepted</span>
-            {% endif %}<br><br>
-            <a href="/media/{{ record.file }}" target="_blank" class="button primary">View Paper</a><br>
-        </dl>
-        <br>
-        <div class="table-wrapper">
-            <table class="alt" id="myTable">
-                <h2>Author Detail</h2>
-                <thead>
-                <tr>
-                    <th>Author Name</th>
-                    <th>Email</th>
-                    <th>Mobile Number</th>
-                    <th>Organization</th>
-                    <th>Country</th>
-                    <th>Url</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for name in authorlist %}
-                <tr>
-                    <td>{{ name.name }}</td>
-                    <td>{{ name.email }}</td>
-                    <td>{{ name.mobileNumber }}</td>
-                    <td>{{ name.organization }}</td>
-                    <td>{{ name.country }}</td>
-                    <td><a href="{{ name.webpage }}" target="_blank">{{ name.webpage }}</a></td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <a href="{% url 'conference:delete_paper' pk=record.pk %}" class="button">Delete Paper</a>
-        {% endif %}
-        <a href="{% url 'conference:welcome' %}" class="button primary">Back to Home Page</a>
-    </div>
-</div>
+	<div id="main" class="wrapper inner">
+		<div class="content">
+			<h2>Welcome {{ user.first_name }}</h2>
+			{% if user.is_staff %}<h3>You login as a Chairperson</h3>{% endif %}
+			{% if messages %}
+				{% for m in messages %}{{ m }}<br>{% endfor %}
+			{% endif %}
+			{% if record is not None %}
+				<h2>Detail Of Paper</h2>
+				<dl>
+					<dt>Title</dt>
+					<dd>
+						<blockquote>{{ record.title }}</blockquote>
+					</dd>
+					<hr>
+					<dt>Keywords</dt>
+					<dd>
+						<blockquote>{{ record.keywords }}</blockquote>
+					</dd>
+					<h
+					<dt>Abstract</dt>
+					<dd>
+						<blockquote>{{ record.abstract }}</blockquote>
+					</dd>
+					<hr>
+					Status: {% if record.status %}<span style="color: green">Accepted</span>{% elif not true %}
+					<span style="color: #3eb1ff;">Pending</span>{% else %}<span style="color: red">Not Accepted</span>
+				{% endif %}<br><br>
+					<a href="/media/{{ record.file }}" target="_blank" class="button primary">Download Paper</a><br>
+				</dl>
+				<br>
+				<div class="table-wrapper">
+					<table class="alt" id="myTable">
+						<h2>Author Detail</h2>
+						<thead>
+						<tr>
+							<th>Author Name</th>
+							<th>Email</th>
+							<th>Mobile Number</th>
+							<th>Organization</th>
+							<th>Country</th>
+							<th>Url</th>
+						</tr>
+						</thead>
+						<tbody>
+						{% for name in authorlist %}
+							<tr>
+								<td>{{ name.name }}</td>
+								<td>{{ name.email }}</td>
+								<td>{{ name.mobileNumber }}</td>
+								<td>{{ name.organization }}</td>
+								<td>{{ name.country }}</td>
+								<td><a href="{{ name.webpage }}" target="_blank">{{ name.webpage }}</a></td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<a href="{% url 'conference:delete_paper' pk=record.pk %}" class="button">Delete Paper</a>
+			{% endif %}
+			<a href="{% url 'conference:welcome' %}" class="button primary">Back to Home Page</a>
+		</div>
+	</div>
 {% endblock %}
