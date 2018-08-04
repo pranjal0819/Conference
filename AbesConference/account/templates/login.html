@@ -1,22 +1,8 @@
-{% extends "base.html" %}
-{% load staticfiles %}
-
-{% block head_title %}Login | {{ block.super }}{% endblock head_title %}
-
-{% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-{% endblock %}
-
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}Login | {{ block.super }}{% endblock head_title %}
+{% block css %}{% endblock %}
 {% block content %}
-
-    <!-- Heading -->
-    <div id="heading">
-        <h1>5TH INTERNATIONAL CONFERENCE ON CICT 2019</h1>
-    </div>
-
-    <!-- Main -->
-    <div class="inner">
-        <br>
+    <div id="heading"><h1>5TH INTERNATIONAL CONFERENCE ON CICT 2019</h1></div>
+    <div class="inner"><br>
         <div class="form" style="margin: auto;">
             <section>
                 <div class="content">
@@ -26,16 +12,12 @@
                         <input type="text" name="user" placeholder="Username"><br>
                         <input type="password" name="pass" placeholder="Password"><br>
                         {% if request.GET.next %}
-                            <input type="hidden" name="next" value="{{ request.GET.next }}">
-                        {% endif %}
+                            <input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
                         <button type="submit" class="primary button fit">Login</button>
                         <br><br>
-                        <a href="{% url 'account:signup' %}" class="button fit">Signup</a>
-                    </form>
+                        <a href="{% url 'account:signup' %}" class="button fit">Signup</a></form>
                 </div>
             </section>
         </div>
-        <br>
-    </div>
-
+        <br></div>
 {% endblock %}
