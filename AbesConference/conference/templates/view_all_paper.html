@@ -6,15 +6,15 @@
                 <div class="row">
                     <div class="col-8 col-12-medium"><h2>List of Paper</h2></div>
                     <div class="col-4 col-12-medium"><input type="text" id="search" onkeyup="myFunction()"
-                                                            placeholder="Search for title.." title="Type in a name">
+                                                            placeholder="Search..." title="Type in a name">
                     </div>
-                </div>
+                </div><br>
                 <table class="alt table-wrapper" id="myTable">
                     <thead>
                     <tr>
                         <th>#</th>
                         <th width="15%">Author Name</th>
-                        <th width="25%">Title</th>
+                        <th width="27%">Title</th>
                         <th width="10%">Category</th>
                         <th style="font-size: 12px;">Detail</th>
                         <th style="font-size: 12px;">Download</th>
@@ -32,25 +32,24 @@
                             <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
                             <td>{{ list.title }}</td>
                             <td>{{ list.keywords }}</td>
-                            <td style="text-align: center; vertical-align: middle;"><a
-                                    href="{% url 'conference:view_detail' pk=list.pk %}"><i
-                                    class="material-icons table-icon">&#xe88f;</i></a>
+                            <td style="text-align: center; vertical-align: middle;">
+                                <a href="{% url 'conference:view_detail' pk=list.pk %}">
+                                    <i class="material-icons table-icon">&#xe88f;</i></a>
                             </td>
-                            <td style="text-align: center; vertical-align: middle;"><a href="/media/{{ list.file }}"
-                                                                                       target="_blank"><i
-                                    class="material-icons table-icon">&#xe2c0;</i></a></td>
+                            <td style="text-align: center; vertical-align: middle;">
+                                <a href="/media/{{ list.file }}" target="_blank">
+                                    <i class="material-icons table-icon">&#xe2c0;</i></a></td>
                             {% if user.is_staff %}
-                                <td style="text-align: center; vertical-align: middle;"><a
-                                        href=" {% url 'conference:select_user' pk=list.pk %}"><i
-                                        class="material-icons table-icon">&#xe7f0;</i></a></td>
-                                <td style="text-align: center; vertical-align: middle;"><a href="#"><i
-                                        class="material-icons table-icon">&#xe5d5;</i></a></td>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <a href=" {% url 'conference:select_user' pk=list.pk %}">
+                                        <i class="material-icons table-icon">&#xe7f0;</i></a></td>
+                                <td style="text-align: center; vertical-align: middle;"><a href="#">
+                                    <i class="material-icons table-icon">&#xe5d5;</i></a></td>
                             {% endif %}
                             <td style="text-align: center; vertical-align: middle;">{% if list.status %}
-                                <i class="material-icons"
-                                   style="color: green; font-size: 25px;">&#xe876;</i>{% elif not true %}
-                                <i class="material-icons"
-                                   style="color: #3eb1ff; font-size: 25px;">&#xe15b;</i>{% else %}
+                                <i class="material-icons" style="color: green; font-size: 25px;">&#xe876;</i>
+                            {% elif not list.status %}<i class="material-icons"
+                                                         style="color: #3eb1ff; font-size: 25px;">&#xe15b;</i>{% else %}
                                 <i class="material-icons" style="color: red; font-size: 25px;">&#xe5cd;</i>{% endif %}
                             </td>
                             <td>{{ list.timestamp|date:'M-d-Y' }}</td>
@@ -61,15 +60,17 @@
     </div>
     <script>
         function myFunction() {
-            var input, filter, table, tr, td, i;
+            var input, filter, table, tr, td1, td2, td3, i;
             input = document.getElementById("search");
             filter = input.value.toUpperCase();
             table = document.getElementById("myTable");
             tr = table.getElementsByTagName("tr");
             for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[2];
-                if (td) {
-                    if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                td1 = tr[i].getElementsByTagName("td")[1];
+                td2 = tr[i].getElementsByTagName("td")[2];
+                td3 = tr[i].getElementsByTagName("td")[3];
+                if (td1 || td2 || td3) {
+                    if ((td1.innerHTML.toUpperCase().indexOf(filter) > -1) || (td2.innerHTML.toUpperCase().indexOf(filter) > -1) || (td3.innerHTML.toUpperCase().indexOf(filter) > -1)) {
                         tr[i].style.display = "";
                     } else {
                         tr[i].style.display = "none";

@@ -22,10 +22,10 @@
 <!-- Header -->
 <header id="header">
     <a class="logo" href="{% url 'home' %}"><img src="{% static 'images/logo.png' %}" alt="ABES EC"
-                                                 style="width: 100px;"></a>
+                                                 style="width: 195px;"></a>
     <nav>
         {% if user.is_authenticated %}
-            <spam style="padding-right: 10px;">Welcome {{ user.first_name }}</spam>
+            <spam style="padding-right: 10px; color: #111111;">Welcome {{ user.first_name }}</spam>
         {% endif %}
         <a href="{% url 'conference:welcome' %}">Conference</a>
         {% if user.is_authenticated %}

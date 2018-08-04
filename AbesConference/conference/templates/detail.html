@@ -3,12 +3,12 @@
 {% block content %}
     <div id="main" class="wrapper inner">
         <div class="content"><h2>Welcome {{ user.first_name }}</h2>{% if user.is_staff %}
-            <h3>You login as a Chairperson</h3>{% endif %}{% if messages %}{% for m in messages %}{{ m }}<br>
+            <h4>You login as a Chairperson</h4>{% endif %}{% if messages %}{% for m in messages %}{{ m }}<br>
         {% endfor %}{% endif %}{% if record is not None %}<h2>Detail Of Paper</h2>
             <dl>
                 <dt>Title</dt>
                 <dd>
-                    <blockquote>{{ record.title }}</blockquote>
+                    <blockquote><h3>{{ record.title }}</h3></blockquote>
                 </dd>
                 <hr>
                 <dt>Keywords</dt>
@@ -21,15 +21,15 @@
                     <blockquote>{{ record.abstract }}</blockquote>
                 </dd>
                 <hr>
-                Status: {% if record.status %}<span style="color: green">Accepted</span>{% elif not true %}
+                <h3>Status: {% if record.status %}<span style="color: green">Accepted</span>{% elif not true %}
                 <span style="color: #3eb1ff;">Pending</span>{% else %}
-                <span style="color: red">Not Accepted</span>{% endif %}<br><br>
+                    <span style="color: red">Not Accepted</span>{% endif %}</h3>
                 <a href="/media/{{ record.file }}" target="_blank" class="button primary">Download Paper</a><br></dl>
             <br>
             <div class="table-wrapper">
                 <table class="alt" id="myTable"><h2>Author Detail</h2>
                     <thead>
-                    <tr>
+                    <tr><th>#</th>
                         <th>Author Name</th>
                         <th>Email</th>
                         <th>Mobile Number</th>
@@ -40,6 +40,7 @@
                     </thead>
                     <tbody>{% for name in authorlist %}
                         <tr>
+                        <td>{{ forloop.counter }}</td>
                             <td>{{ name.name }}</td>
                             <td>{{ name.email }}</td>
                             <td>{{ name.mobileNumber }}</td>

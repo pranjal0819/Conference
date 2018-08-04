@@ -2,13 +2,13 @@ h1, h2, h3, h4, h5, h6 {
     color: #555555;
 }
 
-h1, h2 {
+h1, h2, h3 {
     font-weight: 300;
     line-height: 1.5;
     margin: 0 0 1.5rem 0;
 }
 
-h3, h4, h5, h6 {
+h4, h5, h6 {
     font-weight: 250;
     line-height: 1.2;
     margin: 0 0 1.2rem 0;
@@ -30,11 +30,11 @@ h2 {
 }
 
 h3 {
-    font-size: 1.0rem;
+    font-size: 1.5rem;
 }
 
 h4 {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
 }
 
 h5 {
