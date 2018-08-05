@@ -18,7 +18,7 @@ class AuthorRecord(models.Model):
 
 class PaperRecord(models.Model):
     title = models.CharField(max_length=100)
-    abstract = models.TextField(max_length=500)
+    abstract = models.TextField(max_length=1000)
     keywords = models.TextField(max_length=100)
     file = models.FileField()
     status = models.BooleanField()

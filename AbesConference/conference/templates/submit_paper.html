@@ -11,9 +11,8 @@
         <div class="content">
             <h2>Welcome {{ user.first_name }}</h2>
             {% if user.is_staff %}<h3>You login as a Chairperson</h3>{% endif %}
-            {% if messages %}
-                {% for m in messages %}{{ m }}<br>{% endfor %}
-            {% endif %}
+            {% if messages %}{% for m in messages %}{{ m }}<a href="{% url 'conference:view_all_paper' %}">
+                View Submitted Paper</a><br>{% endfor %}{% endif %}
             <h2>Submit Author Information</h2>
             <form enctype="multipart/form-data" action="" method="post" class="highlights">{% csrf_token %}
                 <section>

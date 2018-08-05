@@ -48,8 +48,11 @@ class Signup(TemplateView):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
 
-            auth.models.User.objects.create_user(username=username.lower(), first_name=firstName, last_name=lastName,
-                                                 email=email.lower(), password=password)
+            auth.models.User.objects.create_user(username=username.lower(),
+                                                 first_name=firstName,
+                                                 last_name=lastName,
+                                                 email=email.lower(),
+                                                 password=password)
 
             messages.success(request, 'user registration successfully.')
             return redirect("account:signup")

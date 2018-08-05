@@ -11,7 +11,7 @@ class SignupForm(forms.ModelForm):
                                 max_length=30)
     email = forms.CharField(widget=forms.EmailInput(
         attrs={'placeholder': 'abcd@gmail.com', 'pattern': '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$'}), required=True,
-        max_length=40)
+                            max_length=40)
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}), required=True,
                                max_length=20)
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}),
@@ -58,7 +58,7 @@ class EditProfileForm(forms.ModelForm):
                                 max_length=30)
     email = forms.CharField(widget=forms.EmailInput(
         attrs={'placeholder': 'abcd@gmail.com', 'pattern': '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$'}), required=True,
-        max_length=40)
+                            max_length=40)
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}), required=True,
                                max_length=20)
 

@@ -22,14 +22,15 @@
                 </dd>
                 <hr>
                 <h3>Status: {% if record.status %}<span style="color: green">Accepted</span>{% elif not true %}
-                <span style="color: #3eb1ff;">Pending</span>{% else %}
+                    <span style="color: #3eb1ff;">Pending</span>{% else %}
                     <span style="color: red">Not Accepted</span>{% endif %}</h3>
                 <a href="/media/{{ record.file }}" target="_blank" class="button primary">Download Paper</a><br></dl>
             <br>
             <div class="table-wrapper">
                 <table class="alt" id="myTable"><h2>Author Detail</h2>
                     <thead>
-                    <tr><th>#</th>
+                    <tr>
+                        <th>#</th>
                         <th>Author Name</th>
                         <th>Email</th>
                         <th>Mobile Number</th>
@@ -40,7 +41,7 @@
                     </thead>
                     <tbody>{% for name in authorlist %}
                         <tr>
-                        <td>{{ forloop.counter }}</td>
+                            <td>{{ forloop.counter }}</td>
                             <td>{{ name.name }}</td>
                             <td>{{ name.email }}</td>
                             <td>{{ name.mobileNumber }}</td>
@@ -49,7 +50,9 @@
                             <td><a href="{{ name.webpage }}" target="_blank">{{ name.webpage }}</a></td>
                         </tr>{% endfor %}</tbody>
                 </table>
-            </div><a href="{% url 'conference:delete_paper' pk=record.pk %}" class="button">Delete Paper</a>{% endif %}
+                </div>{% if user.is_staff %}<a href="{% url 'conference:delete_paper' pk=record.pk %}" class="button">
+                Delete Paper</a>{% endif %}
+        {% endif %}
             <a href="{% url 'conference:welcome' %}" class="button primary">Back to Home Page</a></div>
     </div>
 {% endblock %}

@@ -1,11 +1,4 @@
-{% extends "base.html" %}
-
-{% block head_title %}404 Page not Found | {{ block.super }}{% endblock head_title %}
-
+{% extends "base.html" %}{% block head_title %}404 Page not Found | {{ block.super }}{% endblock head_title %}
 {% block content %}
-    <div class="frame_artical">
-        <h1>404 Page not found</h1>
-        <br>
-        <a href="{% url 'home' %}">Home</a>
-    </div>
+    <h1>404 Page not found</h1><br><a href="{% url 'home' %}">Home</a>
 {% endblock %}

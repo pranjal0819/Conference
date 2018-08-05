@@ -31,10 +31,6 @@
     -webkit-font-smoothing: antialiased;
 }
 
-.material-icons > .label {
-    display: none;
-}
-
 /* Icon */
 .icons1 {
     display: inline-block;
