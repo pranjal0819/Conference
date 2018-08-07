@@ -1,6 +1,7 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
-from .views import *
+from .views.views1 import *
+from .views.views2 import *
 
 urlpatterns = [
     path('welcome', Welcome.as_view(), name='welcome'),
@@ -13,5 +14,5 @@ urlpatterns = [
          name='selected_user'),
     path('review-list', login_required(ReviewList.as_view()), name='review_list'),
     path('review_paper/<int:pk>', login_required(ReviewPaper.as_view()), name='review_paper'),
-    # path('view_paper/<int:paper_pk>/deselect/<int:user_pk>', login_required(deselect_user.as_view()), name='deselect_user'),
+    #path('view_paper/<int:paper_pk>/deselect/<int:user_pk>', login_required(deselect_user.as_view()), name='deselect_user'),
 ]

@@ -18,8 +18,8 @@ class AuthorRecordForm(forms.ModelForm):
 
 class PaperRecordForm(forms.ModelForm):
     title = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Title*'}), required=True, max_length=100)
-    abstract = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Abstract*'}), required=True, max_length=1000)
-    keywords = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Keywords*'}), max_length=100)
+    abstract = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Abstract*'}), required=True, max_length=500)
+    keywords = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Keywords'}), max_length=100)
     file = forms.FileField(widget=forms.ClearableFileInput(attrs={'accept': '.pdf,.doc', 'style': "border:none"}),
                            required=True)
 
