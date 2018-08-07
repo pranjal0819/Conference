@@ -46,59 +46,15 @@
     display: none;
 }
 
-.fa-calendar:before {
-    content: "\f073"
-}
+.fa-calendar:before {content: "\f073"}
+.fa-qrcode:before {content: "\f029"}
+.fa-copy:before {content: "\f0c5"}
+.fa-upload:before {content: "\f093"}
+.fa-paper-plane-o:before {content: "\f1d9"}
+.fa-volume {content: "\f027"}
+.fa-users {content: "\f0c0"}
+.fa-image:before{content: "\f03e"}
 
-.fa-cloud-download:before {
-    content: "\f0ed"
-}
-
-.fa-send-o:before, .fa-paper-plane-o:before {
-    content: "\f1d9"
-}
-
-.fa-qrcode:before {
-    content: "\f029"
-}
-
-.fa-users:before {
-    content: "\f0c0"
-}
-
-.fa-copy:before {
-    content: "\f0c5"
-}
-
-.fa-trash-alt:before {
-    content: "\f2ed"
-}
-
-.fa-download:before {
-    content: "\f019"
-}
-
-.fa-upload:before {
-    content: "\f093"
-}
-
-.fa-list-ul:before {
-    content: "\f0ca"
-}
-
-.fa-file-pdf-o:before {
-    content: "\f1c1"
-}
-
-.fa-info:before {
-    content: "\f129"
-}
-
-.fa-times:before {
-    content: "\f00d"
-}
-
-.fa-check:before {
-    content: "\f00c"
-}
-
+.fa-list-ul:before {content: "\f0ca"}
+.fa-file-pdf-o:before {content: "\f1c1"}
+.fa-download:before {content: "\f019"}

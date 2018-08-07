@@ -5,5 +5,14 @@ from django.shortcuts import render
 def home(request):
     return render(request, "index.html", {})
 
+
 def registration(request):
     return render(request, 'registration.html')
+
+
+def callForPaper(request):
+    return render(request, 'call-for-paper.html')
+
+
+def proceeding(request):
+    return render(request, 'proceeding.html')

@@ -23,6 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
     path('registration/', registration, name='registration'),
+    path('call-for-paper/', callForPaper, name='callForPaper'),
+    path('proceeding/', proceeding, name='proceeding'),
 
     path('account/', include(('account.urls', 'account'), namespace='account')),
 

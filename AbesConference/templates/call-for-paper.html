@@ -1,0 +1,107 @@
+{% extends "base.html" %}{% load staticfiles %}
+{% block head_title %}Call For Paper | {{ block.super }}{% endblock head_title %}
+{% block css %}{% endblock %}
+{% block content %}
+    <div id="heading" style="top: 3.0rem;"><h1>5TH INTERNATIONAL CONFERENCE ON CICT 2019</h1></div>
+    <div id="main" class="wrapper inner">
+        <div class="content">
+            {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}<br><br>
+            <h1 style="text-align: center;">Call for Papers</h1>
+
+            <p><b>ABES Engineering College</b>, Ghaziabad, one of the pioneer institutions in the field of Engineering,
+                Research and Technology is organizing its 4th IEEE- International Conference on Computational
+                Intelligence & Communication technology; CICT-2018 This technical conference aims at providing a
+                platform for industry and academia to discuss various emerging trends and innovations, share research
+                results and new directions in upcoming areas.</p>
+
+
+            <p><b>CICT-2018</b> will provide a leading edge, scholarly forum for researchers, engineers, and students
+                alike to share their state-of-the art research and developmental work in the broad areas of pervasive
+                computing and communications. The conference will feature a diverse mixture of interactive forums, core
+                technical sessions of high quality cutting-edge research articles; targeted workshops on exciting
+                topics; live demonstrations of pervasive computing in action; insightful keynote speeches; panel
+                discussions from domain experts and posters of emerging ideas and achieve the following:</p>
+
+            <p>
+                <li>To present the ongoing researches in the field and hence to foster research relations between the
+                    Universities and the industry.</li>
+                <li>Give participants a review of the latest and upcoming trends in the next few years</li>
+                <li>Exposing the audience to the need for more development and research in the field and with it the growing
+                    need for IT security.</li>
+                <li>Provide the delegates to share their new ideas and the application experiences face to face.</li>
+            </p>
+
+            <p>We invite you to submit papers and also request you to disseminate this CFP to your colleagues and
+                communities. Authors are cordially invited to submit papers through on line paper submission process
+                (Easy Chair submission system) before 15th September, 2018. Research contributions are solicited in all
+                areas pertinent to the conference theme and including the following:</p>
+
+            <h2>COMPUTATIONAL SCIENCE & ENGINEERING</h2>
+
+            <p>Intelligent and Bio-inspired Computing - Distributed and Parallel Computing, Multi-core and GPU
+                Computing, High Performance Computing, Database and Data Mining - Cluster, Grid, P2P and Cloud Computing
+                - Mobile Computing - CSE Education - Scientific and Engineering Computing - Embedded and Ubiquitous
+                Computing - Advanced Networking and Applications - Security, Privacy and Trust - Service and Internet
+                Computing - Dependable, Reliable and Autonomic Computing - CSE applications (bioinformatics, global
+                optimization problems, computer graphics and multimedia, data mining, signal and image processing,
+                etc)</p>
+
+            <h2>COMMUNICATIONS & NETWORKING</h2>
+
+            <p>Channel measurements and modeling - Coding and modulation techniques - OFDM technology - Cognitive Radio
+                - Antennas and propagation - MIMO - theory and trials - Spread Spectrum and CDMA systems - Space-time
+                coding, Ultra Wide-Band Communications - Broadband Wireless Access, Next-generation Networks, Secure
+                communications - Mobile ad-hoc, Mesh, Cooperative, Sensor Networks - Home networking -Cross Layer Design
+                -Embedded Internet devices â New and enhanced services - Resource and information management -
+                Adaptive QoS provisioning - End-to-end QoS - Optical Communications and Networks</p>
+
+            <h2>POWER & ENERGY</h2>
+
+            <p>Power Quality - Smart Grids - Design, Control and Management ,Demand Response, Advanced Metering
+                Infrastructure, Interoperability Standards - Home Energy Management Systems, Protection - RAM
+                (Reliability, Availability, Maintainability) - Grid integration of renewable energy source -plug-in
+                electric vehicles - co-energy - distributed generation - efficiency and conservation - Solar energy -
+                Hydro energy - Wind energy - wind turbines - Ocean energy: tidal and wave -Biomass, Biofuels - Energy
+                Harvesting - other alternative and renewable means of power generation</p>
+
+            <h2>SIGNAL PROCESSING & VLSI</h2>
+
+            <p>Signal Processing Algorithms & Architectures - Smart antennas and tracking algorithms, Signal separation
+                & identification - Adaptive and Array Signal Processing - Audio, Speech, Image & Video Signal Processing
+                - Underwater Communications and Signal Processing - VLSI for Communication & Signal Processing -
+                Non-linear and Biomedical Signal Processing, Spoken Language Processing - Unconventional Applications of
+                Signal Processing - Compressive Sensing and Applications - Detection and Estimation Techniques -
+                Emerging Trends in VLSI - Nanoelectronics -MEMS, VLSI Circuits and Systems - Field-programmable and
+                Reconfigurable Systems - System Level Design - System-on-a-Chip Design - System Issues in Complexity,
+                Low Power, Heat Dissipation - Power Awareness in VLSI Design - Test and Verification - Mixed- Signal
+                Design and Analysis - Electrical/Packaging Co-Design</p>
+
+            <h2>INTERDISCIPLINARY & HUMANITARIAN ENGINEERING</h2>
+
+            <p>Disaster management - Distributed Generation & Communications Solutions for Isolated -
+                Communities,Solutions for the Differently-abled - Space Applications for Development -
+                Preventive Humanitarian Action - Environmental Engineering - Climate Change Mitigation &
+                Adaptations - Sustainable Energy Use -Education Technologies - Enabling Technologies for
+                Human Development - Engineering for Common Property Resources (Agriculture, Forestry,
+                Fisheries) - ICT use in Social Development, Biomedical and Medical Technologies Logistics &
+                Transportation Engineering, Water Resources Management, e-Waste engineering.</p>
+
+            <p>Instructions for Authors</p>
+            <li>Original papers based on theoretical or experimental works related to the above mentioned sub themes are
+                solicited for presentation in the conference.
+            </li>
+            <li>The paper should begin with title, short abstract and a list of keywords. Simultaneous submissions
+                (papers already submitted to other conferences/journals) are not allowed.
+            </li>
+            <li>All authors must follow IEEE formatting instructions.</li>
+            <li>Please do not submit plagiarized papers.</li>
+            <li>The total length of the paper must not exceed six A4 size pages including bibliography and appendices.
+                Paper must be in PDF format.
+            </li>
+            <br>
+            <h3>All accepted & presented papers of the Conference by duly registered authors, will be submitted to IEEE
+                Xplore Digital Library for Publication.</h3>
+
+        </div>
+    </div>
+{% endblock %}
