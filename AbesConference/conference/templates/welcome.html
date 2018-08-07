@@ -8,6 +8,7 @@
 {% block content %}
     <div id="main" class="wrapper inner">
         <div class="content" style="text-align: center;">
+            {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}<br><br>
             <h1>Welcome to 5th CICT 2019 </h1>
             <h2>(Sponsored by IEEE-UP Section)</h2>
             <p>The International Conference on Computational intelligence and communication technology (CICT-2019) is

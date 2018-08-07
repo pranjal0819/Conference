@@ -13,12 +13,12 @@
                 <hr>
                 <dt>Keywords</dt>
                 <dd>
-                    <blockquote>{{ record.keywords }}</blockquote>
+                    <blockquote><pre style="font-style: inherit;">{{ record.keywords }}</pre></blockquote>
                 </dd>
                 <hr>
                 <dt>Abstract</dt>
                 <dd>
-                    <blockquote>{{ record.abstract }}</blockquote>
+                    <blockquote><pre>{{ record.abstract }}</pre></blockquote>
                 </dd>
                 <hr>
                 <h3>Status: {% if record.status %}<span style="color: green">Accepted</span>{% elif not true %}
@@ -43,11 +43,12 @@
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>{{ name.name }}</td>
-                            <td>{{ name.email }}</td>
-                            <td>{{ name.mobileNumber }}</td>
-                            <td>{{ name.organization }}</td>
-                            <td>{{ name.country }}</td>
-                            <td><a href="{{ name.webpage }}" target="_blank">{{ name.webpage }}</a></td>
+                            <td>{% if name.email %}{{ name.email }}{% else %}-{% endif %}</td>
+                            <td>{% if name.mobileNumber %}{{ name.mobileNumber }}{% else %}-{% endif %}</td>
+                            <td>{% if name.organization %}{{ name.organization }}{% else %}-{% endif %}</td>
+                            <td>{% if name.country %}{{ name.country }}{% else %}-{% endif %}</td>
+                            <td>{% if name.webpage %}<a href="{{ name.webpage }}" target="_blank">{{ name.webpage }}</a>
+                            {% else %}-{% endif %}</td>
                         </tr>{% endfor %}</tbody>
                 </table>
                 </div>{% if user.is_staff %}<a href="{% url 'conference:delete_paper' pk=record.pk %}" class="button">

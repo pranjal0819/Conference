@@ -46,11 +46,11 @@
                                 <td style="text-align: center; vertical-align: middle;"><a href="#">
                                     <i class="material-icons table-icon">&#xe5d5;</i></a></td>
                             {% endif %}
-                            <td style="text-align: center; vertical-align: middle;">{% if list.status %}
+                            <td style="text-align: center; vertical-align: middle;">{% if list.status == 5 %}
                                 <i class="material-icons table-icon" style="color: green">&#xe876;</i>
-                            {% elif not list.status %}
-                                <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>{% else %}
-                                <i class="material-icons table-icon" style="color: red">&#xe5cd;</i>{% endif %}
+                                {% elif list.status == 3 %}<i class="material-icons table-icon" style="color: red">&#xe5cd;</i>
+                                {% else %}<i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
+                                {% endif %}
                             </td>
                             <td>{{ list.timestamp|date:'M-d-Y' }}</td>
                         </tr>

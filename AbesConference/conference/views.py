@@ -15,7 +15,7 @@ class Welcome(TemplateView):
 
 
 class ReviewList(TemplateView):
-    template_name = 'coming.html'
+    template_name = 'review_list.html'
 
     def get(self, request):
         list = ReviewPaperRecord.objects.all()

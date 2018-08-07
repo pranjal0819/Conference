@@ -197,9 +197,7 @@ code {
 
 pre {
     -webkit-overflow-scrolling: touch;
-    font-family: "Courier New", monospace;
-    font-size: 0.9rem;
-    margin: 0 0 2rem 0;
+    white-space: pre-wrap;
 }
 
 pre code {

@@ -1,5 +1,6 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}Signup | {{ block.super }}{% endblock head_title %}
-{% block css %}{% endblock %}
+{% block css %}
+    <script src='https://www.google.com/recaptcha/api.js'></script>{% endblock %}
 {% block content %}
     <div id="heading" style="top: 3.0rem;"><h1>5TH INTERNATIONAL CONFERENCE ON CICT 2019</h1></div>
     <div class="inner"><br><br><br>
@@ -7,8 +8,7 @@
             <section>
                 <div class="content">
                     <h2>Create a Account</h2>
-                    <h4>{% if messages %}{% for m in messages %}{{ m }}{% endfor %}
-                        <a href="{% url 'account:login' %}"> Go to Login Page</a></h4>{% endif %}
+                    <h4>{% if messages %}{% for m in messages %}{{ m }}{% endfor %}{% endif %}</h4>
                     <form method="post" action="" style="text-align: left;">{% csrf_token %}
                         {{ form.username }}{{ form.username.errors }}<br>
                         {{ form.first_name }}<br>{{ form.last_name }}<br>{{ form.email }}
@@ -20,6 +20,11 @@
                             <li>Your password can&#39;t be too similar to your other personal information.</li>
                         </ul>
                         {{ form.confirm_password }}{{ form.confirm_password.errors }}<br>
+                        <div style="float: right;">
+                            <script src='https://www.google.com/recaptcha/api.js'></script>
+                            <div class="g-recaptcha" data-sitekey="6Ld5a2gUAAAAAA7LIc7ugPczbREEnZ3FVB2o2Cvu"></div>
+                        </div>
+                        <br style="clear: both"><br>
                         <button type="submit" class="primary button fit">Signup</button>
                         <br><br>
                         <a href="{% url 'account:login' %}" class="button fit">Login</a>

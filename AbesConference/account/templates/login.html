@@ -13,6 +13,9 @@
                         <input type="password" name="pass" placeholder="Password"><br>
                         {% if request.GET.next %}
                             <input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
+                        <script src='https://www.google.com/recaptcha/api.js'></script>
+                        <div class="g-recaptcha" data-sitekey="6Ld5a2gUAAAAAA7LIc7ugPczbREEnZ3FVB2o2Cvu"></div>
+                        <br>
                         <button type="submit" class="primary button fit">Login</button>
                         <br><br>
                         <a href="{% url 'account:signup' %}" class="button fit">Signup</a></form>

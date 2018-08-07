@@ -1,6 +1,9 @@
+import json
+import urllib
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.contrib import messages, auth
+from django.conf import settings
 from .forms import SignupForm, EditProfileForm, ChangePasswordForm
 
 
@@ -12,23 +15,38 @@ class Login(TemplateView):
         return render(request, self.template_name, {})
 
     def post(self, request):
-        username = request.POST['user']
-        password = request.POST['pass']
-        if username is not "":
-            try:
-                auth.models.User.objects.get(username=username.lower())
-                user = auth.authenticate(username=username.lower(), password=password)
-                if user is not None:
-                    auth.login(request, user)
-                    if 'next' in request.POST:
-                        return redirect(request.POST.get('next'))
-                    return redirect("conference:welcome")
-                else:
-                    messages.error(request, "Username and password did not match")
-            except:
-                messages.error(request, "User does not exit")
+        ''' Begin reCAPTCHA validation '''
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        url = 'https://www.google.com/recaptcha/api/siteverify'
+        values = {
+            'secret': settings.RECAPTCHA_PRIVATE_KEY,
+            'response': recaptcha_response
+        }
+        data = urllib.parse.urlencode(values).encode()
+        req = urllib.request.Request(url, data=data)
+        response = urllib.request.urlopen(req)
+        result = json.loads(response.read().decode())
+        ''' End reCAPTCHA validation '''
+        if result['success']:
+            username = request.POST['user']
+            password = request.POST['pass']
+            if username is not "":
+                try:
+                    auth.models.User.objects.get(username=username.lower())
+                    user = auth.authenticate(username=username.lower(), password=password)
+                    if user is not None:
+                        auth.login(request, user)
+                        if 'next' in request.POST:
+                            return redirect(request.POST.get('next'))
+                        return redirect("conference:welcome")
+                    else:
+                        messages.error(request, "Username and password did not match")
+                except:
+                    messages.error(request, "User does not exit. Go to Sign-up Page")
+            else:
+                messages.error(request, "Enter Username and Password")
         else:
-            messages.error(request, "Enter Username and Password")
+            messages.error(request, 'Invalid reCAPTCHA. Please try again.')
         return render(request, self.template_name, {})
 
 
@@ -42,20 +60,31 @@ class Signup(TemplateView):
     def post(self, request):
         form = SignupForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
-            firstName = form.cleaned_data['first_name']
-            lastName = form.cleaned_data['last_name']
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
+            ''' Begin reCAPTCHA validation '''
+            recaptcha_response = request.POST.get('g-recaptcha-response')
+            url = 'https://www.google.com/recaptcha/api/siteverify'
+            values = {
+                'secret': settings.RECAPTCHA_PRIVATE_KEY,
+                'response': recaptcha_response
+            }
+            data = urllib.parse.urlencode(values).encode()
+            req = urllib.request.Request(url, data=data)
+            response = urllib.request.urlopen(req)
+            result = json.loads(response.read().decode())
+            ''' End reCAPTCHA validation '''
+            if result['success']:
+                username = form.cleaned_data['username']
+                firstName = form.cleaned_data['first_name']
+                lastName = form.cleaned_data['last_name']
+                email = form.cleaned_data['email']
+                password = form.cleaned_data['password']
 
-            auth.models.User.objects.create_user(username=username.lower(),
-                                                 first_name=firstName,
-                                                 last_name=lastName,
-                                                 email=email.lower(),
-                                                 password=password)
-
-            messages.success(request, 'user registration successfully.')
-            return redirect("account:signup")
+                auth.models.User.objects.create_user(username=username.lower(), first_name=firstName,
+                                                     last_name=lastName, email=email.lower(), password=password)
+                messages.success(request, 'User registration successfully. Go to Login Page')
+                return redirect("account:signup")
+            else:
+                messages.error(request, "Invalid reCAPTCHA. Please try again.")
         else:
             messages.error(request, "Please try again")
         return render(request, self.template_name, {'form': form})
