@@ -16,16 +16,17 @@ from .forms import SignupForm, EditProfileForm, ChangePasswordForm
 from .tokens import account_activation_token
 
 
-
 def logout(request):
     auth.logout(request)
     return redirect("home")
+
 
 class Profile(TemplateView):
     template_name = 'profile.html'
 
     def get(self, request):
         return render(request, self.template_name, {})
+
 
 class EditProfile(TemplateView):
     template_name = 'editProfile.html'
@@ -80,7 +81,7 @@ class Login(TemplateView):
         return render(request, self.template_name, {})
 
     def post(self, request):
-        try:    
+        try:
             ''' Begin reCAPTCHA validation '''
             recaptcha_response = request.POST.get('g-recaptcha-response')
             url = 'https://www.google.com/recaptcha/api/siteverify'
@@ -89,7 +90,7 @@ class Login(TemplateView):
                 'response': recaptcha_response
             }
             data = urllib.parse.urlencode(values).encode()
-            req =  urllib.request.Request(url, data=data)
+            req = urllib.request.Request(url, data=data)
             response = urllib.request.urlopen(req)
             result = json.loads(response.read().decode())
             ''' End reCAPTCHA validation '''
@@ -137,7 +138,7 @@ class Signup(TemplateView):
                     'response': recaptcha_response
                 }
                 data = urllib.parse.urlencode(values).encode()
-                req =  urllib.request.Request(url, data=data)
+                req = urllib.request.Request(url, data=data)
                 response = urllib.request.urlopen(req)
                 result = json.loads(response.read().decode())
                 ''' End reCAPTCHA validation '''
@@ -148,17 +149,16 @@ class Signup(TemplateView):
                     email = form.cleaned_data['email']
                     password = form.cleaned_data['password']
 
-                    user = User.objects.create_user(username=username.lower(), first_name=firstName,
-                                                     last_name=lastName, email=email.lower(), password=password, is_active=False)
-                    print(user.pk)
+                    user = User.objects.create_user(username=username.lower(), first_name=firstName, last_name=lastName,
+                                                    email=email.lower(), password=password, is_active=False)
                     '''Begin Email Sending '''
                     current_site = get_current_site(request)
                     mail_subject = 'Activate your Conference Account.'
                     message = render_to_string('acc_active_email.html', {
                         'user': user,
                         'domain': current_site.domain,
-                        'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-                        'token':account_activation_token.make_token(user),
+                        'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                        'token': account_activation_token.make_token(user),
                     })
                     email = EmailMessage(mail_subject, message, to=[user.email])
                     email.send()
@@ -168,6 +168,7 @@ class Signup(TemplateView):
                 else:
                     messages.error(request, "Invalid reCAPTCHA. Please try again.")
             except:
+                messages.error(request, "Please try again.")
                 return redirect("account:signup")
         else:
             messages.error(request, "Please try again")
@@ -187,5 +188,5 @@ def activate(request, uidb64, token):
         messages.success(request, "Thank you for your email confirmation. Now you can login your account.")
         return redirect("account:login")
     else:
-        messages.error(request,'Activation link is invalid!')
+        messages.error(request, 'Activation link is invalid!')
         return redirect("account:signup")
