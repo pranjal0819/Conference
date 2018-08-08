@@ -1,104 +1,118 @@
-from django.contrib import messages, auth
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
-from django.core.exceptions import ObjectDoesNotExist
-from conference.forms import AuthorRecordForm, PaperRecordForm, ReviewPaperForm
-from conference.models import PaperRecord, AuthorRecord, ReviewPaperRecord
+
+from ..forms import ConferenceForm
+from ..models import ConferenceRecord
 
 
-class Welcome(TemplateView):
+class Conference(TemplateView):
     template_name = 'welcome.html'
 
     def get(self, request):
-        return render(request, self.template_name, {})
-
-
-class ViewAllPaper(TemplateView):
-    template_name = 'view_all_paper.html'
-
-    def get(self, request):
-        if request.user.is_staff:
-            list = PaperRecord.objects.all().order_by('id')
-            if not list:
-                messages.error(request, "Paper is not submited yet")
-        else:
-            list = PaperRecord.objects.filter(user=request.user)
-            if not list:
-                messages.error(request, "You have not submited any paper")
-        return render(request, self.template_name, {'paperlist': list})
-
-
-class ViewDetail(TemplateView):
-    template_name = 'detail.html'
-
-    def get(self, request, pk):
-        try:
-            if request.user.is_staff:
-                obj = PaperRecord.objects.get(pk=pk)
-            else:
-                obj = PaperRecord.objects.get(user=request.user, pk=pk)
-            list = obj.author.all()
-        except:
-            obj = None
-            list = None
-            messages.error(request, "Lot of Error")
-            return redirect("conference:welcome")
-        return render(request, self.template_name, {'record': obj, 'authorlist': list})
-
-
-class SubmitPaper(TemplateView):
-    template_name = 'submit_paper.html'
-
-    def get(self, request):
-        authorform = AuthorRecordForm()
-        paperform = PaperRecordForm()
-        attr = {'authorform': authorform,
-                'paperform': paperform}
-        return render(request, self.template_name, attr)
+        form = ConferenceForm()
+        record = ConferenceRecord.objects.all().order_by('-id')
+        return render(request, self.template_name, {'form': form, 'record': record})
 
     def post(self, request):
-        paperform = PaperRecordForm(request.POST, request.FILES)
-        if paperform.is_valid():
-            temp = paperform.save(commit=False)
-            temp.user = request.user
-            temp.save()
-            try:
-                for i in range(1, 10, 1):
-                    j = str(i)
-                    nam = request.POST['name' + j]
-                    eml = request.POST['email' + j]
-                    mob = request.POST['mobile' + j]
-                    cou = request.POST['country' + j]
-                    org = request.POST['org' + j]
-                    url = request.POST['url' + j]
-                    if nam is not "":
-                        obj = AuthorRecord.objects.create(name=nam, email=eml, mobileNumber=mob, country=cou,
-                                                          organization=org, webpage=url)
-                        temp.author.add(obj.id)
-            except:
-                pass
-            messages.success(request, "Paper submited successfuly")
-            return redirect("conference:submit_paper")
+        form = ConferenceForm(request.POST)
+        if form.is_valid() and request.user.is_staff:
+            form.save()
+            messages.success(request, 'Successfully Conference Created')
         else:
-            messages.error(request, "Lot of Error")
-            return redirect("conference:welcome")
-        return render(request, self.template_name, {'paperform': None})
+            messages.error(request, 'Contact to admin')
+        form = ConferenceForm()
+        record = ConferenceRecord.objects.all().order_by('-id')
+        return render(request, self.template_name, {'form': form, 'record': record})
 
 
-class DeletePaper(TemplateView):
+class CloseSubmission(TemplateView):
 
-    def get(self, request, pk):
+    def get(self, request, slug):
         try:
             if request.user.is_staff:
-                obj = PaperRecord.objects.get(pk=pk)
-            else:
-                obj = PaperRecord.objects.get(user=request.user, pk=pk)
-            list = obj.author.all()
-            for l in list:
-                l.delete()
-            obj.delete()
-            messages.success(request, "Paper deleted")
+                instance = ConferenceRecord.objects.get(slug=slug)
+                instance.submission = False
+                instance.save(update_fields=['submission'])
+                msg = "Submission closed of " + slug
+                messages.success(request, msg)
         except:
-            messages.error(request, "Lot of error")
-            return redirect("conference:welcome")
-        return redirect("conference:view_all_paper")
+            messages.error(request, 'Contact to admin')
+        return redirect('conference:welcome')
+
+
+class StartSubmission(TemplateView):
+
+    def get(self, request, slug):
+        try:
+            instance = ConferenceRecord.objects.get(slug=slug)
+            if request.user.is_staff and instance.status:
+                instance.submission = True
+                instance.save(update_fields=['submission'])
+                msg = "Submission open of " + slug
+                messages.success(request, msg)
+        except:
+            messages.error(request, 'Contact to admin')
+        return redirect('conference:welcome')
+
+
+class CloseReview(TemplateView):
+
+    def get(self, request, slug):
+        try:
+            if request.user.is_staff:
+                instance = ConferenceRecord.objects.get(slug=slug)
+                instance.review = False
+                instance.save(update_fields=['review'])
+                msg = "Review closed of " + slug
+                messages.success(request, msg)
+        except:
+            messages.error(request, 'Contact to admin')
+        return redirect('conference:welcome')
+
+
+class StartReview(TemplateView):
+
+    def get(self, request, slug):
+        try:
+            instance = ConferenceRecord.objects.get(slug=slug)
+            if request.user.is_staff and instance.status:
+                instance.review = True
+                instance.save(update_fields=['review'])
+                msg = "Review open of " + slug
+                messages.success(request, msg)
+        except:
+            messages.error(request, 'Contact to admin')
+        return redirect('conference:welcome')
+
+
+class CloseStatus(TemplateView):
+
+    def get(self, request, slug):
+        try:
+            if request.user.is_staff:
+                instance = ConferenceRecord.objects.get(slug=slug)
+                instance.status = False
+                instance.review = False
+                instance.submission = False
+                instance.save(update_fields=['status', 'review', 'submission'])
+                msg = slug + " closed"
+                messages.success(request, msg)
+        except:
+            messages.error(request, 'Contact to admin')
+        return redirect('conference:welcome')
+
+
+class StartStatus(TemplateView):
+
+    def get(self, request, slug):
+        try:
+            if request.user.is_staff:
+                instance = ConferenceRecord.objects.get(slug=slug)
+                instance.status = True
+                instance.save(update_fields=['status'])
+                msg = slug + " Open"
+                messages.success(request, msg)
+        except:
+            messages.error(request, 'Contact to admin')
+        return redirect('conference:welcome')

@@ -23,29 +23,37 @@
                 intriguing problems with people that actively involved in these evergreen fields. The 2-day conference
                 commencing on 08-09th Feb, 2019, will feature prominent keynote speakers, tutorials and paper
                 presentation in parallel sessions. CICT 2019 will no doubt be proven to be exciting and educative.</p>
-        </div>
-        <div class="highlights">
-            <section>
-                <a href="{% url 'conference:view_all_paper' %}" style="text-decoration: none; color: #444444">
-                    <div class="content">
-                        <i class="icons1 fa-list-ul"></i>
-                        <h3>List of Submitted Paper</h3>
-                        <p> All the papers must be submitted through on-line paper submission process only.</p></div>
-                </a></section>
-            <section>
-                <a href="{% url 'conference:submit_paper' %}" style="text-decoration: none; color: #444444">
-                    <div class="content">
-                        <i class="icons1 fa-file-pdf-o"></i>
-                        <h3>Submit Paper</h3>
-                        <p> All the papers must be submitted through on-line paper submission process only.</p></div>
-                </a></section>
-            <section>
-                <a href="{% url 'conference:review_list' %}" style="text-decoration: none; color: #444444">
-                    <div class="content">
-                        <i class="icons1 fa-download"></i>
-                        <h3>Review List</h3>
-                        <p> All the papers must be submitted through on-line paper submission process only.</p></div>
-                </a></section>
+            <div style="text-align: left">
+                <h1>List of Conferences</h1>
+                <ul style="font-size: large; width: 100%">
+                    {% for list in record %}
+                        <li><a href="{% url 'conference:slug_welcome' slug=list.slug %}">{{ list.slug }}</a>
+                            {% if user.is_staff %}
+                                {% if list.submission %}
+                                    <a href="{% url 'conference:close_submission' slug=list.slug %}">Close
+                                        Submission</a>{% else %}Submission Closed{% endif %}
+                                {% if list.review %}
+                                    <a href="{% url 'conference:close_review' slug=list.slug %}">Close Review</a>
+                                {% else %}Review Closed{% endif %}
+                                {% if list.status %}
+                                    <a href="{% url 'conference:close_status' slug=list.slug %}">Close Conference</a>
+                                {% else %}Conference Closed{% endif %}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+                {% if user.is_staff %}
+                    <small style="color: red">*Once Conference Closed Can not be Open to anyone</small>
+                    <br><br><br><h2>Create Conference</h2>
+                    <form method="post">{% csrf_token %}
+                        {{ form.slug }}<br>
+                        <button type="submit" class="primary">Create Conference</button>
+                        <br>
+                        <small style="color: red">*Once Conference Created Can not be deleted</small>
+                    </form>
+                {% endif %}
+                <br>
+            </div>
         </div>
     </div>
 {% endblock %}

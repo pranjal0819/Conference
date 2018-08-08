@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block head_title %}Welcome | {{ block.super }}{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+    <div id="main" class="wrapper inner">
+        <div class="content" style="text-align: center;">
+            {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}<br><br>
+            <h1>Welcome to CICT</h1>
+            <h2>(Sponsored by IEEE-UP Section)</h2>
+            <p>The International Conference on Computational intelligence and communication technology is organized to
+                address various issues to prosper the creation of intelligent solutions in future. The aim is to bring
+                together worldwide leading researchers, developers, practitioners and educators interested in advancing
+                the state of the art in computational intelligence and communication technology for exchanging knowledge
+                that encompasses a broad range of disciplines among various distinct communities. It is expected that
+                researchers will bring new prospect for collaboration across disciplines and gain idea facilitating
+                novel breakthrough. The theme for this conference is innovating and inspiring the researchers to adopt
+                the outcome for implementation. The conference will provide an exceptional platform to the researchers
+                to meet and discuss the utmost solutions, scientific results and methods in solving intriguing problems
+                with people that actively involved in these evergreen fields.</p>
+        </div>
+        <div class="highlights">
+            <section>
+                <a href="{% url 'conference:view_all_paper' slug=conference.slug %}"
+                   style="text-decoration: none; color: #444444">
+                    <div class="content">
+                        <i class="icons1 fa-list-ul"></i>
+                        <h3>List of Submitted Paper</h3>
+                        <p> All the papers must be submitted through on-line paper submission process only.</p></div>
+                </a></section>
+            <section>
+                <a href="{% url 'conference:submit_paper' slug=conference.slug %}"
+                   style="text-decoration: none; color: #444444">
+                    <div class="content">
+                        <i class="icons1 fa-file-pdf-o"></i>
+                        <h3>Submit Paper</h3>
+                        <p> All the papers must be submitted through on-line paper submission process only.</p></div>
+                </a></section>
+            <section>
+                <a href="{% url 'conference:review_list' slug=conference.slug %}"
+                   style="text-decoration: none; color: #444444">
+                    <div class="content">
+                        <i class="icons1 fa-download"></i>
+                        <h3>Review List</h3>
+                        <p> All the papers must be submitted through on-line paper submission process only.</p></div>
+                </a></section>
+        </div>
+    </div>
+{% endblock %}

@@ -10,9 +10,8 @@
     <div id="main" class="wrapper inner">
         <div class="content">
             <h2>Welcome {{ user.first_name }}</h2>
-            {% if user.is_staff %}<h3>You login as a Chairperson</h3>{% endif %}
-            {% if messages %}{% for m in messages %}{{ m }}<a href="{% url 'conference:view_all_paper' %}">
-                View Submitted Paper</a><br>{% endfor %}{% endif %}
+            {% for m in messages %}{{ m }}<br>{% endfor %}
+            <a href="{% url 'conference:view_all_paper' slug=slug %}">View Submitted Paper</a><br>
             <h2>Submit Author Information</h2>
             <form enctype="multipart/form-data" action="" method="post" class="highlights">{% csrf_token %}
                 <section>
@@ -26,7 +25,7 @@
                            required="True"></input><br>
                     <input type="text" name="org1" placeholder="Organization*" maxlength="100"
                            required="True"></input><br>
-                    <input type="url" name="url1" placeholder="http://example.com/" maxlength="50"></input><br>
+                    <input type="url" name="url1" placeholder="http://example.com/" maxlength="50" pattern="https?://.+" title="URL"></input><br>
                 </section>
                 <section>
                     <h2>Author 2</h2>

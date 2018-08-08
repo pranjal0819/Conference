@@ -25,7 +25,8 @@
                                                  style="width: 195px;"></a>
     <nav>
         {% if user.is_authenticated %}
-            <spam style="padding-right: 10px; color: #111111;">Welcome {{ user.first_name }}</spam>
+            <spam style="padding-right: 10px; color: #111111;">Welcome {{ user.first_name }}
+            {% if user.is_staff %}(ChairPerson){% else %}(Author){% endif %}</spam>
         {% endif %}
         <a href="{% url 'home' %}">Home</a>
         <a href="{% url 'conference:welcome' %}">Conference</a>

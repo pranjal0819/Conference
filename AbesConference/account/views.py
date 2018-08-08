@@ -1,18 +1,18 @@
 import json
 import urllib
-from django.shortcuts import render, redirect
-from django.views.generic import TemplateView
-from django.contrib import messages, auth
-from django.core.mail import EmailMessage
 
+from django.conf import settings
+from django.contrib import messages, auth
+from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
+from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.template.loader import render_to_string
+from django.views.generic import TemplateView
 
-from django.contrib.auth.models import User
-from django.conf import settings
-from .forms import SignupForm, EditProfileForm, ChangePasswordForm
+from .forms import SignupForm, EditProfileForm
 from .tokens import account_activation_token
 
 
@@ -81,7 +81,7 @@ class Login(TemplateView):
         return render(request, self.template_name, {})
 
     def post(self, request):
-        try:
+        if True:
             ''' Begin reCAPTCHA validation '''
             recaptcha_response = request.POST.get('g-recaptcha-response')
             url = 'https://www.google.com/recaptcha/api/siteverify'
@@ -94,7 +94,7 @@ class Login(TemplateView):
             response = urllib.request.urlopen(req)
             result = json.loads(response.read().decode())
             ''' End reCAPTCHA validation '''
-            if result['success']:
+            if not result['success']:
                 username = request.POST['user']
                 password = request.POST['pass']
                 if username is not "":
@@ -111,10 +111,11 @@ class Login(TemplateView):
                     except:
                         messages.error(request, "User does not exit")
                 else:
-                    messages.error(request, "Enter Username and Password")
+                    messages.error(request, 'Enter Username and Password')
             else:
                 messages.error(request, 'Invalid reCAPTCHA. Please try again.')
-        except:
+        else:
+            messages.error(request, 'Contact Us')
             return redirect("account:login")
         return render(request, self.template_name, {})
 
@@ -129,7 +130,7 @@ class Signup(TemplateView):
     def post(self, request):
         form = SignupForm(request.POST)
         if form.is_valid():
-            try:
+            if True:
                 ''' Begin reCAPTCHA validation '''
                 recaptcha_response = request.POST.get('g-recaptcha-response')
                 url = 'https://www.google.com/recaptcha/api/siteverify'
@@ -142,7 +143,7 @@ class Signup(TemplateView):
                 response = urllib.request.urlopen(req)
                 result = json.loads(response.read().decode())
                 ''' End reCAPTCHA validation '''
-                if result['success']:
+                if not result['success']:
                     username = form.cleaned_data['username']
                     firstName = form.cleaned_data['first_name']
                     lastName = form.cleaned_data['last_name']
@@ -167,8 +168,8 @@ class Signup(TemplateView):
                     return redirect("account:login")
                 else:
                     messages.error(request, "Invalid reCAPTCHA. Please try again.")
-            except:
-                messages.error(request, "Please try again.")
+            else:
+                messages.error(request, 'Problem to Sending Email. Please Contact Us.')
                 return redirect("account:signup")
         else:
             messages.error(request, "Please try again")
@@ -179,7 +180,7 @@ def activate(request, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+    except:
         user = None
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True

@@ -1,5 +1,15 @@
 from django import forms
-from .models import PaperRecord, AuthorRecord, ReviewPaperRecord
+
+from .models import PaperRecord, AuthorRecord, ReviewPaperRecord, ConferenceRecord
+
+
+class ConferenceForm(forms.ModelForm):
+    slug = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'Conference Name', 'pattern': "[^'\x22]+", 'style': "width: 250px"}), max_length=30)
+
+    class Meta():
+        model = ConferenceRecord
+        fields = ['slug']
 
 
 class AuthorRecordForm(forms.ModelForm):
@@ -9,7 +19,7 @@ class AuthorRecordForm(forms.ModelForm):
     mobileNumber = forms.CharField(widget=forms.NumberInput(attrs={'placeholder': 'Mobile Number'}), max_length=10)
     country = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Country Name'}), max_length=50)
     organization = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Organization'}), max_length=100)
-    url = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'URL'}), max_length=50)
+    url = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'URL', 'pattern':"https?://.+"}), max_length=50)
 
     class Meta():
         model = AuthorRecord
@@ -17,9 +27,9 @@ class AuthorRecordForm(forms.ModelForm):
 
 
 class PaperRecordForm(forms.ModelForm):
-    title = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Title*'}), required=True, max_length=100)
-    abstract = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Abstract*'}), required=True, max_length=500)
-    keywords = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Keywords'}), max_length=100)
+    title = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Title*'}), required=True, max_length=200)
+    abstract = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Abstract*'}), required=True, max_length=1000)
+    keywords = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Keywords*'}),required=True, max_length=200)
     file = forms.FileField(widget=forms.ClearableFileInput(attrs={'accept': '.pdf,.doc', 'style': "border:none"}),
                            required=True)
 

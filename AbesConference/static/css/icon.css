@@ -46,15 +46,46 @@
     display: none;
 }
 
-.fa-calendar:before {content: "\f073"}
-.fa-qrcode:before {content: "\f029"}
-.fa-copy:before {content: "\f0c5"}
-.fa-upload:before {content: "\f093"}
-.fa-paper-plane-o:before {content: "\f1d9"}
-.fa-volume {content: "\f027"}
-.fa-users {content: "\f0c0"}
-.fa-image:before{content: "\f03e"}
+.fa-calendar:before {
+    content: "\f073"
+}
 
-.fa-list-ul:before {content: "\f0ca"}
-.fa-file-pdf-o:before {content: "\f1c1"}
-.fa-download:before {content: "\f019"}
+.fa-qrcode:before {
+    content: "\f029"
+}
+
+.fa-copy:before {
+    content: "\f0c5"
+}
+
+.fa-upload:before {
+    content: "\f093"
+}
+
+.fa-paper-plane-o:before {
+    content: "\f1d9"
+}
+
+.fa-volume {
+    content: "\f027"
+}
+
+.fa-users {
+    content: "\f0c0"
+}
+
+.fa-image:before {
+    content: "\f03e"
+}
+
+.fa-list-ul:before {
+    content: "\f0ca"
+}
+
+.fa-file-pdf-o:before {
+    content: "\f1c1"
+}
+
+.fa-download:before {
+    content: "\f019"
+}

@@ -2,6 +2,7 @@
 {% block css %}{% endblock %}{% block content %}
     <div id="main" class="wrapper inner">
         <div class="content">
+            <h2>Welcome {{ user.first_name }}</h2>
             {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% else %}
                 <div class="row">
                     <div class="col-8 col-12-medium"><h2>List of Paper</h2></div>
@@ -33,30 +34,39 @@
                             <td>{{ list.title }}</td>
                             <td>{{ list.keywords }}</td>
                             <td style="text-align: center; vertical-align: middle;">
-                                <a href="{% url 'conference:view_detail' pk=list.pk %}">
+                                <a href="{% url 'conference:view_detail' slug=slug pk=list.pk %}">
                                     <i class="material-icons table-icon">&#xe88f;</i></a>
                             </td>
                             <td style="text-align: center; vertical-align: middle;">
                                 <a href="/media/{{ list.file }}" target="_blank">
-                                    <i class="material-icons table-icon">&#xe2c0;</i></a></td>
+                                    <i class="material-icons table-icon">&#xe2c0;</i>
+                                </a>
+                            </td>
                             {% if user.is_staff %}
                                 <td style="text-align: center; vertical-align: middle;">
-                                    <a href=" {% url 'conference:select_user' pk=list.pk %}">
-                                        <i class="material-icons table-icon">&#xe7f0;</i></a></td>
-                                <td style="text-align: center; vertical-align: middle;"><a href="#">
-                                    <i class="material-icons table-icon">&#xe5d5;</i></a></td>
+                                    <a href="{% url 'conference:select_user' slug=slug pk=list.pk %}">
+                                        <i class="material-icons table-icon">&#xe7f0;</i>
+                                    </a>
+                                </td>
+                                <td style="text-align: center; vertical-align: middle;"><a href="#"><i
+                                        class="material-icons table-icon">&#xe5d5;</i></a>
+                                </td>
                             {% endif %}
-                            <td style="text-align: center; vertical-align: middle;">{% if list.status == 5 %}
-                                <i class="material-icons table-icon" style="color: green">&#xe876;</i>
-                                {% elif list.status == 3 %}<i class="material-icons table-icon" style="color: red">&#xe5cd;</i>
-                                {% else %}<i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
+                            <td style="text-align: center; vertical-align: middle;">
+                                {% if list.status == 5 %}
+                                    <i class="material-icons table-icon" style="color: green">&#xe876;</i>
+                                {% elif list.status == 3 %}
+                                    <i class="material-icons table-icon" style="color: red">&#xe5cd;</i>
+                                {% else %}
+                                    <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
                                 {% endif %}
                             </td>
                             <td>{{ list.timestamp|date:'M-d-Y' }}</td>
                         </tr>
                     {% endfor %}</tbody>
-                </table>{% endif %}
-            <a href="{% url 'conference:welcome' %}" class="button primary">Back to Home Page</a></div>
+                </table>{% endif %}<br>
+            <a href="{% url 'conference:slug_welcome' slug=slug %}" class="button primary">Back to {{ slug }}</a>
+        </div>
     </div>
     <script>
         function myFunction() {
