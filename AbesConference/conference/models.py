@@ -66,6 +66,7 @@ class PaperRecord(models.Model):
 class ReviewPaperRecord(models.Model):
     reviewUser = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='reviewUser')
     paper = models.ForeignKey(PaperRecord, on_delete=models.CASCADE, null=True, related_name='paper')
+    reviewCon = models.ForeignKey(ConferenceRecord, on_delete=models.CASCADE, null=True, related_name='reviewCon')
     overallEvaluation = models.TextField()
     point = models.IntegerField()
     remark = models.CharField(max_length=100)
@@ -73,4 +74,4 @@ class ReviewPaperRecord(models.Model):
     update = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.user) + " -- " + str(self.paper)
+        return str(self.reviewUser) + " -- " + str(self.paper)

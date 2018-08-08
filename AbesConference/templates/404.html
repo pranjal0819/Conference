@@ -1,4 +1,5 @@
-{% extends "base.html" %}{% block head_title %}Error 404 | {{ block.super }}{% endblock head_title %}
+{% extends "base.html" %}{% load staticfiles %}
+{% block head_title %}Error 404 | {{ block.super }}{% endblock head_title %}{% block css %}{% endblock %}
 {% block content %}
     <h1>404 Page not found</h1><br><a href="{% url 'home' %}">Home</a>
 {% endblock %}

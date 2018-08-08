@@ -1,11 +1,5 @@
-{% extends "base.html" %}
-{% load staticfiles %}
-{% block head_title %}Submit Paper | {{ block.super }}{% endblock %}
-
-{% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-{% endblock %}
-
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}Submit Paper | {{ block.super }}{% endblock %}
+{% block css %}{% endblock %}
 {% block content %}
     <div id="main" class="wrapper inner">
         <div class="content">
@@ -25,7 +19,8 @@
                            required="True"></input><br>
                     <input type="text" name="org1" placeholder="Organization*" maxlength="100"
                            required="True"></input><br>
-                    <input type="url" name="url1" placeholder="http://example.com/" maxlength="50" pattern="https?://.+" title="URL"></input><br>
+                    <input type="url" name="url1" placeholder="http://example.com/" maxlength="50" pattern="https?://.+"
+                           title="URL"></input><br>
                 </section>
                 <section>
                     <h2>Author 2</h2>

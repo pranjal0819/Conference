@@ -1,11 +1,5 @@
-{% extends "base.html" %}
-{% load staticfiles %}
-{% block head_title %}Review Paper | {{ block.super }}{% endblock head_title %}
-
-{% block css %}
-
-{% endblock %}
-
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}Review | {{ block.super }}{% endblock head_title %}
+{% block css %}{% endblock %}
 {% block content %}
     <div class="frame_artical">
         <h3>Welcome {{ user.first_name }}</h3>

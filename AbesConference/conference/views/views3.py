@@ -1,94 +1,59 @@
-from django.contrib import messages, auth
-from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
-from ..forms import ReviewPaperForm
-from ..models import PaperRecord, ReviewPaperRecord
-
-
-class ReviewList(TemplateView):
-    template_name = 'review_list.html'
-
-    def get(self, request, slug):
-        list = ReviewPaperRecord.objects.all()
-        return render(request, self.template_name, {'list': list})
-
-
-class ReviewPaper(TemplateView):
-    template_name = 'review_paper.html'
-
-    def get(self, request, slug, pk):
-        try:
-            form = ReviewPaperForm()
-            record = ReviewPaperRecord.objects.get(user=request.user, pk=pk)
-            return render(request, self.template_name, {'form': form, 'record': record})
-        except ObjectDoesNotExist:
-            redirect("conference:view_all_paper")
-
-    def post(self, request, slug, pk):
-        try:
-            form = ReviewPaperForm(request.POST)
-            record = ReviewPaperRecord.objects.get(user=request.user, pk=pk)
-            if form.is_valid():
-                record.overallEvaluation = form.cleaned_data['overallEvaluation']
-                record.point = form.cleaned_data['point']
-                record.remark = form.cleaned_data['remark']
-                record.save(update_fields=['overallEvaluation', 'point', 'remark'])
-                messages.success(request, "Succesfuly save")
-                return redirect("conference:welcome")
-            else:
-                messages.error(request, "Data not save")
-                return redirect("conference:welcome")
-        except ObjectDoesNotExist:
-            redirect("conference:view_all_paper")
+from ..models import PaperRecord, ReviewPaperRecord, ConferenceRecord
 
 
 class SelectUser(TemplateView):
     template_name = 'userlist.html'
 
     def get(self, request, slug, pk):
-        try:
-            if request.user.is_staff:
-                paper = PaperRecord.objects.get(pk=pk)
-                userlist = auth.models.User.objects.exclude(username=paper.user).filter(is_superuser=False)
+        if True:
+            con = ConferenceRecord.objects.get(slug=slug)
+            if request.user.is_staff and con.review:
+                paper = PaperRecord.objects.get(conference=con, pk=pk)
+                userlist = User.objects.exclude(username=paper.user).filter(is_superuser=False)
                 list1 = []
                 for user in userlist:
                     try:
-                        ReviewPaperRecord.objects.get(user=user, paper=paper)
+                        ReviewPaperRecord.objects.get(reviewUser=user, paper=paper)
                         list = [user, True]
                         list1.append(list)
                     except:
                         list = [user, False]
                         list1.append(list)
-                print(list1)
-                return render(request, self.template_name, {'paper': paper, 'userlist': list1})
+                print("Hello",list1)
+                return render(request, self.template_name, {'slug':slug, 'paper': paper, 'userlist': list1})
             else:
-                messages.error(request, "Lot of Error")
-                redirect("conference:welcome")
-        except:
-            messages.error(request, "Lot of error")
-            redirect("conference:view_all_paper")
+                messages.error(request, 'Review Closed or Invalid User')
+                return redirect("conference:slug_welcome", slug=slug)
+        else:
+            messages.error(request, 'Conference Closed or Deleted or Invalid Paper')
+            return redirect("conference:welcome")
 
 
 class SelectedUser(TemplateView):
 
     def get(self, request, slug, paper_pk, user_pk):
-        if request.user.is_staff:
-            try:
-                user = auth.models.User.objects.get(pk=user_pk)
-                paper = PaperRecord.objects.get(pk=paper_pk)
+        try:
+            con = ConferenceRecord.objects.get(slug=slug)
+            if request.user.is_staff and con.review:
+                user = User.objects.get(pk=user_pk)
+                paper = PaperRecord.objects.get(conference=con, pk=paper_pk)
                 try:
-                    ReviewPaperRecord.objects.get(user=user, paper=paper)
-                    messages.error(request, "Already Assign this user")
+                    ReviewPaperRecord.objects.get(reviewUser=user, paper=paper)
+                    messages.error(request, 'Already Assign this user')
                 except:
-                    instance = ReviewPaperRecord.objects.create(user=user, paper=paper, overallEvaluation='', remark='',
-                                                                point=0)
+                    instance = ReviewPaperRecord.objects.create(reviewUser=user, paper=paper, reviewCon=con,
+                                                                overallEvaluation='', remark='', point=0)
                     instance.save()
-                    messages.success(request, "Successfuly record save")
-            except:
-                messages.error(request, "Please Try again")
-            return redirect("conference:view_all_paper")
-        else:
-            messages.error(request, "You are not a Chair Person")
+                    messages.success(request, 'Successfuly record save')
+                return redirect("conference:select_user", slug=slug, pk=paper_pk)
+            else:
+                messages.error(request, 'Review Closed or Invalid User')
+                return redirect("conference:slug_welcome", slug=slug)
+        except:
+            messages.error(request, 'Conference Closed or Deleted or Invalid Paper')
             return redirect("conference:welcome")
