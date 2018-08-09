@@ -61,7 +61,7 @@
                     <a href="{% url 'conference:delete_paper' slug=slug pk=record.pk %}" class="button">
                         Delete Paper</a>{% endif %}
             {% endif %}
-            <a href="{% url 'conference:slug_welcome' slug=slug %}" class="button primary">Back to {{ slug }}</a>
+            <a href="{% url 'conference:view_all_paper' slug=slug %}" class="button primary">Paper list of {{ slug }}</a>
         </div>
     </div>
 {% endblock %}

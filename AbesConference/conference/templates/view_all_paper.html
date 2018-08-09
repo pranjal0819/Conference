@@ -3,7 +3,8 @@
     <div id="main" class="wrapper inner">
         <div class="content">
             <h2>Welcome {{ user.first_name }}</h2>
-            {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% else %}
+            {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
+            {% if paperlist %}
                 <div class="row">
                     <div class="col-8 col-12-medium"><h2>List of Paper</h2></div>
                     <div class="col-4 col-12-medium"><input type="text" id="search" onkeyup="myFunction()"
@@ -56,9 +57,9 @@
                                 {% if list.status == 5 %}
                                     <i class="material-icons table-icon" style="color: green">&#xe876;</i>
                                 {% elif list.status == 3 %}
-                                    <i class="material-icons table-icon" style="color: red">&#xe5cd;</i>
-                                {% else %}
                                     <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
+                                {% else %}
+                                    <i class="material-icons table-icon" style="color: red">&#xe5cd;</i>
                                 {% endif %}
                             </td>
                             <td>{{ list.timestamp|date:'M-d-Y' }}</td>

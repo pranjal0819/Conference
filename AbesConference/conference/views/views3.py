@@ -1,4 +1,5 @@
-from django.contrib import messages
+from django.contrib import messages, auth
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
@@ -10,7 +11,7 @@ class SelectUser(TemplateView):
     template_name = 'userlist.html'
 
     def get(self, request, slug, pk):
-        if True:
+        try:
             con = ConferenceRecord.objects.get(slug=slug)
             if request.user.is_staff and con.review:
                 paper = PaperRecord.objects.get(conference=con, pk=pk)
@@ -24,14 +25,17 @@ class SelectUser(TemplateView):
                     except:
                         list = [user, False]
                         list1.append(list)
-                print("Hello",list1)
-                return render(request, self.template_name, {'slug':slug, 'paper': paper, 'userlist': list1})
+                print("Hello", list1)
+                return render(request, self.template_name, {'slug': slug, 'paper': paper, 'userlist': list1})
             else:
                 messages.error(request, 'Review Closed or Invalid User')
                 return redirect("conference:slug_welcome", slug=slug)
-        else:
+        except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted or Invalid Paper')
             return redirect("conference:welcome")
+        except:
+            auth.logout(request)
+            return redirect('home')
 
 
 class SelectedUser(TemplateView):

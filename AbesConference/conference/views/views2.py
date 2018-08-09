@@ -1,4 +1,5 @@
 from django.contrib import messages, auth
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
@@ -13,7 +14,7 @@ class Welcome2(TemplateView):
         try:
             conference = ConferenceRecord.objects.get(slug=slug)
             return render(request, self.template_name, {'conference': conference})
-        except:
+        except ObjectDoesNotExist:
             messages.error(request, 'Conference closed or Deleted')
             return redirect('conference:welcome')
 
@@ -32,6 +33,7 @@ class ViewAllPaper(TemplateView):
                 list = PaperRecord.objects.filter(conference=conference, user=request.user)
                 if not list:
                     messages.error(request, 'You have not submitted any paper')
+            print(list)
             return render(request, self.template_name, {'slug': slug, 'paperlist': list})
         except:
             messages.error(request, 'Conference closed or Deleted')
@@ -69,7 +71,7 @@ class SubmitPaper(TemplateView):
         try:
             con = ConferenceRecord.objects.get(slug=slug)
             if not con.submission:
-                messages.error(request,'Submission Closed')
+                messages.error(request, 'Submission Closed')
             attr = {'slug': slug, 'authorform': authorform, 'paperform': paperform}
             return render(request, self.template_name, attr)
         except:
@@ -101,7 +103,7 @@ class SubmitPaper(TemplateView):
                 except:
                     pass
                 messages.success(request, 'Paper submited successfuly')
-                return redirect("conference:submit_paper", slug=slug)
+                return redirect("conference:view_all_paper", slug=slug)
             else:
                 paperform = PaperRecordForm()
                 messages.error(request, 'Submission closed')

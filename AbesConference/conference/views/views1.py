@@ -1,4 +1,5 @@
-from django.contrib import messages
+from django.contrib import messages, auth
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
@@ -36,9 +37,13 @@ class CloseSubmission(TemplateView):
                 instance.save(update_fields=['submission'])
                 msg = "Submission closed of " + slug
                 messages.success(request, msg)
-        except:
+                return redirect('conference:welcome')
+        except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
-        return redirect('conference:welcome')
+            return redirect('conference:welcome')
+        except:
+            auth.logout(request)
+            return redirect('home')
 
 
 class StartSubmission(TemplateView):
@@ -51,9 +56,13 @@ class StartSubmission(TemplateView):
                 instance.save(update_fields=['submission'])
                 msg = "Submission open of " + slug
                 messages.success(request, msg)
-        except:
+                return redirect('conference:welcome')
+        except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
-        return redirect('conference:welcome')
+            return redirect('conference:welcome')
+        except:
+            auth.logout(request)
+            return redirect('home')
 
 
 class CloseReview(TemplateView):
@@ -66,9 +75,13 @@ class CloseReview(TemplateView):
                 instance.save(update_fields=['review'])
                 msg = "Review closed of " + slug
                 messages.success(request, msg)
-        except:
+                return redirect('conference:welcome')
+        except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
-        return redirect('conference:welcome')
+            return redirect('conference:welcome')
+        except:
+            auth.logout(request)
+            return redirect('home')
 
 
 class StartReview(TemplateView):
@@ -81,9 +94,13 @@ class StartReview(TemplateView):
                 instance.save(update_fields=['review'])
                 msg = "Review open of " + slug
                 messages.success(request, msg)
-        except:
+                return redirect('conference:welcome')
+        except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
-        return redirect('conference:welcome')
+            return redirect('conference:welcome')
+        except:
+            auth.logout(request)
+            return redirect('home')
 
 
 class CloseStatus(TemplateView):
@@ -98,9 +115,13 @@ class CloseStatus(TemplateView):
                 instance.save(update_fields=['status', 'review', 'submission'])
                 msg = slug + " closed"
                 messages.success(request, msg)
-        except:
+                return redirect('conference:welcome')
+        except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
-        return redirect('conference:welcome')
+            return redirect('conference:welcome')
+        except:
+            auth.logout(request)
+            return redirect('home')
 
 
 class StartStatus(TemplateView):
@@ -113,6 +134,10 @@ class StartStatus(TemplateView):
                 instance.save(update_fields=['status'])
                 msg = slug + " Open"
                 messages.success(request, msg)
-        except:
+                return redirect('conference:welcome')
+        except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
-        return redirect('conference:welcome')
+            return redirect('conference:welcome')
+        except:
+            auth.logout(request)
+            return redirect('home')
