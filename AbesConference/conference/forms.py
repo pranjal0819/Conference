@@ -8,8 +8,10 @@ class ConferenceForm(forms.ModelForm):
         attrs={'placeholder': 'Conference Name', 'pattern': "[^'\x22]+", 'style': "width: 350px"}), max_length=30)
     description = forms.CharField(widget=forms.Textarea(
         attrs={'placeholder': 'Conference Detail', 'style': "width:350px; height:150px"}), max_length=100)
-    #start_date = forms.DateField(widget=forms.widgets.DateInput(attrs={'placeholder':'Start Date'} ,format="%m/%d/%Y"))
-    #end_date =
+    start_date = forms.DateField(widget=forms.widgets.DateInput(
+        attrs={'placeholder': 'yyyy-mm-dd', 'style': "width: 150px"}, format="%Y/%m/%d"))
+    end_date = forms.DateField(widget=forms.widgets.DateInput(
+        attrs={'placeholder': 'yyyy-mm-dd', 'style': "width: 150px"}, format="%Y/%m/%d"))
 
     class Meta():
         model = ConferenceRecord
