@@ -7,7 +7,7 @@
             {% for m in messages %}{{ m }}<br>{% endfor %}
             <a href="{% url 'conference:view_all_paper' slug=slug %}">View Submitted Paper</a><br>
             <h2>Selected User List </h2>
-            {% for list in userlist %}
+            {% for list in userList %}
                 {{ list.0.first_name }}
                 {% if list.1 %}{{ list.1 }}{% else %}
                     <a href="{% url 'conference:selected_user' slug=slug paper_pk=paper.pk user_pk=list.0.id %}"> {{ list.1 }}</a>

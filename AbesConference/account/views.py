@@ -130,7 +130,7 @@ class Signup(TemplateView):
     def post(self, request):
         form = SignupForm(request.POST)
         if form.is_valid():
-            if True:
+            try:
                 ''' Begin reCAPTCHA validation '''
                 recaptcha_response = request.POST.get('g-recaptcha-response')
                 url = 'https://www.google.com/recaptcha/api/siteverify'
@@ -168,7 +168,7 @@ class Signup(TemplateView):
                     return redirect("account:login")
                 else:
                     messages.error(request, "Invalid reCAPTCHA. Please try again.")
-            else:
+            except:
                 messages.error(request, 'Problem to Sending Email. Please Contact Us.')
                 return redirect("account:signup")
         else:

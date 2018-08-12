@@ -1,5 +1,7 @@
+# Reviewer related view
+
 from django.contrib import messages, auth
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 

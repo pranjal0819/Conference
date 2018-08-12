@@ -1,3 +1,5 @@
+# Conference related view
+
 from django.contrib import messages, auth
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.shortcuts import render, redirect
@@ -10,12 +12,12 @@ from ..models import ConferenceRecord
 class Conference(TemplateView):
     template_name = 'welcome.html'
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         form = ConferenceForm()
         record = ConferenceRecord.objects.all().order_by('-id')
         return render(request, self.template_name, {'form': form, 'record': record})
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         form = ConferenceForm(request.POST)
         if form.is_valid() and request.user.is_staff:
             form.save()
@@ -29,13 +31,13 @@ class Conference(TemplateView):
 
 class CloseSubmission(TemplateView):
 
-    def get(self, request, slug):
+    def get(self, request, *args, **kwargs):
         try:
             if request.user.is_staff:
-                instance = ConferenceRecord.objects.get(slug=slug)
+                instance = ConferenceRecord.objects.get(slug=kwargs['slug'])
                 instance.submission = False
                 instance.save(update_fields=['submission'])
-                msg = "Submission closed of " + slug
+                msg = "Submission closed of " + kwargs['slug']
                 messages.success(request, msg)
                 return redirect('conference:welcome')
             else:
@@ -43,103 +45,103 @@ class CloseSubmission(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')
 
 
 class StartSubmission(TemplateView):
 
-    def get(self, request, slug):
+    def get(self, request, *args, **kwargs):
         try:
-            instance = ConferenceRecord.objects.get(slug=slug)
+            instance = ConferenceRecord.objects.get(slug=kwargs['slug'])
             if request.user.is_staff and instance.status:
                 instance.submission = True
                 instance.save(update_fields=['submission'])
-                msg = "Submission open of " + slug
+                msg = "Submission open of " + kwargs['slug']
                 messages.success(request, msg)
                 return redirect('conference:welcome')
         except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')
 
 
 class CloseReview(TemplateView):
 
-    def get(self, request, slug):
+    def get(self, request, *args, **kwargs):
         try:
             if request.user.is_staff:
-                instance = ConferenceRecord.objects.get(slug=slug)
+                instance = ConferenceRecord.objects.get(slug=kwargs['slug'])
                 instance.review = False
                 instance.save(update_fields=['review'])
-                msg = "Review closed of " + slug
+                msg = "Review closed of " + kwargs['slug']
                 messages.success(request, msg)
                 return redirect('conference:welcome')
         except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')
 
 
 class StartReview(TemplateView):
 
-    def get(self, request, slug):
+    def get(self, request, *args, **kwargs):
         try:
-            instance = ConferenceRecord.objects.get(slug=slug)
+            instance = ConferenceRecord.objects.get(slug=kwargs['slug'])
             if request.user.is_staff and instance.status:
                 instance.review = True
                 instance.save(update_fields=['review'])
-                msg = "Review open of " + slug
+                msg = "Review open of " + kwargs['slug']
                 messages.success(request, msg)
                 return redirect('conference:welcome')
         except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')
 
 
 class CloseStatus(TemplateView):
 
-    def get(self, request, slug):
+    def get(self, request, *args, **kwargs):
         try:
             if request.user.is_staff:
-                instance = ConferenceRecord.objects.get(slug=slug)
+                instance = ConferenceRecord.objects.get(slug=kwargs['slug'])
                 instance.status = False
                 instance.review = False
                 instance.submission = False
                 instance.save(update_fields=['status', 'review', 'submission'])
-                msg = slug + " closed"
+                msg = kwargs['slug'] + " closed"
                 messages.success(request, msg)
                 return redirect('conference:welcome')
         except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')
 
 
 class StartStatus(TemplateView):
 
-    def get(self, request, slug):
+    def get(self, request, *args, **kwargs):
         try:
             if request.user.is_staff:
-                instance = ConferenceRecord.objects.get(slug=slug)
+                instance = ConferenceRecord.objects.get(slug=kwargs['slug'])
                 instance.status = True
                 instance.save(update_fields=['status'])
-                msg = slug + " Open"
+                msg = kwargs['slug'] + " Open"
                 messages.success(request, msg)
                 return redirect('conference:welcome')
         except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')

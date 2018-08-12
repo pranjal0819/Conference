@@ -10,12 +10,12 @@
             <form action="" method="post" class="highlights">{% csrf_token %}
                 <section>
                     <h2>Author*</h2>
-                    {{ authorForm.name }}<br>
-                    {{ authorForm.email }}<br>
-                    {{ authorForm.mobileNumber }}<br>
-                    {{ authorForm.country }}<br>
-                    {{ authorForm.organization }}<br>
-                    {{ authorForm.url }}<br>
+                    {{ author_form.name }}<br>
+                    {{ author_form.email }}<br>
+                    {{ author_form.mobileNumber }}<br>
+                    {{ author_form.country }}<br>
+                    {{ author_form.organization }}<br>
+                    {{ author_form.url }}<br>
                 </section>
                 <div style="width: 85%; margin: 0; padding: 10px;">
                     <button type="submit" class="primary wide">Save</button>

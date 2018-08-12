@@ -9,7 +9,7 @@ urlpatterns = [
     path('logout', login_required(logout), name='logout'),
     path('activate/<uidb64>/<token>/', activate, name='activate'),
     path('profile', login_required(Profile.as_view()), name='profile'),
-    path('edit-profile', login_required(EditProfile.as_view()), name='edit_profile'),
+    path('edit-profile', login_required(Profile.as_view()), name='edit_profile'),
     path('change-username', login_required(ChangeUsername.as_view()), name='change_username'),
     path('change-password', login_required(ChangePassword.as_view()), name='change_password'),
 ]

@@ -63,8 +63,7 @@ class EditProfileForm(forms.ModelForm):
         attrs={'placeholder': 'abcd@gmail.com', 'pattern': '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$',
                'title': 'Email'}), required=True, max_length=40)
     password = forms.CharField(widget=forms.PasswordInput(
-        attrs={'placeholder': 'Password', 'pattern': "(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}", 'title': 'Password'}),
-        required=True, max_length=20)
+        attrs={'placeholder': 'Password', 'title': 'Password'}), required=True, max_length=20)
 
     class Meta():
         model = models.User
@@ -81,8 +80,7 @@ class EditProfileForm(forms.ModelForm):
 
 class ChangePasswordForm(forms.ModelForm):
     current_password = forms.CharField(widget=forms.PasswordInput(
-        attrs={'placeholder': 'Current Password', 'pattern': "(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
-               'title': 'Current Password'}), required=True, max_length=20)
+        attrs={'placeholder': 'Current Password', 'title': 'Current Password'}), required=True, max_length=20)
     password = forms.CharField(widget=forms.PasswordInput(
         attrs={'placeholder': 'New Password', 'pattern': "(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
                'title': 'New Password'}), required=True, max_length=20)

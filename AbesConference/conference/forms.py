@@ -21,7 +21,7 @@ class AuthorRecordForm(forms.ModelForm):
     country = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Country Name'}), max_length=50)
     organization = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Organization'}), max_length=100)
     url = forms.CharField(widget=forms.TextInput(
-        attrs={'placeholder': 'http://example.com/', 'pattern': "https?://.+"}),required=False, max_length=50)
+        attrs={'placeholder': 'http://example.com/', 'pattern': "https?://.+"}), required=False, max_length=50)
 
     class Meta():
         model = AuthorRecord
