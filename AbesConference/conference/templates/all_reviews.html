@@ -1,0 +1,10 @@
+{% extends 'base.html' %}{% load staticfiles %}{% block head_title %}Paper Detail | {{ block.super }}{% endblock %}
+{% block css %}{% endblock %}
+{% block content %}
+    <div id="main" class="wrapper inner">
+        <div class="content">
+            {% for m in messages %}{{ m }}<br>{% endfor %}
+            <a href="{% url 'conference:view_all_paper' slug=slug %}" class="button primary">Back to Paper List</a>
+        </div>
+    </div>
+{% endblock %}

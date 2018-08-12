@@ -3,19 +3,19 @@
 {% block content %}
     <div id="main" class="wrapper inner">
         <div class="content">
-            <h2>Welcome {{ user.first_name }}</h2>
             {% for m in messages %}{{ m }}<br>{% endfor %}
-            <a href="{% url 'conference:slug_welcome' slug=slug %}">Go to {{ slug }}</a><br><br>
             <h3>Paper List to Review</h3>
-            {% if not paperlist %}
+            {% if not paper_list %}
                 Their is no paper to review
             {% endif %}
-            {% for list in paperlist %}
-                {{ forloop.counter }} {{ list.pk }}
-                <a href="{% url 'conference:review_paper' slug=slug pk=list.pk %}">{{ list.paper.title }}</a>
-                {{ list.paper.keywords }}
-                <br>
+            <ul>
+            {% for list in paper_list %}
+                <li><a href="{% url 'conference:review_paper' slug=slug pk=list.pk %}">{{ list.paper.title }}</a>
+                    <br>{{ list.paper.keywords }}</li>
             {% endfor %}
+            </ul>
+            <br>
+            <a href="{% url 'conference:slug_welcome' slug=slug %}" class="small wide button">Go to {{ slug }}</a>
         </div>
     </div>
 {% endblock %}

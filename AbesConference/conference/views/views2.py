@@ -15,7 +15,7 @@ class Welcome2(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
             conference = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            return render(request, self.template_name, {'conference': conference})
+            return render(request, self.template_name, {'conference': kwargs['slug']})
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')

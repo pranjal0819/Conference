@@ -3,9 +3,9 @@
 {% block content %}
     <div id="main" class="wrapper inner">
         <div class="content">
-            <h2>Welcome {{ user.first_name }}</h2>
             {% for m in messages %}{{ m }}<br>{% endfor %}
-            <a href="{% url 'conference:view_all_paper' slug=slug %}">View Submitted Paper</a><br>
+            <a href="{% url 'conference:view_all_paper' slug=slug %}" style="float: right" class="button small">View
+                Submitted Paper</a><br>
             <h2>Submit Author Information</h2>
             <form enctype="multipart/form-data" action="" method="post" class="highlights">{% csrf_token %}
                 <section>

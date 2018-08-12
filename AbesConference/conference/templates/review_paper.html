@@ -3,10 +3,8 @@
 {% block content %}
     <div id="main" class="wrapper inner">
         <div class="content">
-            <h2>Welcome {{ user.first_name }}</h2>
             {% for m in messages %}{{ m }}<br>{% endfor %}
             {% if not con.review %}<h3 style="color: red">Review Submission Closed</h3>{% endif %}
-            <a href="{% url 'conference:review_list' slug=slug %}">Review List</a><br><br>
             <h3>Detail Of Paper</h3>
             <dl>
                 <dt>Title</dt>
@@ -48,6 +46,7 @@
                 {% else %}
                     <h3>Review Submission Closed</h3>
                 {% endif %}
+                <a href="{% url 'conference:review_list' slug=slug %}" class="button wide small">Review List</a>
             </form>
             <br>
         </div>

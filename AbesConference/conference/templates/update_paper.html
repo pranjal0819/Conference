@@ -2,7 +2,7 @@
 {% block css %}{% endblock %}
 {% block content %}
     <div id="main" class="wrapper inner">
-        <div class="content"><h2>Welcome {{ user.first_name }}</h2>
+        <div class="content">
             {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}{% if record is not None %}
                 <h2>Detail Of Paper</h2>
                 <dl>

@@ -66,8 +66,16 @@ class PaperRecord(models.Model):
         return str(self.title)
 
 
+class PcMemberRecord(models.Model):
+    pcCon = models.ForeignKey(ConferenceRecord, on_delete=models.CASCADE, null=True, related_name='pcCon')
+    pcUser = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='pcUser')
+
+    def __str__(self):
+        return str(self.pcUser) + " -- " + str(self.pcCon)
+
+
 class ReviewPaperRecord(models.Model):
-    reviewUser = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='reviewUser')
+    reviewUser = models.ForeignKey(PcMemberRecord, on_delete=models.CASCADE, null=True, related_name='reviewUser')
     paper = models.ForeignKey(PaperRecord, on_delete=models.CASCADE, null=True, related_name='paper')
     reviewCon = models.ForeignKey(ConferenceRecord, on_delete=models.CASCADE, null=True, related_name='reviewCon')
     overallEvaluation = models.TextField()

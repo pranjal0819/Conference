@@ -3,16 +3,20 @@
 {% block content %}
     <div id="main" class="wrapper inner">
         <div class="content">
-            <h2>Welcome {{ user.first_name }}</h2>
             {% for m in messages %}{{ m }}<br>{% endfor %}
-            <a href="{% url 'conference:view_all_paper' slug=slug %}">View Submitted Paper</a><br>
-            <h2>Selected User List </h2>
-            {% for list in userList %}
-                {{ list.0.first_name }}
-                {% if list.1 %}{{ list.1 }}{% else %}
-                    <a href="{% url 'conference:selected_user' slug=slug paper_pk=paper.pk user_pk=list.0.id %}"> {{ list.1 }}</a>
-                {% endif %}<br>
-            {% endfor %}
+            <h2>PC Member List</h2>
+            <ul>
+                {% for list in user_list %}
+                    <li>{{ list.0.pcUser.first_name }}
+                        {% if list.1 %}{{ list.1 }}{% else %}
+                            <a href="{% url 'conference:selected_user' slug=slug paper_pk=paper.pk user_pk=list.0.id %}"> {{ list.1 }}</a>
+                        {% endif %}</li>
+                {% endfor %}
+            </ul>
+            <br><a href="#" class="button wide small primary">Add PC Member</a>
+            <a href="{% url 'conference:view_all_paper' slug=slug %}" class="small button wide" style="float: right">View
+                All Paper</a>
+
         </div>
     </div>
 {% endblock %}
