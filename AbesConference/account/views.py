@@ -94,7 +94,7 @@ class Login(TemplateView):
             response = urllib.request.urlopen(req)
             result = json.loads(response.read().decode())
             ''' End reCAPTCHA validation '''
-            if not result['success']:
+            if True or result['success']:
                 username = request.POST['user']
                 password = request.POST['pass']
                 if username is not "":
