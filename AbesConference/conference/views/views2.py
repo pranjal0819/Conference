@@ -15,8 +15,11 @@ class Welcome2(TemplateView):
             conference = ConferenceRecord.objects.get(slug=slug)
             return render(request, self.template_name, {'conference': conference})
         except ObjectDoesNotExist:
-            messages.error(request, 'Conference closed or Deleted')
+            messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
+        except:
+            auth.logout(request)
+            return redirect('home')
 
 
 class ViewAllPaper(TemplateView):
@@ -33,11 +36,13 @@ class ViewAllPaper(TemplateView):
                 list = PaperRecord.objects.filter(conference=conference, user=request.user)
                 if not list:
                     messages.error(request, 'You have not submitted any paper')
-            print(list)
             return render(request, self.template_name, {'slug': slug, 'paperlist': list})
-        except:
-            messages.error(request, 'Conference closed or Deleted')
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
+        except:
+            auth.logout(request)
+            return redirect('home')
 
 
 class ViewDetail(TemplateView):
@@ -116,9 +121,12 @@ class SubmitPaper(TemplateView):
                 messages.error(request, 'Submission Closed')
             attr = {'slug': slug, 'authorform': authorform, 'paperform': paperform}
             return render(request, self.template_name, attr)
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('conference:welcome')
         except:
-            messages.error(request, 'Conference closed or Deleted')
-            return redirect("conference:welcome")
+            auth.logout(request)
+            return redirect('home')
 
     def post(self, request, slug):
         paperform = PaperRecordForm(request.POST, request.FILES)
@@ -150,9 +158,12 @@ class SubmitPaper(TemplateView):
                 paperform = PaperRecordForm()
                 messages.error(request, 'Submission closed')
             return render(request, self.template_name, {'slug': slug, 'paperform': paperform})
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('conference:welcome')
         except:
-            messages.error(request, 'Conference closed or Deleted')
-            return redirect("conference:welcome")
+            auth.logout(request)
+            return redirect('home')
 
 
 class DeletePaper(TemplateView):

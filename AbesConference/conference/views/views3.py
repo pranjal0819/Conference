@@ -57,24 +57,29 @@ class SelectedUser(TemplateView):
             else:
                 messages.error(request, 'Review Closed or Invalid User')
                 return redirect("conference:slug_welcome", slug=slug)
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('conference:welcome')
         except:
-            messages.error(request, 'Conference Closed or Deleted or Invalid Paper')
-            return redirect("conference:welcome")
+            auth.logout(request)
+            return redirect('home')
 
 
 class ShowReviews(TemplateView):
     template_name = 'all_reviews.html'
 
     def get(self, request, slug, pk):
-        if request.user.is_staff:
-            try:
+        try:
+            if request.user.is_staff:
                 con = ConferenceRecord.objects.get(slug=slug)
                 paper = PaperRecord.objects.get(conference=con, pk=pk)
                 reviews = ReviewPaperRecord.objects.filter(paper=paper)
                 return render(request, self.template_name, {'slug': slug, 'paper': paper, 'reviews': reviews})
-            except ObjectDoesNotExist:
-                messages.error(request, 'Conference Deleted or Invalid Paper')
-                return redirect('conference:welcome')
-        else:
+            else:
+                raise PermissionError
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('conference:welcome')
+        except:
             auth.logout(request)
             return redirect('home')
