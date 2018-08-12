@@ -1,6 +1,6 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}View All Paper | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}{% block content %}
-    <div id="main" class="wrapper inner">
+    <div id="main" class="wrapper inner" style="width: 90%;">
         <div class="content">
             <h2>Welcome {{ user.first_name }}</h2>
             {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
@@ -16,15 +16,15 @@
                     <tr>
                         <th>#</th>
                         <th width="15%">Author Name</th>
-                        <th width="27%">Title</th>
-                        <th width="10%">Category</th>
-                        <th style="font-size: 12px;">Detail</th>
-                        <th style="font-size: 12px;">Download</th>
+                        <th width="30%">Title</th>
+                        <th width="15%">Category</th>
+                        <th style="font-size: 10px;">Detail</th>
+                        <th style="font-size: 10px;">Download</th>
                         {% if user.is_staff %}
-                            <th style="font-size: 12px;">Assignment</th>
-                            <th style="font-size: 12px;">Update</th>{% endif %}
-                        <th>Status</th>
-                        <th width="12%" style="font-size: 12px;">Submission Date</th>
+                            <th style="font-size: 10px;">Assignment</th>
+                            <th style="font-size: 10px;">Update</th>{% endif %}
+                        <th width="5%" style="font-size: 10px;">Status</th>
+                        <th width="5%" style="font-size: 10px; text-align: center">Submission Date</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -63,7 +63,7 @@
                                     <i class="material-icons table-icon" style="color: red">&#xe5cd;</i>
                                 {% endif %}
                             </td>
-                            <td>{{ list.timestamp|date:'M-d-Y' }}</td>
+                            <td style="text-align: center;">{{ list.timestamp|date:'M-d-Y' }}</td>
                         </tr>
                     {% endfor %}</tbody>
                 </table>{% endif %}<br>

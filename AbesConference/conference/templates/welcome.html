@@ -20,32 +20,31 @@
                 presentation in parallel sessions. CICT 2019 will no doubt be proven to be exciting and educative.</p>
             <div style="text-align: left">
                 <h1>List of Conferences</h1>
-                <ul style="font-size: large; width: 100%">
-                    {% for list in record %}
-                        <li><a href="{% url 'conference:slug_welcome' slug=list.slug %}">{{ list.slug }}</a>
-                            {% if user.is_staff %}
-                                {% if list.submission %}
-                                    <a href="{% url 'conference:close_submission' slug=list.slug %}">Close
-                                        Submission</a>{% else %}Submission Closed{% endif %}
-                                {% if list.review %}
-                                    <a href="{% url 'conference:close_review' slug=list.slug %}">Close Review</a>
-                                {% else %}Review Closed{% endif %}
-                                {% if list.status %}
-                                    <a href="{% url 'conference:close_status' slug=list.slug %}">Close Conference</a>
-                                {% else %}Conference Closed{% endif %}
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
+                {% if record %}
+                    <ul style="font-size: large; width: 100%">
+                        {% for list in record %}
+                            <li><a href="{% url 'conference:slug_welcome' slug=list.slug %}">{{ list.slug }}</a>
+                                {% if user.is_staff %}
+                                    {% if list.submission %}
+                                        <a href="{% url 'conference:close_submission' slug=list.slug %}">Close
+                                            Submission</a>{% else %}Submission Closed{% endif %}
+                                    {% if list.review %}
+                                        <a href="{% url 'conference:close_review' slug=list.slug %}">Close Review</a>
+                                    {% else %}Review Closed{% endif %}
+                                    {% if list.status %}
+                                        <a href="{% url 'conference:close_status' slug=list.slug %}">Close
+                                            Conference</a>
+                                    {% else %}Conference Closed{% endif %}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <h3>There is no conference</h3>
+                {% endif %}
+                <br><br>
                 {% if user.is_staff %}
-                    <small style="color: red">*Once Conference Closed Can not be Open to anyone</small>
-                    <br><br><br><h2>Create Conference</h2>
-                    <form method="post">{% csrf_token %}
-                        {{ form.slug }}<br>
-                        <button type="submit" class="primary">Create Conference</button>
-                        <br>
-                        <small style="color: red">*Once Conference Created Can not be deleted</small>
-                    </form>
+                    <a href="{% url 'conference:create_conference' %}" class="button wide small">Create Conference</a>
                 {% endif %}
                 <br>
             </div>

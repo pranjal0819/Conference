@@ -9,9 +9,13 @@ from .views.views4 import *
 urlpatterns = [
     # views1
     path('', Conference.as_view(), name='welcome'),
+    path('create-conference', CreateConference.as_view(), name='create_conference'),
     path('<slug>/close-submission', login_required(CloseSubmission.as_view()), name='close_submission'),
     path('<slug>/close-review', login_required(CloseReview.as_view()), name='close_review'),
     path('<slug>/close-status', login_required(CloseStatus.as_view()), name='close_status'),
+    path('<slug>/open-submission', login_required(OpenSubmission.as_view()), name='open_submission'),
+    path('<slug>/open-review', login_required(OpenReview.as_view()), name='open_review'),
+    path('<slug>/open-status', login_required(OpenStatus.as_view()), name='open_status'),
     # views2
     path('<slug>', login_required(Welcome2.as_view()), name='slug_welcome'),
     path('<slug>/submit_paper', login_required(SubmitPaper.as_view()), name='submit_paper'),

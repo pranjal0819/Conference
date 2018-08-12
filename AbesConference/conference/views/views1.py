@@ -13,9 +13,16 @@ class Conference(TemplateView):
     template_name = 'welcome.html'
 
     def get(self, request, *args, **kwargs):
-        form = ConferenceForm()
         record = ConferenceRecord.objects.all().order_by('-id')
-        return render(request, self.template_name, {'form': form, 'record': record})
+        return render(request, self.template_name, {'record': record})
+
+
+class CreateConference(TemplateView):
+    template_name = 'create_conference.html'
+
+    def get(self, request, *args, **kwargs):
+        form = ConferenceForm()
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
         form = ConferenceForm(request.POST)
@@ -24,9 +31,7 @@ class Conference(TemplateView):
             messages.success(request, 'Successfully Conference Created')
         else:
             messages.error(request, 'Contact to admin')
-        form = ConferenceForm()
-        record = ConferenceRecord.objects.all().order_by('-id')
-        return render(request, self.template_name, {'form': form, 'record': record})
+        return redirect('conference:welcome')
 
 
 class CloseSubmission(TemplateView):
@@ -50,7 +55,7 @@ class CloseSubmission(TemplateView):
             return redirect('home')
 
 
-class StartSubmission(TemplateView):
+class OpenSubmission(TemplateView):
 
     def get(self, request, *args, **kwargs):
         try:
@@ -88,7 +93,7 @@ class CloseReview(TemplateView):
             return redirect('home')
 
 
-class StartReview(TemplateView):
+class OpenReview(TemplateView):
 
     def get(self, request, *args, **kwargs):
         try:
@@ -128,7 +133,7 @@ class CloseStatus(TemplateView):
             return redirect('home')
 
 
-class StartStatus(TemplateView):
+class OpenStatus(TemplateView):
 
     def get(self, request, *args, **kwargs):
         try:
