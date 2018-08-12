@@ -17,10 +17,11 @@ urlpatterns = [
     path('<slug>/submit_paper', login_required(SubmitPaper.as_view()), name='submit_paper'),
     path('<slug>/view-all-paper', login_required(ViewAllPaper.as_view()), name='view_all_paper'),
     path('<slug>/view-paper/<int:pk>/detail', login_required(ViewDetail.as_view()), name='view_detail'),
+    path('<slug>/add-author/<int:pk>', login_required(AddAuthor.as_view()), name='add_author'),
+    path('<slug>/update-paper/<int:pk>', login_required(UpdatePaper.as_view()), name='update_paper'),
+    path('<slug>/update-author/<int:pk>', login_required(UpdateAuthor.as_view()), name='update_author'),
     path('<slug>/view-paper/<int:pk>/delete', login_required(DeletePaper.as_view()), name='delete_paper'),
     # views3
-    path('<slug>/update-paper/<int:pk>', login_required(UpdatePaper.as_view()), name='update_paper'),
-    #path('<slug>/update-paper', login_required(UpdatePaper.as_view()), name='update_paper'),
     path('<slug>/view-paper/<int:pk>/select-user', login_required(SelectUser.as_view()), name='select_user'),
     path('<slug>/view-paper/<int:paper_pk>/select/<int:user_pk>', login_required(SelectedUser.as_view()),
          name='selected_user'),

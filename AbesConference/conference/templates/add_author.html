@@ -1,0 +1,27 @@
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}Submit Paper | {{ block.super }}{% endblock %}
+{% block css %}{% endblock %}
+{% block content %}
+    <div id="main" class="wrapper inner">
+        <div class="content">
+            <h2>Welcome {{ user.first_name }}</h2>
+            {% for m in messages %}{{ m }}<br>{% endfor %}
+            <a href="{% url 'conference:view_all_paper' slug=slug %}">View Submitted Paper</a><br>
+            <h2>Submit Author Information</h2>
+            <form action="" method="post" class="highlights">{% csrf_token %}
+                <section>
+                    <h2>Author*</h2>
+                    {{ authorForm.name }}<br>
+                    {{ authorForm.email }}<br>
+                    {{ authorForm.mobileNumber }}<br>
+                    {{ authorForm.country }}<br>
+                    {{ authorForm.organization }}<br>
+                    {{ authorForm.url }}<br>
+                </section>
+                <div style="width: 85%; margin: 0; padding: 10px;">
+                    <button type="submit" class="primary wide">Save</button>
+                    <a href="{% url 'conference:view_detail' slug=slug pk=pk %}" class="button wide">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

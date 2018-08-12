@@ -8,7 +8,7 @@ from .utils import unique_slug_generator
 
 # Create your models here.
 def upload_path(instance, filename):
-    fileBase, ext = filename.split(".")
+    file_base, ext = filename.split(".")
     new_filename = str(random.randint(10000, 953205))
     final_filename = '{new_filename}.{ext}'.format(new_filename=new_filename, ext=ext)
     return "{folder}/{final_filename}".format(folder=instance.conference, final_filename=final_filename)
@@ -54,7 +54,7 @@ class PaperRecord(models.Model):
     keywords = models.TextField(max_length=200)
     file = models.FileField(upload_to=upload_path)
     status = models.IntegerField(default=3)
-    #review = models.TextField(max_length=500, default=None)
+    # review = models.TextField(max_length=500, default=None)
     timestamp = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
     author = models.ManyToManyField(AuthorRecord)

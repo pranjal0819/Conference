@@ -4,7 +4,7 @@
         <div class="content">
             <h2>Welcome {{ user.first_name }}</h2>
             {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
-            {% if paperlist %}
+            {% if paperList %}
                 <div class="row">
                     <div class="col-8 col-12-medium"><h2>List of Paper</h2></div>
                     <div class="col-4 col-12-medium"><input type="text" id="search" onkeyup="myFunction()"
@@ -28,7 +28,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for list in paperlist %}
+                    {% for list in paperList %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
@@ -49,7 +49,8 @@
                                         <i class="material-icons table-icon">&#xe7f0;</i>
                                     </a>
                                 </td>
-                                <td style="text-align: center; vertical-align: middle;"><a href="{% url 'conference:update_paper' slug=slug pk=list.pk %}"><i
+                                <td style="text-align: center; vertical-align: middle;"><a
+                                        href="{% url 'conference:update_paper' slug=slug pk=list.pk %}"><i
                                         class="material-icons table-icon">&#xe5d5;</i></a>
                                 </td>
                             {% endif %}

@@ -1,5 +1,5 @@
 from django.contrib import messages, auth
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
@@ -38,6 +38,8 @@ class CloseSubmission(TemplateView):
                 msg = "Submission closed of " + slug
                 messages.success(request, msg)
                 return redirect('conference:welcome')
+            else:
+                raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
             return redirect('conference:welcome')

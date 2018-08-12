@@ -1,5 +1,5 @@
 from django.contrib import messages, auth
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
@@ -76,7 +76,7 @@ class ShowReviews(TemplateView):
                 reviews = ReviewPaperRecord.objects.filter(paper=paper)
                 return render(request, self.template_name, {'slug': slug, 'paper': paper, 'reviews': reviews})
             else:
-                raise PermissionError
+                raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')

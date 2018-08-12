@@ -10,15 +10,15 @@
             <form enctype="multipart/form-data" action="" method="post" class="highlights">{% csrf_token %}
                 <section>
                     <h2>Author 1*</h2>
-                    <input type="text" name="name1" placeholder="Full Name*" required="True" maxlength="50"></input><br>
-                    <input type="email" name="email1" placeholder="Email*" required="True" maxlength="50"
+                    <input type="text" name="name1" placeholder="Full Name*" required maxlength="50"></input><br>
+                    <input type="email" name="email1" placeholder="Email*" required maxlength="50"
                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"></input><br>
                     <input type="text" name="mobile1" placeholder="Mobile Number*" maxlength="10"
-                           required="True"></input><br>
+                           pattern="[789][0-9]{9}" required></input><br>
                     <input type="text" name="country1" placeholder="Country*" maxlength="50"
-                           required="True"></input><br>
+                           required></input><br>
                     <input type="text" name="org1" placeholder="Organization*" maxlength="100"
-                           required="True"></input><br>
+                           required></input><br>
                     <input type="url" name="url1" placeholder="http://example.com/" maxlength="50" pattern="https?://.+"
                            title="URL"></input><br>
                 </section>
@@ -27,7 +27,8 @@
                     <input type="text" name="name2" placeholder="Full Name" maxlength="50"></input><br>
                     <input type="email" name="email2" placeholder="Email" maxlength="50"
                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"></input><br>
-                    <input type="text" name="mobile2" placeholder="Mobile Number" maxlength="10"></input><br>
+                    <input type="text" name="mobile2" placeholder="Mobile Number" maxlength="10"
+                           pattern="[789][0-9]{9}"></input><br>
                     <input type="text" name="country2" placeholder="Country" maxlength="50"></input><br>
                     <input type="text" name="org2" placeholder="Organization" maxlength="100"></input><br>
                     <input type="url" name="url2" placeholder="http://example.com/" maxlength="50"></input><br>
@@ -37,17 +38,18 @@
                     <input type="text" name="name3" placeholder="Full Name" maxlength="50"></input><br>
                     <input type="email" name="email3" placeholder="Email" maxlength="50"
                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"></input><br>
-                    <input type="text" name="mobile3" placeholder="Mobile Number" maxlength="10"></input><br>
+                    <input type="text" name="mobile3" placeholder="Mobile Number" maxlength="10"
+                           pattern="[789][0-9]{9}"></input><br>
                     <input type="text" name="country3" placeholder="Country" maxlength="50"></input><br>
                     <input type="text" name="org3" placeholder="Organization" maxlength="100"></input><br>
                     <input type="url" name="url3" placeholder="http://example.com/" maxlength="50"></input><br>
                 </section>
                 <div style="width: 85%; margin: 0; padding: 10px; ">
                     <h2>Upload File*</h2>
-                    {{ paperform.title }}<br>
-                    {{ paperform.keywords }}<br>
-                    {{ paperform.abstract }}<br>
-                    {{ paperform.file }}<br><br>
+                    {{ paperForm.title }}<br>
+                    {{ paperForm.keywords }}<br>
+                    {{ paperForm.abstract }}<br>
+                    {{ paperForm.file }}<br><br>
                     <button type="submit" class="primary wide">Submit</button>
                     <button type="reset">Reset</button>
                 </div>

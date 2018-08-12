@@ -41,8 +41,8 @@
                             Download Paper</a>
                         <br><br>Upload new File: <input type="file" accept="application/pdf" name="upload"
                                                         title="Upload File"><br>
-                    <br>
-                    <button type="submit" title="Save the Changes" class="small wide">Save the Changes</button>
+                        <br>
+                        <button type="submit" title="Save the Changes" class="small wide">Save the Changes</button>
                     </form>
                 </dl>
                 <br>
@@ -57,9 +57,10 @@
                             <th>Organization</th>
                             <th>Country</th>
                             <th>Url</th>
+                            <th>Edit</th>
                         </tr>
                         </thead>
-                        <tbody>{% for name in authorlist %}
+                        <tbody>{% for name in authorList %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
                                 <td>{{ name.name }}</td>
@@ -67,17 +68,16 @@
                                 <td>{% if name.mobileNumber %}{{ name.mobileNumber }}{% else %}-{% endif %}</td>
                                 <td>{% if name.organization %}{{ name.organization }}{% else %}-{% endif %}</td>
                                 <td>{% if name.country %}{{ name.country }}{% else %}-{% endif %}</td>
-                                <td>{% if name.webpage %}
-                                    <a href="{{ name.webpage }}" target="_blank">{{ name.webpage }}</a>
+                                <td>{% if name.webPage %}
+                                    <a href="{{ name.webPage }}" target="_blank">{{ name.webPage }}</a>
                                 {% else %}-{% endif %}</td>
+                                <td><a href="{% url 'conference:update_author' slug=slug pk=name.pk %}">Edit</a></td>
                             </tr>{% endfor %}</tbody>
                     </table>
-                </div>{% if user.is_staff %}
-                    <a href="{% url 'conference:delete_paper' slug=slug pk=record.pk %}" class="button">
-                        Delete Paper</a>{% endif %}
+                    <a href="{% url 'conference:add_author' slug=slug pk=record.pk %}"
+                       class="button wide small primary" style="float: right;">Add another author</a><br><br></div>
             {% endif %}
-            <a href="{% url 'conference:view_all_paper' slug=slug %}" class="button primary">Paper list
-                of {{ slug }}</a>
+            <a href="{% url 'conference:view_all_paper' slug=slug %}" class="button primary">Back to Paper list</a>
         </div>
     </div>
 {% endblock %}
