@@ -5,6 +5,7 @@
         <div class="content">
             <h2>Welcome {{ user.first_name }}</h2>
             {% for m in messages %}{{ m }}<br>{% endfor %}
+            {% if not con.review %}<h3 style="color: red">Review Submission Closed</h3>{% endif %}
             <a href="{% url 'conference:review_list' slug=slug %}">Review List</a><br><br>
             <h3>Detail Of Paper</h3>
             <dl>
@@ -31,10 +32,22 @@
             </dl>
             <h3>Give your Review</h3>
             <form action="" method="post">{% csrf_token %}
-                {{ form.overallEvaluation }}<br>
-                {{ form.point }}<br>
-                {{ form.remark }}<br>
+                <h4>Evaluation:</h4><textarea name="evaluation" cols="40" rows="8" placeholder="Evaluation"
+                                              maxlength="500" required>{{ record.overallEvaluation }}</textarea><br>
+                <h4>Point: {{ record.point }}</h4>
+                <input type="radio" id="five" name="point" value="5"><label for="five">5</label><br>
+                <input type="radio" id="four" name="point" value="4"><label for="four">4</label><br>
+                <input type="radio" id="three" name="point" value="3"><label for="three">3</label><br>
+                <input type="radio" id="two" name="point" value="2"><label for="two">2</label><br>
+                <input type="radio" id="one" name="point" value="1"><label for="one">1</label><br>
+                <input type="radio" id="zero" name="point" value="0" checked><label for="zero">0</label><br>
+                <h4>Remark:</h4><textarea name="remark" cols="40" rows="5" placeholder="Remark" maxlength="100"
+                                          required>{{ record.remark }}</textarea><br>
+                {% if con.review %}
                 <button type="submit" title="Save" class="primary small">Save Review</button>
+                {% else %}
+                <h3>Review Submission Closed</h3>
+                {% endif %}
             </form>
             <br>
         </div>

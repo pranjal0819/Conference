@@ -81,7 +81,7 @@ class Login(TemplateView):
         return render(request, self.template_name, {})
 
     def post(self, request):
-        if True:
+        try:
             ''' Begin reCAPTCHA validation '''
             recaptcha_response = request.POST.get('g-recaptcha-response')
             url = 'https://www.google.com/recaptcha/api/siteverify'
@@ -114,7 +114,7 @@ class Login(TemplateView):
                     messages.error(request, 'Enter Username and Password')
             else:
                 messages.error(request, 'Invalid reCAPTCHA. Please try again.')
-        else:
+        except:
             messages.error(request, 'Contact Us')
             return redirect("account:login")
         return render(request, self.template_name, {})
@@ -143,7 +143,7 @@ class Signup(TemplateView):
                 response = urllib.request.urlopen(req)
                 result = json.loads(response.read().decode())
                 ''' End reCAPTCHA validation '''
-                if not result['success']:
+                if result['success']:
                     username = form.cleaned_data['username']
                     firstName = form.cleaned_data['first_name']
                     lastName = form.cleaned_data['last_name']
@@ -186,8 +186,8 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         auth.login(request, user)
-        messages.success(request, "Thank you for your email confirmation. Now you can login your account.")
+        messages.success(request, 'Thank you for Email Confirmation. Now you can login to your Account.')
         return redirect("account:login")
     else:
-        messages.error(request, 'Activation link is invalid!')
+        messages.error(request, 'Activation link is invalid! Contact to Us')
         return redirect("account:signup")

@@ -25,7 +25,6 @@ class SelectUser(TemplateView):
                     except:
                         list = [user, False]
                         list1.append(list)
-                print("Hello", list1)
                 return render(request, self.template_name, {'slug': slug, 'paper': paper, 'userlist': list1})
             else:
                 messages.error(request, 'Review Closed or Invalid User')
@@ -61,3 +60,21 @@ class SelectedUser(TemplateView):
         except:
             messages.error(request, 'Conference Closed or Deleted or Invalid Paper')
             return redirect("conference:welcome")
+
+
+class ShowReviews(TemplateView):
+    template_name = 'all_reviews.html'
+
+    def get(self, request, slug, pk):
+        if request.user.is_staff:
+            try:
+                con = ConferenceRecord.objects.get(slug=slug)
+                paper = PaperRecord.objects.get(conference=con, pk=pk)
+                reviews = ReviewPaperRecord.objects.filter(paper=paper)
+                return render(request, self.template_name, {'slug': slug, 'paper': paper, 'reviews': reviews})
+            except ObjectDoesNotExist:
+                messages.error(request, 'Conference Deleted or Invalid Paper')
+                return redirect('conference:welcome')
+        else:
+            auth.logout(request)
+            return redirect('home')

@@ -10,7 +10,7 @@ from .utils import unique_slug_generator
 def upload_path(instance, filename):
     fileBase, ext = filename.split(".")
     new_filename = str(random.randint(10000, 953205))
-    final_filename = f'{new_filename}.{ext}'
+    final_filename = '{new_filename}.{ext}'.format(new_filename=new_filename, ext=ext)
     return "{folder}/{final_filename}".format(folder=instance.conference, final_filename=final_filename)
 
 

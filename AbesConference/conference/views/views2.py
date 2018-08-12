@@ -46,20 +46,62 @@ class ViewDetail(TemplateView):
     def get(self, request, slug, pk):
         try:
             conference = ConferenceRecord.objects.get(slug=slug)
-            try:
-                if request.user.is_staff:
-                    obj = PaperRecord.objects.get(conference=conference, pk=pk)
-                else:
-                    obj = PaperRecord.objects.get(conference=conference, user=request.user, pk=pk)
-                list = obj.author.all()
-                return render(request, self.template_name, {'slug': slug, 'record': obj, 'authorlist': list})
-            except:
-                messages.error(request, 'Invalid')
-                auth.logout(request)
-                redirect('conference:welcome')
+            if request.user.is_staff:
+                obj = PaperRecord.objects.get(conference=conference, pk=pk)
+            else:
+                obj = PaperRecord.objects.get(conference=conference, user=request.user, pk=pk)
+            list = obj.author.all()
+            return render(request, self.template_name, {'slug': slug, 'record': obj, 'authorlist': list})
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('conference:welcome')
         except:
-            messages.error(request, 'Conference closed or Deleted')
-            return redirect("conference:welcome")
+            auth.logout(request)
+            return redirect('home')
+
+
+class UpdatePaper(TemplateView):
+    template_name = 'update.html'
+
+    def get(self, request, slug, pk):
+        try:
+            if request.user.is_staff:
+                con = ConferenceRecord.objects.get(slug=slug)
+                paper = PaperRecord.objects.get(conference=con, pk=pk)
+                list = paper.author.all()
+                return render(request, self.template_name, {'slug': slug, 'record': paper, 'authorlist': list})
+            else:
+                raise PermissionError
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('conference:welcome')
+        except:
+            auth.logout(request)
+            return redirect('home')
+
+    def post(self, request, slug, pk):
+        try:
+            if request.user.is_staff:
+                con = ConferenceRecord.objects.get(slug=slug)
+                paper = PaperRecord.objects.get(conference=con, pk=pk)
+                paper.title = request.POST['title']
+                paper.keywords = request.POST['keyword']
+                paper.abstract = request.POST['abstract']
+                try:
+                    paper.file = request.FILES['upload']
+                    paper.save(update_fields=['title', 'keywords', 'abstract', 'file'])
+                except:
+                    paper.save(update_fields=['title', 'keywords', 'abstract'])
+                messages.success(request, 'Successfully Updated')
+                return redirect('conference:view_detail', slug=slug, pk=pk)
+            else:
+                raise PermissionError
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('conference:welcome')
+        except:
+            auth.logout(request)
+            return redirect('home')
 
 
 class SubmitPaper(TemplateView):
@@ -125,8 +167,7 @@ class DeletePaper(TemplateView):
                     l.delete()
                 obj.delete()
             else:
-                auth.logout(request)
-                pass
+                raise PermissionError
                 '''obj = PaperRecord.objects.get(conference=con, user=request.user, pk=pk)
                 list = obj.author.all()
                 for l in list:
@@ -134,6 +175,9 @@ class DeletePaper(TemplateView):
                 obj.delete()'''
             messages.success(request, 'Paper deleted')
             return redirect("conference:view_all_paper", slug=slug)
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('conference:welcome')
         except:
-            messages.error(request, 'Conference closed or Deleted')
-            return redirect("conference:welcome")
+            auth.logout(request)
+            return redirect('home')
