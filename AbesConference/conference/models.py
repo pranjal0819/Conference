@@ -39,7 +39,7 @@ models.signals.pre_save.connect(conference_pre_save, sender=ConferenceRecord)
 
 class AuthorRecord(models.Model):
     name = models.CharField(max_length=55)
-    email = models.CharField(max_length=55)
+    email = models.EmailField(max_length=85)
     mobileNumber = models.CharField(max_length=10)
     country = models.CharField(max_length=55)
     organization = models.CharField(max_length=110)
@@ -68,10 +68,10 @@ class PaperRecord(models.Model):
 
 class PcMemberRecord(models.Model):
     pcCon = models.ForeignKey(ConferenceRecord, on_delete=models.CASCADE, null=True, related_name='pcCon')
-    pcUser = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='pcUser')
+    pcEmail = models.EmailField(max_length=85)
 
     def __str__(self):
-        return str(self.pcUser) + " -- " + str(self.pcCon)
+        return str(self.pcEmail) + " -- " + str(self.pcCon)
 
 
 class ReviewPaperRecord(models.Model):

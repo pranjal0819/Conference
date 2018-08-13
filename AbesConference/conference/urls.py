@@ -26,12 +26,12 @@ urlpatterns = [
     path('<slug>/update-author/<int:pk>', login_required(UpdateAuthor.as_view()), name='update_author'),
     path('<slug>/view-paper/<int:pk>/delete', login_required(DeletePaper.as_view()), name='delete_paper'),
     # views3
-    path('<slug>/view-paper/<int:pk>/select-user', login_required(SelectUser.as_view()), name='select_user'),
-    path('<slug>/view-paper/<int:paper_pk>/select/<int:user_pk>', login_required(SelectedUser.as_view()),
-         name='selected_user'),
+    path('<slug>/add_pc_member', login_required(AddPcMember.as_view()), name='add_pc_member'),
+    path('<slug>/<int:pk>/select-user', login_required(SelectUser.as_view()), name='select_user'),
+    path('<slug>/<int:paper_pk>/select/<int:user_pk>', login_required(SelectedUser.as_view()), name='selected_user'),
     # path('view_paper/<int:paper_pk>/deselect/<int:user_pk>', login_required(deselect_user.as_view()),
     #    name='deselect_user'),
     # views4
-    path('<slug>/review-list', login_required(ReviewerList.as_view()), name='review_list'),
+    path('<slug>/review_paper_list', login_required(ReviewPaperList.as_view()), name='review_list'),
     path('<slug>/review_paper/<int:pk>', login_required(ReviewPaper.as_view()), name='review_paper'),
 ]

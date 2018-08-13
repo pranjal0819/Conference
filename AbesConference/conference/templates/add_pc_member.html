@@ -1,0 +1,24 @@
+{% extends 'base.html' %}{% load staticfiles %}{% block head_title %}Paper Detail | {{ block.super }}{% endblock %}
+{% block css %}{% endblock %}
+{% block content %}
+    <div id="main" class="wrapper inner">
+        <div class="content">
+            {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
+            <h2>Add Pc Member</h2>
+            <a href="{% url 'conference:view_all_paper' slug=slug %}" class="button small" style="float: right">View
+                Submitted Paper</a><br>
+            <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                Subject:<br>
+                <input type="text" name="subject" required placeholder="Subject"><br>
+                Message:<br>
+                <textarea name="message" placeholder="Message" required style="width: 350px" rows="5"></textarea><br>
+                Pc Member Emails:<br>
+                <textarea name="emails" placeholder="Paste Emails" required style="width: 350px" rows="5"></textarea>
+                <br><br>
+                <button type="submit" class="small wide">Send Email</button>
+            </form>
+            {% if list1 %}Successfully Email send to:<br>{% for li in list1 %}{{ li }}, {% endfor %}{% endif %}<br>
+            {% if list2 %}Invalid Email:<br>{% for li in list2 %}{{ li }}, {% endfor %}{% endif %}
+        </div>
+    </div>
+{% endblock %}

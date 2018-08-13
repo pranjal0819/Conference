@@ -4,7 +4,7 @@
     <div id="main" class="wrapper inner">
         <div class="content">
             {% for m in messages %}{{ m }}<br>{% endfor %}
-            <a href="{% url 'conference:view_all_paper' slug=slug %}">View Submitted Paper</a><br>
+            <a href="{% url 'conference:view_all_paper' slug=slug %}" class="button small" style="float: right">View Submitted Paper</a><br>
             <h2>Submit Author Information</h2>
             <form action="" method="post" class="highlights">{% csrf_token %}
                 <section>

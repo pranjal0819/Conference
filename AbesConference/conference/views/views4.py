@@ -8,14 +8,14 @@ from django.views.generic import TemplateView
 from ..models import ReviewPaperRecord, ConferenceRecord, PcMemberRecord
 
 
-class ReviewerList(TemplateView):
-    template_name = 'review_list.html'
+class ReviewPaperList(TemplateView):
+    template_name = 'review_paper_list.html'
 
     def get(self, request, *args, **kwargs):
         try:
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
             try:
-                pc_member = PcMemberRecord.objects.get(pcCon=con, pcUser=request.user)
+                pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user)
                 li = ReviewPaperRecord.objects.filter(reviewCon=con, reviewUser=pc_member)
                 return render(request, self.template_name, {'slug': kwargs['slug'], 'paper_list': li})
             except ObjectDoesNotExist:
@@ -24,7 +24,7 @@ class ReviewerList(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -35,7 +35,7 @@ class ReviewPaper(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            pc_member = PcMemberRecord.objects.get(pcCon=con, pcUser=request.user)
+            pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user)
             record = ReviewPaperRecord.objects.get(reviewCon=con, reviewUser=pc_member, pk=kwargs['pk'])
             return render(request, self.template_name, {'slug': kwargs['slug'], 'con': con, 'record': record})
         except ObjectDoesNotExist:
@@ -49,7 +49,7 @@ class ReviewPaper(TemplateView):
         try:
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
             if con.review:
-                pc_member = PcMemberRecord.objects.get(pcCon=con, pcUser=request.user)
+                pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user)
                 record = ReviewPaperRecord.objects.get(reviewCon=con, reviewUser=pc_member, pk=kwargs['pk'])
                 record.overallEvaluation = request.POST['evaluation']
                 record.point = int(request.POST['point'])
