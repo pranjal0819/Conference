@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import models, password_validation
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.validators import validate_email
 
 
@@ -20,27 +21,27 @@ class SignupForm(forms.ModelForm):
         attrs={'placeholder': 'Confirm Password', 'pattern': "(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
                'title': 'Confirmation Password'}), required=True, max_length=20)
 
-    class Meta():
+    class Meta:
         model = models.User
         fields = ['username', 'email', 'first_name', 'last_name', 'password']
 
     def clean_username(self):
         user = self.cleaned_data['username']
         try:
-            match = models.User.objects.get(username=user.lower())
-        except:
+            models.User.objects.get(username=user.lower())
+        except ObjectDoesNotExist:
             return user
         raise forms.ValidationError("Username already exits")
 
     def clean_email(self):
         email = self.cleaned_data['email']
         try:
-            mt = validate_email(email)
-        except:
+            validate_email(email)
+        except ValidationError:
             return forms.ValidationError("Email is not in correct format")
         try:
-            match = models.User.objects.get(email=email.lower())
-        except:
+            models.User.objects.get(email=email.lower())
+        except ObjectDoesNotExist:
             return email
         raise forms.ValidationError("Email already exits")
 
@@ -65,15 +66,15 @@ class EditProfileForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(
         attrs={'placeholder': 'Password', 'title': 'Password'}), required=True, max_length=20)
 
-    class Meta():
+    class Meta:
         model = models.User
         fields = ['email', 'first_name', 'last_name']
 
     def clean_email(self):
         email = self.cleaned_data['email']
         try:
-            mt = validate_email(email)
-        except:
+            validate_email(email)
+        except ValidationError:
             return forms.ValidationError("Email is not in correct format")
         return email
 
@@ -88,7 +89,7 @@ class ChangePasswordForm(forms.ModelForm):
         attrs={'placeholder': 'Confirm Password', 'pattern': "(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
                'title': 'Confirm Password'}), required=True, max_length=20)
 
-    class Meta():
+    class Meta:
         model = models.User
         fields = ['password']
 

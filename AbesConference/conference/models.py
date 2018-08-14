@@ -69,6 +69,7 @@ class PaperRecord(models.Model):
 class PcMemberRecord(models.Model):
     pcCon = models.ForeignKey(ConferenceRecord, on_delete=models.CASCADE, null=True, related_name='pcCon')
     pcEmail = models.EmailField(max_length=85)
+    accepted = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.pcEmail) + " -- " + str(self.pcCon)

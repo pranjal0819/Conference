@@ -24,7 +24,7 @@ class CreateConference(TemplateView):
         form = ConferenceForm()
         return render(request, self.template_name, {'form': form})
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         form = ConferenceForm(request.POST)
         if form.is_valid() and request.user.is_staff:
             form.save()

@@ -13,7 +13,7 @@ class ConferenceForm(forms.ModelForm):
     end_date = forms.DateField(widget=forms.widgets.DateInput(
         attrs={'placeholder': 'yyyy-mm-dd', 'style': "width: 150px"}, format="%Y/%m/%d"))
 
-    class Meta():
+    class Meta:
         model = ConferenceRecord
         fields = ['slug', 'description', 'start_date', 'end_date']
 
@@ -29,7 +29,7 @@ class AuthorRecordForm(forms.ModelForm):
     url = forms.CharField(widget=forms.TextInput(
         attrs={'placeholder': 'http://example.com/', 'pattern': "https?://.+"}), required=False, max_length=50)
 
-    class Meta():
+    class Meta:
         model = AuthorRecord
         fields = ['name', 'email', 'mobileNumber', 'country', 'organization', 'url']
 
@@ -42,7 +42,7 @@ class PaperRecordForm(forms.ModelForm):
     file = forms.FileField(widget=forms.ClearableFileInput(attrs={'accept': '.pdf,.doc', 'style': "border:none"}),
                            required=True)
 
-    class Meta():
+    class Meta:
         model = PaperRecord
         fields = ['title', 'abstract', 'keywords', 'file']
 
@@ -52,6 +52,6 @@ class ReviewPaperForm(forms.ModelForm):
     point = forms.CharField(widget=forms.NumberInput(), max_length=5)
     remark = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Remark'}), max_length=100)
 
-    class Meta():
+    class Meta:
         model = ReviewPaperRecord
         fields = ['overallEvaluation', 'point', 'remark']

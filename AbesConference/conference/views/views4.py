@@ -1,6 +1,6 @@
 # Reviewer related view
 
-from django.contrib import messages, auth
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
@@ -25,7 +25,7 @@ class ReviewPaperList(TemplateView):
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
         except Exception:
-            auth.logout(request)
+            # auth.logout(request)
             return redirect('home')
 
 
@@ -41,11 +41,11 @@ class ReviewPaper(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect("conference:welcome")
-        except:
-            auth.logout(request)
+        except Exception:
+            # auth.logout(request)
             return redirect('home')
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, **kwargs):
         try:
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
             if con.review:
@@ -62,6 +62,6 @@ class ReviewPaper(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect("conference:welcome")
-        except:
-            auth.logout(request)
+        except Exception:
+            # auth.logout(request)
             return redirect('home')

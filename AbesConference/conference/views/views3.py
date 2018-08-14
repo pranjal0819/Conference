@@ -1,5 +1,5 @@
 from django.contrib import messages, auth
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ValidationError
 from django.core.mail import EmailMessage
 from django.core.validators import validate_email
 from django.shortcuts import render, redirect
@@ -37,13 +37,13 @@ class AddPcMember(TemplateView):
                     except ObjectDoesNotExist:
                         instance = PcMemberRecord.objects.create(pcCon=con, pcEmail=l)
                         instance.save()
-                except :
+                except ValidationError:
                     list2.append(l)
             email = EmailMessage(subject, message, list1)
             email.send()
             return render(request, self.template_name, {'slug': kwargs['slug'], 'list1': list1, 'list2': list2})
         except Exception:
-            auth.logout(request)
+            # auth.logout(request)
             return redirect('home')
 
 

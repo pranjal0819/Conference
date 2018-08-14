@@ -14,12 +14,12 @@ class Welcome2(TemplateView):
 
     def get(self, request, *args, **kwargs):
         try:
-            conference = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            ConferenceRecord.objects.get(slug=kwargs['slug'])
             return render(request, self.template_name, {'conference': kwargs['slug']})
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -42,7 +42,7 @@ class ViewAllPaper(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -62,7 +62,7 @@ class ViewDetail(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -83,7 +83,7 @@ class UpdatePaper(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -98,7 +98,7 @@ class UpdatePaper(TemplateView):
                 try:
                     paper.file = request.FILES['upload']
                     paper.save(update_fields=['title', 'keywords', 'abstract', 'file'])
-                except:
+                except Exception:
                     paper.save(update_fields=['title', 'keywords', 'abstract'])
                 messages.success(request, 'Successfully Updated')
                 return redirect('conference:view_detail', slug=kwargs['slug'], pk=kwargs['pk'])
@@ -107,7 +107,7 @@ class UpdatePaper(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -126,7 +126,7 @@ class UpdateAuthor(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -149,7 +149,7 @@ class UpdateAuthor(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -167,7 +167,7 @@ class SubmitPaper(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -193,7 +193,7 @@ class SubmitPaper(TemplateView):
                             obj = AuthorRecord.objects.create(name=nam, email=eml, mobileNumber=mob, country=cou,
                                                               organization=org, webPage=url)
                             temp.author.add(obj.id)
-                except:
+                except Exception:
                     pass
                 messages.success(request, 'Paper submitted successfully')
                 return redirect("conference:view_all_paper", slug=kwargs['slug'])
@@ -204,7 +204,7 @@ class SubmitPaper(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -233,7 +233,7 @@ class AddAuthor(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -245,8 +245,8 @@ class DeletePaper(TemplateView):
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
             if request.user.is_staff:
                 obj = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
-                list = obj.author.all()
-                for l in list:
+                li = obj.author.all()
+                for l in li:
                     l.delete()
                 obj.delete()
             else:
@@ -261,6 +261,6 @@ class DeletePaper(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except:
+        except Exception:
             auth.logout(request)
             return redirect('home')

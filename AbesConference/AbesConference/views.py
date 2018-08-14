@@ -10,7 +10,7 @@ def registration(request):
     return render(request, 'registration.html')
 
 
-def callForPaper(request):
+def call_for_paper(request):
     return render(request, 'call-for-paper.html')
 
 

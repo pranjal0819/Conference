@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -24,14 +25,14 @@ def logout(request):
 class Profile(TemplateView):
     template_name = 'profile.html'
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {})
 
 
 class EditProfile(TemplateView):
     template_name = 'editProfile.html'
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         form = EditProfileForm()
         return render(request, self.template_name, {'form': form})
 
@@ -63,31 +64,31 @@ class EditProfile(TemplateView):
 class ChangeUsername(TemplateView):
     template_name = 'profile.html'
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {})
 
 
 class ChangePassword(TemplateView):
     template_name = 'profile.html'
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {})
 
 
 class Login(TemplateView):
     template_name = 'login.html'
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {})
 
     def post(self, request):
         try:
             ''' Begin reCAPTCHA validation '''
-            recaptcha_response = request.POST.get('g-recaptcha-response')
+            re_captcha_response = request.POST.get('g-recaptcha-response')
             url = 'https://www.google.com/recaptcha/api/siteverify'
             values = {
                 'secret': settings.RECAPTCHA_PRIVATE_KEY,
-                'response': recaptcha_response
+                'response': re_captcha_response
             }
             data = urllib.parse.urlencode(values).encode()
             req = urllib.request.Request(url, data=data)
@@ -108,13 +109,13 @@ class Login(TemplateView):
                             return redirect("conference:welcome")
                         else:
                             messages.error(request, "Username and password did not match")
-                    except:
+                    except ObjectDoesNotExist:
                         messages.error(request, "User does not exit")
                 else:
                     messages.error(request, 'Enter Username and Password')
             else:
                 messages.error(request, 'Invalid reCAPTCHA. Please try again.')
-        except:
+        except Exception:
             messages.error(request, 'Contact Us')
             return redirect("account:login")
         return render(request, self.template_name, {})
@@ -123,7 +124,7 @@ class Login(TemplateView):
 class Signup(TemplateView):
     template_name = 'signup.html'
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         form = SignupForm()
         return render(request, self.template_name, {'form': form})
 
@@ -132,11 +133,11 @@ class Signup(TemplateView):
         if form.is_valid():
             try:
                 ''' Begin reCAPTCHA validation '''
-                recaptcha_response = request.POST.get('g-recaptcha-response')
+                re_captcha_response = request.POST.get('g-recaptcha-response')
                 url = 'https://www.google.com/recaptcha/api/siteverify'
                 values = {
                     'secret': settings.RECAPTCHA_PRIVATE_KEY,
-                    'response': recaptcha_response
+                    'response': re_captcha_response
                 }
                 data = urllib.parse.urlencode(values).encode()
                 req = urllib.request.Request(url, data=data)
@@ -145,13 +146,13 @@ class Signup(TemplateView):
                 ''' End reCAPTCHA validation '''
                 if result['success']:
                     username = form.cleaned_data['username']
-                    firstName = form.cleaned_data['first_name']
-                    lastName = form.cleaned_data['last_name']
+                    first_name = form.cleaned_data['first_name']
+                    last_name = form.cleaned_data['last_name']
                     email = form.cleaned_data['email']
                     password = form.cleaned_data['password']
 
-                    user = User.objects.create_user(username=username.lower(), first_name=firstName, last_name=lastName,
-                                                    email=email.lower(), password=password, is_active=False)
+                    user = User.objects.create_user(username=username.lower(), email=email.lower(), password=password,
+                                                    first_name=first_name, last_name=last_name, is_active=False)
                     '''Begin Email Sending '''
                     current_site = get_current_site(request)
                     mail_subject = 'Activate your Conference Account.'
@@ -168,7 +169,7 @@ class Signup(TemplateView):
                     return redirect("account:login")
                 else:
                     messages.error(request, "Invalid reCAPTCHA. Please try again.")
-            except:
+            except Exception:
                 messages.error(request, 'Problem to Sending Email. Please Contact Us.')
                 return redirect("account:signup")
         else:
@@ -180,7 +181,7 @@ def activate(request, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
-    except:
+    except Exception:
         user = None
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
