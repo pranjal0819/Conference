@@ -1,8 +1,7 @@
 from django.contrib import messages, auth
-from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.mail import EmailMessage
 from django.core.validators import validate_email
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
@@ -26,7 +25,7 @@ class AddPcMember(TemplateView):
             subject = request.POST['subject']
             message = request.POST['message']
             emails = request.POST['emails']
-            li =  emails.split('\r\n')
+            li = emails.split('\r\n')
             list1 = []
             list2 = []
             for l in li:
@@ -38,9 +37,9 @@ class AddPcMember(TemplateView):
                     except ObjectDoesNotExist:
                         instance = PcMemberRecord.objects.create(pcCon=con, pcEmail=l)
                         instance.save()
-                except:
+                except :
                     list2.append(l)
-            email = EmailMessage(subject, message, to=list1)
+            email = EmailMessage(subject, message, list1)
             email.send()
             return render(request, self.template_name, {'slug': kwargs['slug'], 'list1': list1, 'list2': list2})
         except Exception:

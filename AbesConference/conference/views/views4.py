@@ -15,7 +15,7 @@ class ReviewPaperList(TemplateView):
         try:
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
             try:
-                pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user)
+                pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
                 li = ReviewPaperRecord.objects.filter(reviewCon=con, reviewUser=pc_member)
                 return render(request, self.template_name, {'slug': kwargs['slug'], 'paper_list': li})
             except ObjectDoesNotExist:
@@ -35,7 +35,7 @@ class ReviewPaper(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user)
+            pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
             record = ReviewPaperRecord.objects.get(reviewCon=con, reviewUser=pc_member, pk=kwargs['pk'])
             return render(request, self.template_name, {'slug': kwargs['slug'], 'con': con, 'record': record})
         except ObjectDoesNotExist:
@@ -49,7 +49,7 @@ class ReviewPaper(TemplateView):
         try:
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
             if con.review:
-                pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user)
+                pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
                 record = ReviewPaperRecord.objects.get(reviewCon=con, reviewUser=pc_member, pk=kwargs['pk'])
                 record.overallEvaluation = request.POST['evaluation']
                 record.point = int(request.POST['point'])
