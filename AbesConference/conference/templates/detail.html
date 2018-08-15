@@ -28,6 +28,15 @@
                     <h3>Status: {% if record.status == 5 %}<span style="color: green">Accepted</span>
                     {% elif record.status == 3 %}<span style="color: #3eb1ff;">Pending</span>{% else %}
                         <span style="color: red">Not Accepted</span>{% endif %}</h3>
+                    {% if record.review %}
+                        <dt>Chair Person Comment</dt>
+                        <dd>
+                            <blockquote>
+                                <pre>{{ record.review }}</pre>
+                            </blockquote>
+                        </dd>
+                        <hr>
+                    {% endif %}
                     <a href="/media/{{ record.file }}" target="_blank" class="button primary">Download Paper</a><br>
                 </dl>
                 <br>
@@ -61,12 +70,13 @@
                        class="button wide small primary" style="float: right;">Add another author</a>
                 </div>
                 {% if user.is_staff %}
-                    <a href="{% url 'conference:show_review' slug=slug pk=record.id %}" class="small primary button wide">Show
+                    <a href="{% url 'conference:show_review' slug=slug pk=record.id %}"
+                       class="small primary button wide">Show
                         all Review</a><br><br>
                     <a href="{% url 'conference:delete_paper' slug=slug pk=record.pk %}" class="button wide small">
                         Delete Paper</a>
                 {% endif %}
-            {% endif %}
+            {% endif %}<br>
             <a href="{% url 'conference:view_all_paper' slug=slug %}" class="button small wide primary"
                style="float: right">Back to Paper List</a><br><br>
         </div>
