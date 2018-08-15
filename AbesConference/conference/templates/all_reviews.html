@@ -4,7 +4,43 @@
     <div id="main" class="wrapper inner">
         <div class="content">
             {% for m in messages %}{{ m }}<br>{% endfor %}
-            <a href="{% url 'conference:view_all_paper' slug=slug %}" class="button primary">Back to Paper List</a>
+            <h2>Detail Of Paper</h2>
+            <dl>
+                <dt>Title</dt>
+                <dd>
+                    <blockquote><h3>{{ paper.title }}</h3></blockquote>
+                </dd>
+                <hr>
+                <h3>Status: {% if paper.status == 5 %}<span style="color: green">Accepted</span>
+                {% elif paper.status == 3 %}<span style="color: #3eb1ff;">Pending</span>{% else %}
+                    <span style="color: red">Not Accepted</span>{% endif %}</h3>
+                <br>
+                <a href="{% url 'conference:view_detail' slug=slug pk=paper.pk %}" class="button small wide">Detail</a>
+                <hr>
+            </dl>
+            <br>
+            <dl>
+                {% for review in reviews %}
+                    {% if review.accepted %}
+                        <dt>Name:</dt>
+                        <dd>{{ review.reviewUser.pcEmail }}</dd><br>
+                        {% if review.overallEvaluation %}
+                            <dt>Overall Evaluation</dt>
+                            <dd>{{ review.overallEvaluation }}</dd>
+                            <dt>Point {{ review.point }}</dt>
+                            <dt>Remarks</dt>
+                            <dd>{{ review.remark }}</dd>{% else %}<h3>Review Pending</h3>{% endif %}
+                        <hr>
+                    {% endif %}
+                {% endfor %}
+            </dl>
+            <form method="post">{% csrf_token %}
+                <input type="radio" id="accept" name="point" value="5"><label for="accept">Accept</label><br>
+                <input type="radio" id="reject" name="point" value="0" checked><label for="reject">Reject</label><br>
+                <h4>Remark:</h4><textarea name="review" cols="40" rows="5" placeholder="Remark" maxlength="100"
+                                          required>{{ record.review }}</textarea><br>
+                <button type="submit" title="Save" class="primary wide small">Save Review</button>
+            </form>
         </div>
     </div>
 {% endblock %}

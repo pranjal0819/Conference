@@ -58,12 +58,17 @@
                             </tr>{% endfor %}</tbody>
                     </table>
                     <a href="{% url 'conference:add_author' slug=slug pk=record.pk %}"
-                       class="button wide small primary" style="float: right;">Add another author</a><br><br>
-                </div>{% if user.is_staff %}
-                    <a href="{% url 'conference:delete_paper' slug=slug pk=record.pk %}" class="button">
-                        Delete Paper</a>{% endif %}
+                       class="button wide small primary" style="float: right;">Add another author</a>
+                </div>
+                {% if user.is_staff %}
+                    <a href="{% url 'conference:show_review' slug=slug pk=record.id %}" class="small primary button wide">Show
+                        all Review</a><br><br>
+                    <a href="{% url 'conference:delete_paper' slug=slug pk=record.pk %}" class="button wide small">
+                        Delete Paper</a>
+                {% endif %}
             {% endif %}
-            <a href="{% url 'conference:view_all_paper' slug=slug %}" class="button primary">Back to Paper List</a>
+            <a href="{% url 'conference:view_all_paper' slug=slug %}" class="button small wide primary"
+               style="float: right">Back to Paper List</a><br><br>
         </div>
     </div>
 {% endblock %}

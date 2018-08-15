@@ -19,7 +19,7 @@ class Welcome2(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except Exception:
+            # except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -42,7 +42,7 @@ class ViewAllPaper(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except Exception:
+            # except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -62,94 +62,7 @@ class ViewDetail(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except Exception:
-            auth.logout(request)
-            return redirect('home')
-
-
-class UpdatePaper(TemplateView):
-    template_name = 'update_paper.html'
-
-    def get(self, request, *args, **kwargs):
-        try:
-            if request.user.is_staff:
-                con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-                paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
-                li = paper.author.all()
-                return render(request, self.template_name,
-                              {'slug': kwargs['slug'], 'record': paper, 'authorList': li})
-            else:
-                raise PermissionDenied
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
-        except Exception:
-            auth.logout(request)
-            return redirect('home')
-
-    def post(self, request, **kwargs):
-        try:
-            if request.user.is_staff:
-                con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-                paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
-                paper.title = request.POST['title']
-                paper.keywords = request.POST['keyword']
-                paper.abstract = request.POST['abstract']
-                try:
-                    paper.file = request.FILES['upload']
-                    paper.save(update_fields=['title', 'keywords', 'abstract', 'file'])
-                except Exception:
-                    paper.save(update_fields=['title', 'keywords', 'abstract'])
-                messages.success(request, 'Successfully Updated')
-                return redirect('conference:view_detail', slug=kwargs['slug'], pk=kwargs['pk'])
-            else:
-                raise PermissionDenied
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
-        except Exception:
-            auth.logout(request)
-            return redirect('home')
-
-
-class UpdateAuthor(TemplateView):
-    template_name = 'update_author.html'
-
-    def get(self, request, *args, **kwargs):
-        try:
-            if request.user.is_staff:
-                ConferenceRecord.objects.get(slug=kwargs['slug'])
-                author = AuthorRecord.objects.get(pk=kwargs['pk'])
-                return render(request, self.template_name, {'slug': kwargs['slug'], 'author': author})
-            else:
-                raise PermissionDenied
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
-        except Exception:
-            auth.logout(request)
-            return redirect('home')
-
-    def post(self, request, **kwargs):
-        try:
-            if request.user.is_staff:
-                ConferenceRecord.objects.get(slug=kwargs['slug'])
-                author = AuthorRecord.objects.get(pk=kwargs['pk'])
-                author.name = request.POST['name']
-                author.email = request.POST['email']
-                author.mobileNumber = request.POST['mobile']
-                author.country = request.POST['country']
-                author.organization = request.POST['org']
-                author.webPage = request.POST['url']
-                author.save(update_fields=['name', 'email', 'mobileNumber', 'country', 'organization', 'webPage'])
-                messages.success(request, 'Successfully Updated')
-                return redirect('conference:view_all_paper', kwargs['slug'])
-            else:
-                raise PermissionDenied
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
-        except Exception:
+            # except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -158,8 +71,8 @@ class SubmitPaper(TemplateView):
     template_name = 'submit_paper.html'
 
     def get(self, request, *args, **kwargs):
-        paper_form = PaperRecordForm()
         try:
+            paper_form = PaperRecordForm()
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
             if not con.submission:
                 messages.error(request, 'Submission Closed')
@@ -167,13 +80,13 @@ class SubmitPaper(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except Exception:
+            # except Exception:
             auth.logout(request)
             return redirect('home')
 
     def post(self, request, **kwargs):
-        paper_form = PaperRecordForm(request.POST, request.FILES)
         try:
+            paper_form = PaperRecordForm(request.POST, request.FILES)
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
             if con.submission and paper_form.is_valid():
                 temp = paper_form.save(commit=False)
@@ -204,7 +117,52 @@ class SubmitPaper(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except Exception:
+            # except Exception:
+            auth.logout(request)
+            return redirect('home')
+
+
+class UpdatePaper(TemplateView):
+    template_name = 'update_paper.html'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            if request.user.is_staff:
+                con = ConferenceRecord.objects.get(slug=kwargs['slug'])
+                paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
+                li = paper.author.all()
+                return render(request, self.template_name,
+                              {'slug': kwargs['slug'], 'record': paper, 'authorList': li})
+            else:
+                raise PermissionDenied
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('conference:welcome')
+            # except Exception:
+            auth.logout(request)
+            return redirect('home')
+
+    def post(self, request, **kwargs):
+        try:
+            if request.user.is_staff:
+                con = ConferenceRecord.objects.get(slug=kwargs['slug'])
+                paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
+                paper.title = request.POST['title']
+                paper.keywords = request.POST['keyword']
+                paper.abstract = request.POST['abstract']
+                try:
+                    paper.file = request.FILES['upload']
+                    paper.save(update_fields=['title', 'keywords', 'abstract', 'file'])
+                except Exception:
+                    paper.save(update_fields=['title', 'keywords', 'abstract'])
+                messages.success(request, 'Successfully Updated')
+                return redirect('conference:view_detail', slug=kwargs['slug'], pk=kwargs['pk'])
+            else:
+                raise PermissionDenied
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('conference:welcome')
+            # except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -213,18 +171,27 @@ class AddAuthor(TemplateView):
     template_name = 'add_author.html'
 
     def get(self, request, *args, **kwargs):
-        author_form = AuthorRecordForm()
-        return render(request, self.template_name,
-                      {'slug': kwargs['slug'], 'pk': kwargs['pk'], 'author_form': author_form})
+        try:
+            PaperRecord.objects.get(user=request.user, pk=kwargs['pk'])
+            form = AuthorRecordForm()
+            return render(request, self.template_name,
+                          {'slug': kwargs['slug'], 'pk': kwargs['pk'], 'author_form': form})
+        except ObjectDoesNotExist:
+            messages.error(request, 'Permission Denied')
+        return redirect('conference:view_detail', **kwargs)
 
     def post(self, request, **kwargs):
         try:
             author_form = AuthorRecordForm(request.POST)
             if author_form.is_valid():
                 con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-                paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
-                instance = author_form.save()
-                paper.author.add(instance.id)
+                try:
+                    paper = PaperRecord.objects.get(conference=con, user=request.user, pk=kwargs['pk'])
+                    instance = author_form.save()
+                    paper.author.add(instance.id)
+                    messages.success(request, 'Successfully add Author')
+                except ObjectDoesNotExist:
+                    messages.error(request, 'Permission Denied')
                 return redirect('conference:view_detail', **kwargs)
             else:
                 author_form = AuthorRecordForm()
@@ -233,7 +200,49 @@ class AddAuthor(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except Exception:
+            # except Exception:
+            auth.logout(request)
+            return redirect('home')
+
+
+class UpdateAuthor(TemplateView):
+    template_name = 'update_author.html'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            if request.user.is_staff:
+                ConferenceRecord.objects.get(slug=kwargs['slug'])
+                author = AuthorRecord.objects.get(pk=kwargs['pk'])
+                return render(request, self.template_name, {'slug': kwargs['slug'], 'author': author})
+            else:
+                raise PermissionDenied
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('conference:welcome')
+            # except Exception:
+            auth.logout(request)
+            return redirect('home')
+
+    def post(self, request, **kwargs):
+        try:
+            if request.user.is_staff:
+                ConferenceRecord.objects.get(slug=kwargs['slug'])
+                author = AuthorRecord.objects.get(pk=kwargs['pk'])
+                author.name = request.POST['name']
+                author.email = request.POST['email']
+                author.mobileNumber = request.POST['mobile']
+                author.country = request.POST['country']
+                author.organization = request.POST['org']
+                author.webPage = request.POST['url']
+                author.save(update_fields=['name', 'email', 'mobileNumber', 'country', 'organization', 'webPage'])
+                messages.success(request, 'Successfully Updated')
+                return redirect('conference:view_all_paper', kwargs['slug'])
+            else:
+                raise PermissionDenied
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('conference:welcome')
+            # except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -261,6 +270,6 @@ class DeletePaper(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except Exception:
+            # except Exception:
             auth.logout(request)
             return redirect('home')

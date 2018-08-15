@@ -1,3 +1,5 @@
+# PC Member related Views
+
 from django.contrib import messages, auth
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ValidationError
 from django.core.mail import EmailMessage
@@ -13,47 +15,59 @@ class AddPcMember(TemplateView):
 
     def get(self, request, *args, **kwargs):
         try:
-            ConferenceRecord.objects.get(slug=kwargs['slug'])
-            return render(request, self.template_name, {'slug': kwargs['slug'], 'list1': None, 'list2': None})
-        except Exception:
+            if request.user.is_staff:
+                ConferenceRecord.objects.get(slug=kwargs['slug'])
+                return render(request, self.template_name, {'slug': kwargs['slug'], 'list1': None, 'list2': None})
+            else:
+                raise PermissionDenied
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('conference:welcome')
+            # except Exception:
             auth.logout(request)
             return redirect('home')
 
     def post(self, request, **kwargs):
         try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            subject = request.POST['subject']
-            message = request.POST['message']
-            emails = request.POST['emails']
-            li = emails.split('\r\n')
-            list1 = []
-            list2 = []
-            for l in li:
-                try:
-                    validate_email(l)
-                    list1.append(l)
+            if request.user.is_staff:
+                con = ConferenceRecord.objects.get(slug=kwargs['slug'])
+                subject = request.POST['subject']
+                message = request.POST['message']
+                emails = request.POST['emails']
+                li = emails.split('\r\n')
+                list1 = []
+                list2 = []
+                for l in li:
                     try:
-                        PcMemberRecord.objects.get(pcCon=con, pcEmail=l)
-                    except ObjectDoesNotExist:
-                        instance = PcMemberRecord.objects.create(pcCon=con, pcEmail=l)
-                        instance.save()
-                except ValidationError:
-                    list2.append(l)
-            email = EmailMessage(subject, message, list1)
-            email.send()
-            return render(request, self.template_name, {'slug': kwargs['slug'], 'list1': list1, 'list2': list2})
-        except Exception:
-            # auth.logout(request)
+                        validate_email(l)
+                        list1.append(l)
+                        try:
+                            PcMemberRecord.objects.get(pcCon=con, pcEmail=l)
+                        except ObjectDoesNotExist:
+                            instance = PcMemberRecord.objects.create(pcCon=con, pcEmail=l)
+                            instance.save()
+                    except ValidationError:
+                        list2.append(l)
+                email = EmailMessage(subject, message, list1)
+                email.send()
+                return render(request, self.template_name, {'slug': kwargs['slug'], 'list1': list1, 'list2': list2})
+            else:
+                raise PermissionDenied
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('conference:welcome')
+            # except Exception:
+            auth.logout(request)
             return redirect('home')
 
 
-class SelectUser(TemplateView):
-    template_name = 'user_list.html'
+class PcMemberList(TemplateView):
+    template_name = 'pc_member_list.html'
 
     def get(self, request, *args, **kwargs):
         try:
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            if request.user.is_staff and con.review:
+            if request.user.is_staff:
                 paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
                 user_list = PcMemberRecord.objects.all()
                 list1 = []
@@ -72,7 +86,7 @@ class SelectUser(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted or Invalid Paper')
             return redirect("conference:welcome")
-        except Exception:
+            # except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -82,7 +96,7 @@ class SelectedUser(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            if request.user.is_staff and con.review:
+            if request.user.is_staff:
                 user = PcMemberRecord.objects.get(pk=kwargs['user_pk'])
                 paper = PaperRecord.objects.get(conference=con, pk=kwargs['paper_pk'])
                 try:
@@ -100,7 +114,7 @@ class SelectedUser(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except Exception:
+            # except Exception:
             auth.logout(request)
             return redirect('home')
 
@@ -120,6 +134,25 @@ class ShowReviews(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
-        except Exception:
+            # except Exception:
+            auth.logout(request)
+            return redirect('home')
+
+    def post(self, request, **kwargs):
+        try:
+            if request.user.is_staff:
+                con = ConferenceRecord.objects.get(slug=kwargs['slug'])
+                paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
+                paper.status = int(request.POST['point'])
+                paper.review = request.POST['review']
+                paper.save(update_fields=['status', 'review'])
+                messages.success(request, 'Successfully update remarks')
+                return redirect('conference:view_detail', slug=kwargs['slug'], pk=kwargs['pk'])
+            else:
+                raise PermissionDenied
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('conference:welcome')
+            # except Exception:
             auth.logout(request)
             return redirect('home')

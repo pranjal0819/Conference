@@ -28,26 +28,34 @@
                 <hr>
                 <a href="/media/{{ record.paper.file }}" target="_blank" class="button primary">Download Paper</a><br>
             </dl>
-            <h3>Give your Review</h3>
-            <form action="" method="post">{% csrf_token %}
-                <h4>Evaluation:</h4><textarea name="evaluation" cols="40" rows="8" placeholder="Evaluation"
-                                              maxlength="500" required>{{ record.overallEvaluation }}</textarea><br>
-                <h4>Point: {{ record.point }}</h4>
-                <input type="radio" id="five" name="point" value="5"><label for="five">5</label><br>
-                <input type="radio" id="four" name="point" value="4"><label for="four">4</label><br>
-                <input type="radio" id="three" name="point" value="3"><label for="three">3</label><br>
-                <input type="radio" id="two" name="point" value="2"><label for="two">2</label><br>
-                <input type="radio" id="one" name="point" value="1"><label for="one">1</label><br>
-                <input type="radio" id="zero" name="point" value="0" checked><label for="zero">0</label><br>
-                <h4>Remark:</h4><textarea name="remark" cols="40" rows="5" placeholder="Remark" maxlength="100"
-                                          required>{{ record.remark }}</textarea><br>
-                {% if con.review %}
-                    <button type="submit" title="Save" class="primary small">Save Review</button>
-                {% else %}
-                    <h3>Review Submission Closed</h3>
-                {% endif %}
-                <a href="{% url 'conference:review_list' slug=slug %}" class="button wide small">Review List</a>
-            </form>
+            {% if record.accepted == 3 %}
+            <a href="{% url 'conference:accept_paper' slug=slug pk=record.pk %}" class="wide button primary small">Accept Paper to Review</a>
+            <a href="{% url 'conference:reject_paper' slug=slug pk=record.pk %}" class="wide button small">Reject from Review</a>
+            {% elif record.accepted == 5 %}
+                <h3>Give your Review</h3>
+                <form action="" method="post">{% csrf_token %}
+                    <h4>Evaluation:</h4><textarea name="evaluation" cols="40" rows="8" placeholder="Evaluation"
+                                                  maxlength="500" required>{{ record.overallEvaluation }}</textarea><br>
+                    <h4>Point: {{ record.point }}</h4>
+                    <input type="radio" id="five" name="point" value="5"><label for="five">5</label><br>
+                    <input type="radio" id="four" name="point" value="4"><label for="four">4</label><br>
+                    <input type="radio" id="three" name="point" value="3"><label for="three">3</label><br>
+                    <input type="radio" id="two" name="point" value="2"><label for="two">2</label><br>
+                    <input type="radio" id="one" name="point" value="1"><label for="one">1</label><br>
+                    <input type="radio" id="zero" name="point" value="0" checked><label for="zero">0</label><br>
+                    <h4>Remark:</h4><textarea name="remark" cols="40" rows="5" placeholder="Remark" maxlength="100"
+                                              required>{{ record.remark }}</textarea><br>
+                    {% if con.review %}
+                        <button type="submit" title="Save" class="primary small">Save Review</button>
+                    {% else %}
+                        <h3>Review Submission Closed</h3>
+                    {% endif %}
+                </form>
+            {% else %}
+                <h3>You reject this paper to review</h3>
+                <a href="{% url 'conference:accept_paper' slug=slug pk=record.pk %}" class="small wide button">Accept to review</a>
+            {% endif %}
+                <a href="{% url 'conference:review_list' slug=slug %}" class="button wide small" style="float: right">Review List</a>
             <br>
         </div>
     </div>

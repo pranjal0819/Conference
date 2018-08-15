@@ -57,7 +57,7 @@ class PaperRecord(models.Model):
     keywords = models.TextField(max_length=210)
     file = models.FileField(upload_to=upload_path)
     status = models.IntegerField(default=3)
-    # review = models.TextField(max_length=510)
+    review = models.TextField(default="", max_length=510)
     timestamp = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
     author = models.ManyToManyField(AuthorRecord)
@@ -82,6 +82,7 @@ class ReviewPaperRecord(models.Model):
     overallEvaluation = models.TextField()
     point = models.IntegerField()
     remark = models.CharField(max_length=110)
+    accepted = models.IntegerField(default=3)
     timestamp = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
 

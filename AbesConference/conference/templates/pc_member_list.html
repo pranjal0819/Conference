@@ -8,9 +8,12 @@
             <ul>
                 {% for list in user_list %}
                     <li>{{ list.0.pcEmail }}
-                        {% if list.1 %}{{ list.1 }}{% else %}
-                            <a href="{% url 'conference:selected_user' slug=slug paper_pk=paper.pk user_pk=list.0.id %}"> {{ list.1 }}</a>
-                        {% endif %}</li>
+                        {% if list.0.accepted %}
+                            {% if list.1 %}{{ list.1 }}{% else %}
+                                <a href="{% url 'conference:selected_user' slug=slug paper_pk=paper.pk user_pk=list.0.id %}"> {{ list.1 }}</a>
+                            {% endif %}
+                        {% else %}<span style="color: red" >Not Accepted yet</span>{% endif %}
+                        <a href="#">Send Email</a></li>
                 {% endfor %}
             </ul>
             <br><a href="{% url 'conference:add_pc_member' slug %}" class="button wide small primary">Add PC Member</a>
