@@ -2,12 +2,14 @@
 
 from django.contrib import messages, auth
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ValidationError
-from django.core.mail import EmailMessage
+from django.core.mail import send_mass_mail
 from django.core.validators import validate_email
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
 from ..models import PaperRecord, ReviewPaperRecord, ConferenceRecord, PcMemberRecord
+
+from django.conf import settings
 
 
 class AddPcMember(TemplateView):
@@ -37,10 +39,13 @@ class AddPcMember(TemplateView):
                 li = emails.split('\r\n')
                 list1 = []
                 list2 = []
+                email_list = []
                 for l in li:
                     try:
                         validate_email(l)
                         list1.append(l)
+                        email = (subject, message, settings.EMAIL_HOST_USER, [l])
+                        email_list.append(email)
                         try:
                             PcMemberRecord.objects.get(pcCon=con, pcEmail=l)
                         except ObjectDoesNotExist:
@@ -48,8 +53,8 @@ class AddPcMember(TemplateView):
                             instance.save()
                     except ValidationError:
                         list2.append(l)
-                email = EmailMessage(subject, message, list1)
-                email.send()
+                t = tuple(email_list)
+                send_mass_mail(t, fail_silently=False)
                 return render(request, self.template_name, {'slug': kwargs['slug'], 'list1': list1, 'list2': list2})
             else:
                 raise PermissionDenied
