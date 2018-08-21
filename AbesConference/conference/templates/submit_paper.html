@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% load staticfiles %}{% block head_title %}Submit Paper | {{ block.super }}{% endblock %}
+{% extends "base2.html" %}{% load staticfiles %}{% block head_title %}Submit Paper | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
     <div id="main" class="wrapper inner">
@@ -10,39 +10,39 @@
             <form enctype="multipart/form-data" action="" method="post" class="highlights">{% csrf_token %}
                 <section>
                     <h2>Author 1*</h2>
-                    <input type="text" name="name1" placeholder="Full Name*" required maxlength="50"></input><br>
+                    <input type="text" name="name1" placeholder="Full Name*" required maxlength="50"><br>
                     <input type="email" name="email1" placeholder="Email*" required maxlength="50"
-                           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"></input><br>
+                           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"><br>
                     <input type="text" name="mobile1" placeholder="Mobile Number*" maxlength="10"
-                           pattern="[789][0-9]{9}" required></input><br>
+                           pattern="[789][0-9]{9}" required><br>
                     <input type="text" name="country1" placeholder="Country*" maxlength="50"
-                           required></input><br>
+                           required><br>
                     <input type="text" name="org1" placeholder="Organization*" maxlength="100"
-                           required></input><br>
+                           required><br>
                     <input type="url" name="url1" placeholder="http://example.com/" maxlength="50" pattern="https?://.+"
-                           title="URL"></input><br>
+                           title="URL"><br>
                 </section>
                 <section>
                     <h2>Author 2</h2>
-                    <input type="text" name="name2" placeholder="Full Name" maxlength="50"></input><br>
+                    <input type="text" name="name2" placeholder="Full Name" maxlength="50"><br>
                     <input type="email" name="email2" placeholder="Email" maxlength="50"
-                           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"></input><br>
+                           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"><br>
                     <input type="text" name="mobile2" placeholder="Mobile Number" maxlength="10"
-                           pattern="[789][0-9]{9}"></input><br>
-                    <input type="text" name="country2" placeholder="Country" maxlength="50"></input><br>
-                    <input type="text" name="org2" placeholder="Organization" maxlength="100"></input><br>
-                    <input type="url" name="url2" placeholder="http://example.com/" maxlength="50"></input><br>
+                           pattern="[789][0-9]{9}"><br>
+                    <input type="text" name="country2" placeholder="Country" maxlength="50"><br>
+                    <input type="text" name="org2" placeholder="Organization" maxlength="100"><br>
+                    <input type="url" name="url2" placeholder="http://example.com/" maxlength="50"><br>
                 </section>
                 <section style="padding: 0 0 22px 22px;">
                     <h2>Author 3</h2>
-                    <input type="text" name="name3" placeholder="Full Name" maxlength="50"></input><br>
+                    <input type="text" name="name3" placeholder="Full Name" maxlength="50"><br>
                     <input type="email" name="email3" placeholder="Email" maxlength="50"
-                           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"></input><br>
+                           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"><br>
                     <input type="text" name="mobile3" placeholder="Mobile Number" maxlength="10"
-                           pattern="[789][0-9]{9}"></input><br>
-                    <input type="text" name="country3" placeholder="Country" maxlength="50"></input><br>
-                    <input type="text" name="org3" placeholder="Organization" maxlength="100"></input><br>
-                    <input type="url" name="url3" placeholder="http://example.com/" maxlength="50"></input><br>
+                           pattern="[789][0-9]{9}"><br>
+                    <input type="text" name="country3" placeholder="Country" maxlength="50"><br>
+                    <input type="text" name="org3" placeholder="Organization" maxlength="100"><br>
+                    <input type="url" name="url3" placeholder="http://example.com/" maxlength="50"><br>
                 </section>
                 <div style="width: 85%; margin: 0; padding: 10px; ">
                     <h2>Upload File*</h2>

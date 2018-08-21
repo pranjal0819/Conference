@@ -67,7 +67,7 @@ class AddPcMember(TemplateView):
 
 
 class PcMemberList(TemplateView):
-    template_name = 'pc_member_list.html'
+    template_name = 'pc_member_list2.html'
 
     def get(self, request, *args, **kwargs):
         try:

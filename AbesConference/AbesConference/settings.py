@@ -1,4 +1,5 @@
 import os
+
 from media.file import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -113,7 +114,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
 
 LOGIN_URL = "/account/login"
-#SESSION_COOKIE_AGE = 600
+# SESSION_COOKIE_AGE = 600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 EMAIL_USE_TLS = TLS
@@ -122,5 +123,6 @@ EMAIL_HOST_USER = USER
 EMAIL_HOST_PASSWORD = PASSWORD
 EMAIL_PORT = PORT
 
-RECAPTCHA_PRIVATE_KEY = PRIVATE_KEY
-RECAPTCHA_PUBLIC_KEY = PUBLIC_KEY
+RECAPTCHA_PRIVATE_KEY = 'contacttome'
+# RECAPTCHA_PRIVATE_KEY = PRIVATE_KEY
+# RECAPTCHA_PUBLIC_KEY = PUBLIC_KEY

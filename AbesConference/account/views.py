@@ -106,7 +106,7 @@ class Login(TemplateView):
                             auth.login(request, user)
                             if 'next' in request.POST:
                                 return redirect(request.POST.get('next'))
-                            return redirect("conference:welcome")
+                            return redirect("home")
                         else:
                             messages.error(request, "Username and password did not match")
                     except ObjectDoesNotExist:
@@ -115,7 +115,7 @@ class Login(TemplateView):
                     messages.error(request, 'Enter Username and Password')
             else:
                 messages.error(request, 'Invalid reCAPTCHA. Please try again.')
-        except Exception:
+        except ObjectDoesNotExist:
             messages.error(request, 'Contact Us')
             return redirect("account:login")
         return render(request, self.template_name, {})

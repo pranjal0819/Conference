@@ -16,7 +16,8 @@ def upload_path(instance, filename):
 
 class ConferenceRecord(models.Model):
     slug = models.SlugField(unique=True, blank=True)
-    description = models.CharField(max_length=500)
+    title = models.CharField(max_length=100, default="")
+    description = models.CharField(max_length=1000)
     start_date = models.DateField()
     end_date = models.DateField()
     submission = models.BooleanField(default=True)

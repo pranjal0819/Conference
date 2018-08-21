@@ -10,12 +10,12 @@ from ..models import PaperRecord, AuthorRecord, ConferenceRecord
 
 
 class Welcome2(TemplateView):
-    template_name = 'welcome2.html'
+    template_name = 'welcome3.html'
 
     def get(self, request, *args, **kwargs):
         try:
-            ConferenceRecord.objects.get(slug=kwargs['slug'])
-            return render(request, self.template_name, {'conference': kwargs['slug']})
+            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            return render(request, self.template_name, {'conference': con})
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('conference:welcome')
@@ -25,7 +25,7 @@ class Welcome2(TemplateView):
 
 
 class ViewAllPaper(TemplateView):
-    template_name = 'view_all_paper.html'
+    template_name = 'view_all_paper2.html'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -68,7 +68,7 @@ class ViewDetail(TemplateView):
 
 
 class SubmitPaper(TemplateView):
-    template_name = 'submit_paper.html'
+    template_name = 'submit_paper2.html'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -168,7 +168,7 @@ class UpdatePaper(TemplateView):
 
 
 class AddAuthor(TemplateView):
-    template_name = 'add_author.html'
+    template_name = 'add_author2.html'
 
     def get(self, request, *args, **kwargs):
         try:

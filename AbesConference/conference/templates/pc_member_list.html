@@ -1,25 +1,43 @@
-{% extends "base.html" %}{% load staticfiles %}{% block head_title %}User List | {{ block.super }}{% endblock %}
+{% extends "base2.html" %}{% load staticfiles %}{% block head_title %}User List | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
-    <div id="main" class="wrapper inner">
-        <div class="content">
-            {% for m in messages %}{{ m }}<br>{% endfor %}
-            <h2>PC Member List</h2>
-            <ul>
-                {% for list in user_list %}
-                    <li>{{ list.0.pcEmail }}
-                        {% if list.0.accepted %}
-                            {% if list.1 %}{{ list.1 }}{% else %}
-                                <a href="{% url 'conference:selected_user' slug=slug paper_pk=paper.pk user_pk=list.0.id %}"> {{ list.1 }}</a>
-                            {% endif %}
-                        {% else %}<span style="color: red" >Not Accepted yet</span>{% endif %}
-                        <a href="#">Send Email</a></li>
-                {% endfor %}
-            </ul>
-            <br><a href="{% url 'conference:add_pc_member' slug %}" class="button wide small primary">Add PC Member</a>
-            <a href="{% url 'conference:view_all_paper' slug %}" class="small button wide" style="float: right">View
-                All Paper</a>
+    <div id="main">
+        <div class="wrapper inner">
+            <div class="content">
+                {% for m in messages %}{{ m }}<br>{% endfor %}
+                <h2>PC Member List</h2>
+                <ul>
+                    {% for list in user_list %}
+                        <li>{{ list.0.pcEmail }}
+                            {% if list.0.accepted %}
+                                {% if list.1 %}{{ list.1 }}{% else %}
+                                    <button type="button"
+                                            onclick='loadDoc("{% url 'conference:selected_user' slug=slug paper_pk=paper.pk user_pk=list.0.id %}")'>
+                                        Active
+                                    </button>
+                                {% endif %}
+                            {% else %}<span type="button" style="color: red">Not Accepted yet</span>{% endif %}
+                            <a href="#">Send Email</a></li>
+                    {% endfor %}
+                </ul>
+                <br><a href="{% url 'conference:add_pc_member' slug %}" class="button wide small primary">Add PC
+                Member</a>
+                <a href="{% url 'conference:view_all_paper' slug %}" class="small button wide" style="float: right">View
+                    All Paper</a>
 
+            </div>
         </div>
     </div>
+    <script>
+        function loadDoc(URL_address) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("main").innerHTML = this.responseText;
+                }
+            };
+            xhttp.open("GET", URL_address, true);
+            xhttp.send();
+        }
+    </script>
 {% endblock %}

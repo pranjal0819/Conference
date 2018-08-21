@@ -1,0 +1,97 @@
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}Submit Paper | {{ block.super }}{% endblock %}
+{% block css %}{% endblock %}
+{% block content %}
+    <main role="main" class="container bg-white">
+        {% for m in messages %}{{ m }}<br>{% endfor %}
+        <div class="px-3 pt-4 pb-5">
+            <h2>Submit Paper</h2>
+            <form enctype="multipart/form-data" action="" method="post" class="px-2">{% csrf_token %}
+                <h3>Author 1*</h3>
+                <div class="form-row px-5">
+                    <div class="col-4">
+                        <input type="text" class="form-control" name="name1" placeholder="Full Name*" required
+                               maxlength="50"></div>
+                    <div class="col-4">
+                        <input type="email" class="form-control" name="email1" placeholder="Email*" required
+                               maxlength="50" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"></div>
+                    <div class="col-3">
+                        <input type="text" class="form-control" name="mobile1" placeholder="Mobile Number*"
+                               maxlength="10" pattern="[789][0-9]{9}" required></div>
+                </div>
+                <div class="pt-4 form-row px-5">
+                    <div class="col-4">
+                        <input type="text" class="form-control" name="org1" placeholder="Organization*" maxlength="100"
+                               required></div>
+                    <div class="col-4">
+                        <input type="text" class="form-control" name="country1" placeholder="Country*" maxlength="50"
+                               required></div>
+                    <div class="col-4">
+                        <input type="url" class="form-control" name="url1" placeholder="http://example.com/"
+                               maxlength="50" pattern="https?://.+" title="URL"></div>
+                </div>
+                <hr>
+                <h3>Author 2</h3>
+                <div class="form-row px-5">
+                    <div class="col-4">
+                        <input type="text" class="form-control" name="name2" placeholder="Full Name" maxlength="50">
+                    </div>
+                    <div class="col-4">
+                        <input type="email" class="form-control" name="email2" placeholder="Email" maxlength="50"
+                               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"></div>
+                    <div class="col-3">
+                        <input type="text" class="form-control" name="mobile2" placeholder="Mobile Number"
+                               maxlength="10" pattern="[789][0-9]{9}"></div>
+                </div>
+                <div class="pt-4 form-row px-5">
+                    <div class="col-4">
+                        <input type="text" class="form-control" name="org2" placeholder="Organization" maxlength="100">
+                    </div>
+                    <div class="col-4">
+                        <input type="text" class="form-control" name="country2" placeholder="Country" maxlength="50">
+                    </div>
+                    <div class="col-4">
+                        <input type="url" class="form-control" name="url2" placeholder="http://example.com/"
+                               maxlength="50" pattern="https?://.+" title="URL"></div>
+                </div>
+                <hr>
+                <h3>Author 3</h3>
+                <div class="form-row px-5">
+                    <div class="col-4">
+                        <input type="text" class="form-control" name="name3" placeholder="Full Name" maxlength="50">
+                    </div>
+                    <div class="col-4">
+                        <input type="email" class="form-control" name="email3" placeholder="Email" maxlength="50"
+                               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"></div>
+                    <div class="col-3">
+                        <input type="text" class="form-control" name="mobile3" placeholder="Mobile Number"
+                               maxlength="10" pattern="[789][0-9]{9}"></div>
+                </div>
+                <div class="pt-4 form-row px-5">
+                    <div class="col-4">
+                        <input type="text" class="form-control" name="org3" placeholder="Organization" maxlength="100">
+                    </div>
+                    <div class="col-4">
+                        <input type="text" class="form-control" name="country3" placeholder="Country" maxlength="50">
+                    </div>
+                    <div class="col-4">
+                        <input type="url" class="form-control" name="url3" placeholder="http://example.com/"
+                               maxlength="50" pattern="https?://.+" title="URL"></div>
+                </div>
+                <hr>
+                <h3>Upload File*</h3>
+                <div class="form-row px-5">
+                    <div class="pb-4 col-12">{{ paper_form.title }}</div>
+                    <div class="pb-4 col-4">{{ paper_form.keywords }}</div>
+                    <div class="pb-4 col-8">{{ paper_form.abstract }}</div>
+                    <div>{{ paper_form.file }}</div>
+                </div>
+                <div class="px-5 py-5 clearfix">
+                    <button type="submit" class="px-5 btn btn-outline-primary">Submit</button>
+                    <button type="reset" class="btn btn-outline-danger">Reset</button>
+                    <a href="{% url 'conference:view_all_paper' slug=slug %}"
+                       class="btn btn-outline-primary float-right">View Submitted Paper</a>
+                </div>
+            </form>
+        </div>
+    </main>
+{% endblock %}

@@ -1,117 +1,80 @@
-<!DOCTYPE HTML>
-{% load static from staticfiles %}
-<html>
+<!doctype html>{% load static from staticfiles %}
+<html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <title>{% block head_title %}ABES Conference{% endblock head_title %}</title>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
-    <meta name="description" content=""/>
-    <meta name="keywords" content=""/>
-    <link rel="stylesheet" href="{% static 'css/main.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/h.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/extra.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/button.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/form.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/highlights.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/list.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/table.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/icon.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/icon.css' %}">
+    {% block css %}{% endblock css %}
 </head>
 <body>
-
-<!-- Header -->
-<header id="header">
-    <a class="logo" href="{% url 'home' %}"><img src="{% static 'images/logo.png' %}" alt="ABES EC"
-                                                 style="width: 195px;"></a>
-    <nav>
+<div class="d-flex flex-column fixed-top flex-md-row align-items-center px-md-4 mb-3 bg-light border-bottom shadow-sm">
+    <a class="mr-md-auto"><img src="{% static 'images/logo.png' %}" alt="ABES EC" style="width: 195px;"></a>
+    <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" href="{% url 'home' %}">Home</a>
+        <a class="p-2 text-dark" href="#">Enterprise</a>
+        <a class="p-2 text-dark" href="#">Support</a>
+        <a class="p-2 text-dark" href="#">Pricing</a>
         {% if user.is_authenticated %}
-            <spam style="padding-right: 10px; color: #111111;">Welcome {{ user.first_name }}
-            {% if user.is_staff %}(ChairPerson){% else %}(Author){% endif %}</spam>
-        {% endif %}
-        <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'conference:welcome' %}">Conference</a>
-        {% if user.is_authenticated %}
-            <a href="{% url 'account:profile' %}">Profile</a>
-            <a href="mailto:pranjal0819@gmail.com">Contact Us</a>
-            <a href="{% url 'account:logout' %}" style="color: red">Logout</a>
+        <a class="p-2 text-dark" href="{% url 'account:profile' %}">Profile</a>
+        <a class="p-2" href="{% url 'account:logout' %}" style="color: red">Logout</a>
         {% else %}
-            <a href="mailto:pranjal0819@gmail.com">Contact Us</a>
-            <a href="{% url 'account:login' %}">Login</a>
-            <a href="{% url 'account:signup' %}">Signup</a>
+            <a class="p-2" href="{% url 'account:login' %}">Login</a>
+            <a class="p-2" href="{% url 'account:signup' %}">Signup</a>
         {% endif %}
-        <a href="#menu">Menu</a>
     </nav>
-</header>
-
-<!-- Nav -->
-<nav id="menu">
-    <ul class="links">
-        <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'conference:welcome' %}">Conference</a></li>
-        <li><a href="{% url 'registration' %}">Important Date/Registration</a></li>
-        <li><a href="{% url 'callForPaper' %}">Call for Paper</a></li>
-        <li><a href="#">Speaker Profile !</a></li>
-        <li><a href="#">Committees !</a></li>
-        <li><a href="#">Tour !</a></li>
-        {% if user.is_authenticated %}
-            <li><a href="{% url 'account:profile' %}">Profile</a></li>
-            <li><a href="mailto:pranjal0819@gmail.com">Contact Us</a></li>
-            <li><a href="{% url 'account:logout' %}" style="color: red">Logout</a></li>
-        {% else %}
-            <li><a href="{% url 'account:login' %}">Login</a></li>
-            <li><a href="{% url 'account:signup' %}">Signup</a></li>
-            <li><a href="mailto:pranjal0819@gmail.com">Contact Us</a></li>
-        {% endif %}
-    </ul>
-</nav>
+</div>
 
 <!-- - - - - - - - - - START - - - - - - - - - - - -->
 {% block content %}{% endblock content %}
 <!-- - - - - - - - - - END - - - - - - - - - - - - -->
 
 <!-- Footer -->
-<footer id="footer">
-    <div class="inner">
-        <div class="content">
-            <section>
-                <h4>About Us</h4>
-                <p>The International Conference on Computational intelligence and communication technology (CICT-2019)
-                    is organized to address various issues to prosper the creation of intelligent solutions in future.
-                    The aim is to bring together worldwide leading researchers, developers, practitioners and educators
-                    interested in advancing the state of the art in computational intelligence and communication
-                    technology for exchanging knowledge that encompasses a broad range of disciplines among various
-                    distinct communities. It is expected that researchers will bring new prospect for collaboration
-                    across disciplines and gain idea facilitating novel breakthrough.</p>
-            </section>
-            <section>
-                <h4>Previous CICT Conference</h4>
-                <ul class="alt">
-                    <li><a href="#">1st CICT-2015</a></li>
-                    <li><a href="#">2nd CICT-2016</a></li>
-                    <li><a href="#">3rd CICT-2017</a></li>
-                    <li><a href="#">4th CICT-2018</a></li>
+<div class="bg-dark">
+    <footer class="pt-4 my-md-5 text-white container">
+        <div class="row pt-md-5 pb-md-4 mx-lg-5">
+            <div class="col-12 col-md">
+                <img class="mb-2" src="" alt="ABES EC" width="24" height="24">
+                <small class="d-block mb-3 text-muted">&copy; 2017-2018</small>
+            </div>
+            <div class="col-6 col-md">
+                <h5>Features</h5>
+                <ul class="list-unstyled text-small">
+                    <li><a class="text-muted" href="#">Cool stuff</a></li>
+                    <li><a class="text-muted" href="#">Random feature</a></li>
+                    <li><a class="text-muted" href="#">Team feature</a></li>
+                    <li><a class="text-muted" href="#">Stuff for developers</a></li>
+                    <li><a class="text-muted" href="#">Another one</a></li>
+                    <li><a class="text-muted" href="#">Last time</a></li>
                 </ul>
-            </section>
-            <section>
-                <h4>Contact Us</h4>
-                <ul class="plain">
-                    <li><a href="#"><i class="icon fa-twitter">&nbsp;</i>Twitter</a></li>
-                    <li><a href="#"><i class="icon fa-facebook">&nbsp;</i>Facebook</a></li>
+            </div>
+            <div class="col-6 col-md">
+                <h5>Resources</h5>
+                <ul class="list-unstyled text-small">
+                    <li><a class="text-muted" href="#">Resource</a></li>
+                    <li><a class="text-muted" href="#">Resource name</a></li>
+                    <li><a class="text-muted" href="#">Another resource</a></li>
+                    <li><a class="text-muted" href="#">Final resource</a></li>
                 </ul>
-            </section>
+            </div>
+            <div class="col-6 col-md">
+                <h5>About</h5>
+                <ul class="list-unstyled text-small">
+                    <li><a class="text-muted" href="#">Team</a></li>
+                    <li><a class="text-muted" href="#">Locations</a></li>
+                    <li><a class="text-muted" href="#">Privacy</a></li>
+                    <li><a class="text-muted" href="#">Terms</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="copyright">
-            &copy; ABES EC
-        </div>
-    </div>
-</footer>
-
+    </footer>
+</div>
 <!-- Scripts -->
-<script src="{% static 'js/jquery.min.js' %}"></script>
-<script src="{% static 'js/browser.min.js' %}"></script>
-<script src="{% static 'js/breakpoints.min.js' %}"></script>
-<script src="{% static 'js/util.js' %}"></script>
-<script src="{% static 'js/main.js' %}"></script>
-
+{#<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"#}
+{#        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"#}
+{#        crossorigin="anonymous"></script>#}
 </body>
 </html>
