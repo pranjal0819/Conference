@@ -9,14 +9,6 @@ from ..forms import ConferenceForm
 from ..models import ConferenceRecord
 
 
-class Conference(TemplateView):
-    template_name = 'welcome.html'
-
-    def get(self, request, *args, **kwargs):
-        record = ConferenceRecord.objects.all().order_by('-id')
-        return render(request, self.template_name, {'record': record})
-
-
 class CreateConference(TemplateView):
     template_name = 'create_conference.html'
 
@@ -31,7 +23,7 @@ class CreateConference(TemplateView):
             messages.success(request, 'Successfully Conference Created')
         else:
             messages.error(request, 'Contact to admin')
-        return redirect('conference:welcome')
+        return redirect('home')
 
 
 class CloseSubmission(TemplateView):
@@ -44,12 +36,12 @@ class CloseSubmission(TemplateView):
                 instance.save(update_fields=['submission'])
                 msg = "Submission closed of " + kwargs['slug']
                 messages.success(request, msg)
-                return redirect('conference:welcome')
+                return redirect('home')
             else:
                 raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
-            return redirect('conference:welcome')
+            return redirect('home')
         except Exception:
             auth.logout(request)
             return redirect('home')
@@ -65,10 +57,10 @@ class OpenSubmission(TemplateView):
                 instance.save(update_fields=['submission'])
                 msg = "Submission open of " + kwargs['slug']
                 messages.success(request, msg)
-                return redirect('conference:welcome')
+                return redirect('home')
         except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
-            return redirect('conference:welcome')
+            return redirect('home')
         except Exception:
             auth.logout(request)
             return redirect('home')
@@ -84,10 +76,10 @@ class CloseReview(TemplateView):
                 instance.save(update_fields=['review'])
                 msg = "Review closed of " + kwargs['slug']
                 messages.success(request, msg)
-                return redirect('conference:welcome')
+                return redirect('home')
         except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
-            return redirect('conference:welcome')
+            return redirect('home')
         except Exception:
             auth.logout(request)
             return redirect('home')
@@ -103,10 +95,10 @@ class OpenReview(TemplateView):
                 instance.save(update_fields=['review'])
                 msg = "Review open of " + kwargs['slug']
                 messages.success(request, msg)
-                return redirect('conference:welcome')
+                return redirect('home')
         except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
-            return redirect('conference:welcome')
+            return redirect('home')
         except Exception:
             auth.logout(request)
             return redirect('home')
@@ -124,10 +116,10 @@ class CloseStatus(TemplateView):
                 instance.save(update_fields=['status', 'review', 'submission'])
                 msg = kwargs['slug'] + " closed"
                 messages.success(request, msg)
-                return redirect('conference:welcome')
+                return redirect('home')
         except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
-            return redirect('conference:welcome')
+            return redirect('home')
         except Exception:
             auth.logout(request)
             return redirect('home')
@@ -143,10 +135,10 @@ class OpenStatus(TemplateView):
                 instance.save(update_fields=['status'])
                 msg = kwargs['slug'] + " Open"
                 messages.success(request, msg)
-                return redirect('conference:welcome')
+                return redirect('home')
         except ObjectDoesNotExist:
             messages.error(request, 'Contact to admin')
-            return redirect('conference:welcome')
+            return redirect('home')
         except Exception:
             auth.logout(request)
             return redirect('home')

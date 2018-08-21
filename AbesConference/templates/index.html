@@ -1,146 +1,25 @@
-{% extends "base2.html" %}{% load staticfiles %}{% block head_title %}Home | {{ block.super }}{% endblock head_title %}
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}Home | {{ block.super }}{% endblock head_title %}
 {% block css %}{% endblock %}
 {% block content %}
-    <!-- Banner -->
-    <section id="banner">
-        <div class="inner"><h1>ABES-EC INTRODUCES</h1>
-            <p>5th International Conference on CICT 2019 (Sponsored by IEEE-UP Section)<br>Fifth-International
-                Conference on Computational Intelligence and Communication Technology</p>
-            <p id="timer"></p></div>
-        <video autoplay loop muted playsinline src="{% static 'images/banner.mp4' %}"></video>
-    </section>
-    <!-- Highlights -->
-    <section class="wrapper">
-        <div class="inner">
-            <header class="special"><h2>WELCOME TO 5TH CICT 2019</h2>
-                <p>The International Conference on Computational Intelligence and Communication Technology (CICT-2019)
-                    is organized to address various issues to prosper the creation of intelligent solutions in future.
-                    The aim is to bring together worldwide leading researchers, developers, practitioners and educators
-                    interested in advancing the state of the art in computational intelligence and communication
-                    technology for exchanging knowledge that encompasses a broad range of disciplines among various
-                    distinct communities.</p></header>
-            <div class="highlights">
-                <section><a href="{% url 'registration' %}" style="text-decoration: none; color: #444444">
-                    <div class="content"><i class="icons1 fa-calendar"></i>
-                        <h3>Important Dates</h3>
-                        <p>Paper Submission deadline<br><strong>30th September 2018</strong><br>Notification of
-                            Acceptance<br><strong>10th December 2018</strong><br>Camera ready Paper Submission Deadline:
-                            <strong>30th December 2018</strong></p></div>
-                </a></section>
-                <section><a href="{% url 'registration' %}" style="text-decoration: none; color: #444444">
-                    <div class="content"><i class="icons1 fa-qrcode"></i>
-                        <h3>Registration</h3>
-                        <p>Last Date of Registration for early bird discount: <strong>30th December 2018</strong><br>
-                            <br>Download Registration form<br><a href="/static/doc/registrationform.pdf"
-                                                                 target="_blank">
-                                Click Here</a>
-                        </p></div>
-                </a></section>
-                <section><a href="{% url 'callForPaper' %}" style="text-decoration: none; color: #444444">
-                    <div class="content"><i class="icons1 fa-copy"></i>
-                        <h3>Call for Papers</h3>
-                        <p>We invite you to submit papers and also request you to disseminate this CFP to your
-                            colleagues and communities.</p></div>
-                </a></section>
-                <section><a href="{% url 'conference:welcome' %}" style="text-decoration: none; color: #444444">
-                    <div class="content"><i class="icons1 fa-upload"></i>
-                        <h3>Paper Submission</h3>
-                        <p>All the papers must be submitted through on-line paper submission process only.</p></div>
-                </a></section>
-                <section><a href="http://www.cict.abes.ac.in/international.php"
-                            style="text-decoration: none; color: #444444">
-                    <div class="content"><i class="icons1 fa-paper-plane-o"></i>
-                        <h3>International Advisory Board !</h3>
-                        <p>.....................</p></div>
-                </a></section>
-                <section><a href="http://www.cict.abes.ac.in/tour.php" style="text-decoration: none; color: #444444">
-                    <div class="content"><i class="icons1 fa-image"></i>
-                        <h3>Tour !</h3>
-                        <p>......................</p></div>
-                </a></section>
-                <section><a href="http://www.cict.abes.ac.in/speaker.php" style="text-decoration: none; color: #444444">
-                    <div class="content"><i class="icons1 fa-volume"></i>
-                        <h3>Speakers Profile !</h3>
-                        <p>......................</p></div>
-                </a></section>
-                <section><a href="http://www.cict.abes.ac.in/committee.php"
-                            style="text-decoration: none; color: #444444">
-                    <div class="content"><i class="icons1 "></i>
-                        <h3>Committees !</h3>
-                        <p>......................</p></div>
-                </a></section>
+    <main role="main" class="container">
+        <div class="my-5 p-3 bg-white rounded shadow-sm">
+            <div class="border-bottom border-gray d-flex justify-content-between">
+                <h2>Conferences</h2>
+            </div>
+            {% for list in conference_list %}
+                <div class="media text-muted pt-3">
+                    <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                        <div class="d-flex justify-content-between align-items-center w-100">
+                            <a href="{% url 'conference:slug_welcome' slug=list.slug %}"><h3
+                                    class="text-gray-dark" style="margin: 0;">{{ list.slug }}</h3></a>
+                        </div>
+                        <span class="d-block">{{ list.title }}</span>
+                        <a href="{% url 'conference:slug_welcome' slug=list.slug %}" class="d-block text-right mt-md-2">View...</a>
 
-                <section><a href="{% url 'proceeding' %}" style="text-decoration: none; color: #444444">
-                    <div class="content"><i class="icons1 "></i>
-                        <h3>Proceedings</h3>
-                        <p>CICT 2017 proceedings will be published by Conference Publishing Services and will be linked
-                            with IEEE Xplore. It is mandatory at least one author registers for every paper that is
-                            included in the conference proceedings.</p></div>
-                </a></section>
-            </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-    </section><!-- CTA -->
-    <section id="cta" class="wrapper">
-        <div class="inner"><h2>Curabitur ullamcorper ultricies</h2>
-            <p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non
-                faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan
-                varius montes viverra nibh in adipiscing. Lorem ipsum dolor vestibulum ante ipsum primis in faucibus
-                vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing sed feugiat eu faucibus. Integer
-                ac sed amet praesent. Nunc lacinia ante nunc ac gravida. It is expected that researchers will bring new
-                prospect for collaboration across disciplines and gain idea facilitating novel breakthrough.</p></div>
-    </section>
-    <!-- Testimonials -->
-    <section class="wrapper">
-        <div class="inner">
-            <header class="special"><h2>Faucibus consequat lorem</h2>
-                <p>In arcu accumsan arcu adipiscing accumsan orci ac. Felis id enim aliquet. Accumsan ac integer
-                    lobortis commodo ornare aliquet accumsan erat tempus amet porttitor.</p></header>
-            <div class="testimonials">
-                <section>
-                    <div class="content">
-                        <blockquote><p>Nunc lacinia ante nunc ac lobortis ipsum. Interdum adipiscing gravida odio
-                            porttitor sem non mi integer non faucibus.</p></blockquote>
-                        <div class="author">
-                            <div class="image"><img src="{% static 'images/pic01.jpg' %}" alt=""/></div>
-                            <p class="credit">- <strong>Jane Doe</strong> <span>Director - ABES EC</span></p></div>
-                    </div>
-                </section>
-                <section>
-                    <div class="content">
-                        <blockquote><p>Nunc lacinia ante nunc ac lobortis ipsum. Interdum adipiscing gravida odio
-                            porttitor sem non mi integer non faucibus.</p></blockquote>
-                        <div class="author">
-                            <div class="image"><img src="{% static 'images/pic03.jpg' %}" alt=""/></div>
-                            <p class="credit">- <strong>John Doe</strong> <span>HOD - ABES EC</span></p></div>
-                    </div>
-                </section>
-                <section>
-                    <div class="content">
-                        <blockquote><p>Nunc lacinia ante nunc ac lobortis ipsum. Interdum adipiscing gravida odio
-                            porttitor sem non mi integer non faucibus.</p></blockquote>
-                        <div class="author">
-                            <div class="image"><img src="{% static 'images/pic02.jpg' %}" alt=""/></div>
-                            <p class="credit">- <strong>Janet Smith</strong> <span>CEO - ABC Inc.</span></p></div>
-                    </div>
-                </section>
-            </div>
-        </div>
-    </section>
-    <!-- Footer -->
-    <script>
-        var countDownDate = new Date("Aug 19, 2018").getTime();
-        var x = setInterval(function () {
-            var now = new Date().getTime();
-            var distance = countDownDate - now;
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            document.getElementById("timer").innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s Left";
-            if (distance < 0) {
-                clearInterval(x);
-                document.getElementById("timer").innerHTML = "";
-            }
-        }, 1000);
-    </script>
+    </main>
 {% endblock %}
+{% block script %}{% endblock %}

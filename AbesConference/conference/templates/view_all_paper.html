@@ -1,75 +1,77 @@
-{% extends "base2.html" %}{% load staticfiles %}{% block head_title %}View All Paper | {{ block.super }}{% endblock %}
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}View All Paper | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}{% block content %}
-    <div id="main" class="wrapper inner" style="width: 90%;">
-        <div class="content">
-            {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
-            {% if paperList %}
-                <div class="row">
-                    <div class="col-8 col-12-medium"><h2>List of Paper</h2></div>
-                    <div class="col-4 col-12-medium"><input type="text" id="search" onkeyup="myFunction()"
-                                                            placeholder="Search..." title="Type in a name">
-                    </div>
-                </div><br>
-                <table class="alt table-wrapper" id="myTable">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th width="15%">Author Name</th>
-                        <th width="30%">Title</th>
-                        <th width="15%">Category</th>
-                        <th style="font-size: 11px;">Detail</th>
-                        <th style="font-size: 11px;">Download</th>
-                        {% if user.is_staff %}
-                            <th style="font-size: 11px;">Assign</th>
-                            <th style="font-size: 11px;">Update</th>{% endif %}
-                        <th style="font-size: 11px;">Status</th>
-                        <th style="font-size: 11px; text-align: center">Submission Date</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for list in paperList %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
-                            <td>{{ list.title }}</td>
-                            <td>{{ list.keywords }}</td>
-                            <td style="text-align: center; vertical-align: middle;">
-                                <a href="{% url 'conference:view_detail' slug=slug pk=list.pk %}">
-                                    <i class="material-icons table-icon">&#xe88f;</i></a>
-                            </td>
-                            <td style="text-align: center; vertical-align: middle; ">
-                                <a href="/media/{{ list.file }}" target="_blank">
-                                    <i class="material-icons table-icon">&#xe2c0;</i>
-                                </a>
-                            </td>
-                            {% if user.is_staff %}
-                                <td style="text-align: center; vertical-align: middle;">
-                                    <a href="{% url 'conference:select_user' slug=slug pk=list.pk %}">
-                                        <i class="material-icons table-icon">&#xe7f0;</i>
-                                    </a>
-                                </td>
-                                <td style="text-align: center; vertical-align: middle;"><a
-                                        href="{% url 'conference:update_paper' slug=slug pk=list.pk %}"><i
-                                        class="material-icons table-icon">&#xe5d5;</i></a>
-                                </td>
-                            {% endif %}
-                            <td style="text-align: center; vertical-align: middle;">
-                                {% if list.status == 5 %}
-                                    <i class="material-icons table-icon" style="color: green">&#xe876;</i>
-                                {% elif list.status == 3 %}
-                                    <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
-                                {% else %}
-                                    <i class="material-icons table-icon" style="color: red">&#xe5cd;</i>
-                                {% endif %}
-                            </td>
-                            <td style="text-align: center; vertical-align: middle;">
-                                {{ list.timestamp|date:'M-d-Y' }}</td>
-                        </tr>
-                    {% endfor %}</tbody>
-                </table>{% endif %}<br>
-            <a href="{% url 'conference:slug_welcome' slug=slug %}" class="button primary" >Back to {{ slug }}</a><br>
+    <main role="main" class="container bg-white">
+        <div class="px-3 pt-4 pb-5 d-flex justify-content-between">
+            <h2>PC Member List</h2>
+            <div style="width: 300px">
+                <input type="text" class="form-control" id="search" onkeyup="myFunction()" placeholder="Search...">
+            </div>
         </div>
-    </div>
+        {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
+        {% if paperList %}
+            <div class="px-3 py-3 pb-md-4 table-responsive-xl">
+            <table class="table table-bordered table-hover" id="myTable">
+                <thead>
+                <tr style="font-weight: 600;">
+                    <th scope="col">#</th>
+                    <th scope="col" width="15%">Author Name</th>
+                    <th scope="col" width="30%">Title</th>
+                    <th scope="col" width="15%">Category</th>
+                    <th scope="col" style="font-size: 11px;">Detail</th>
+                    <th scope="col" style="font-size: 11px;">Download</th>
+                    {% if user.is_staff %}
+                        <th scope="col" style="font-size: 11px;">Assign</th>
+                        <th scope="col" style="font-size: 11px;">Reviews</th>
+                        <th scope="col" style="font-size: 11px;">Update</th>{% endif %}
+                    <th scope="col" style="font-size: 11px;">Status</th>
+                    <th scope="col" style="font-size: 11px; text-align: center">Submission Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for list in paperList %}
+                    <tr>
+                        <td scope="row">{{ forloop.counter }}</td>
+                        <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
+                        <td>{{ list.title }}</td>
+                        <td>{{ list.keywords }}</td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            <a href="{% url 'conference:view_detail' slug=slug pk=list.pk %}">
+                                <i class="material-icons table-icon">&#xe88f;</i></a></td>
+                        <td style="text-align: center; vertical-align: middle; ">
+                            <a href="/media/{{ list.file }}" target="_blank">
+                                <i class="material-icons table-icon">&#xe2c0;</i></a></td>
+                        {% if user.is_staff %}
+                            <td style="text-align: center; vertical-align: middle;">
+                                <a href="{% url 'conference:select_user' slug=slug pk=list.pk %}">
+                                    <i class="material-icons table-icon">&#xe7f0;</i></a></td>
+                            <td style="text-align: center; vertical-align: middle;">
+                                <a href="{% url 'conference:show_review' slug=slug pk=list.pk %}">
+                                    <i class="material-icons table-icon">&#xe02f;</i></a></td>
+                            <td style="text-align: center; vertical-align: middle;">
+                                <a href="{% url 'conference:update_paper' slug=slug pk=list.pk %}"><i
+                                        class="material-icons table-icon">&#xe5d5;</i></a></td>
+                        {% endif %}
+                        <td style="text-align: center; vertical-align: middle;">
+                            {% if list.status == 5 %}
+                                <i class="material-icons table-icon" style="color: #00bb00">&#xe876;</i>
+                            {% elif list.status == 3 %}
+                                <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
+                            {% else %}
+                                <i class="material-icons table-icon" style="color: red">&#xe5cd;</i>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            {{ list.timestamp|date:'M-d-Y' }}</td>
+                    </tr>
+                {% endfor %}</tbody>
+            </table>{% endif %}</div>
+        <div class="px-3 py-4 clearfix">
+            <a href="{% url 'conference:slug_welcome' slug=slug %}" class="btn btn-outline-primary float-right">Back
+                to {{ slug }}</a>
+        </div>
+    </main>
+{% endblock %}
+{% block script %}
     <script>
         function myFunction() {
             var input, filter, table, tr, td1, td2, td3, i;

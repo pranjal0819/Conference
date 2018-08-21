@@ -1,53 +1,68 @@
-{% extends "base2.html" %}{% load staticfiles %}{% block head_title %}Welcome | {{ block.super }}{% endblock %}
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}Welcome | {{ block.super }}{% endblock head_title %}
 {% block css %}{% endblock %}
 {% block content %}
-    <div id="main" class="wrapper inner">
-        <div class="content" style="text-align: center;">
-            {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}<br><br>
-            <h1>Welcome to 5th CICT 2019 </h1>
-            <h2>(Sponsored by IEEE-UP Section)</h2>
-            <p>The International Conference on Computational intelligence and communication technology (CICT-2019) is
-                organized to address various issues to prosper the creation of intelligent solutions in future. The aim
-                is to bring together worldwide leading researchers, developers, practitioners and educators interested
-                in advancing the state of the art in computational intelligence and communication technology for
-                exchanging knowledge that encompasses a broad range of disciplines among various distinct communities.
-                It is expected that researchers will bring new prospect for collaboration across disciplines and gain
-                idea facilitating novel breakthrough. The theme for this conference is innovating and inspiring the
-                researchers to adopt the outcome for implementation. The conference will provide an exceptional platform
-                to the researchers to meet and discuss the utmost solutions, scientific results and methods in solving
-                intriguing problems with people that actively involved in these evergreen fields. The 2-day conference
-                commencing on 08-09th Feb, 2019, will feature prominent keynote speakers, tutorials and paper
-                presentation in parallel sessions. CICT 2019 will no doubt be proven to be exciting and educative.</p>
-            <div style="text-align: left">
-                <h1>List of Conferences</h1>
-                {% if record %}
-                    <ul style="font-size: large; width: 100%">
-                        {% for list in record %}
-                            <li><a href="{% url 'conference:slug_welcome' slug=list.slug %}">{{ list.slug }}</a>
-                                {% if user.is_staff %}
-                                    {% if list.submission %}
-                                        <a href="{% url 'conference:close_submission' slug=list.slug %}">Close
-                                            Submission</a>{% else %}Submission Closed{% endif %}
-                                    {% if list.review %}
-                                        <a href="{% url 'conference:close_review' slug=list.slug %}">Close Review</a>
-                                    {% else %}Review Closed{% endif %}
-                                    {% if list.status %}
-                                        <a href="{% url 'conference:close_status' slug=list.slug %}">Close
-                                            Conference</a>
-                                    {% else %}Conference Closed{% endif %}
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <h3>There is no conference</h3>
-                {% endif %}
-                <br><br>
+    <main role="main" class="container">
+        <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center bg-white">
+            <h1>Welcome to</h1>
+            <h2>{{ conference.slug }}</h2>
+            <p class="lead p-5">{{ conference.description }}</p>
+        </div>
+
+        <div class="container p-4">
+            <div class="card-deck mb-3 text-center">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <a href="{% url 'conference:view_all_paper' slug=conference.slug %}" class="text-dark"
+                           style="text-decoration: none">
+                            <i class="icons1 fa-list-ul"></i>
+                            <h3>List of Submitted Paper</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis doloremque ipsum
+                                molestias neque sit ullam? Atque aut beatae cupiditate dicta dolores eius facilis illo,
+                                ipsam iure libero quaerat repudiandae ut!</p>
+                            <button type="button" class="btn btn-lg btn-block btn-outline-primary">View all Paper
+                            </button>
+                        </a></div>
+                </div>
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <a href="{% url 'conference:submit_paper' slug=conference.slug %}" class="text-dark"
+                           style="text-decoration: none">
+                            <i class="icons1 fa-file-pdf-o"></i>
+                            <h3>Submit Paper</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis doloremque ipsum
+                                molestias neque sit ullam? Atque aut beatae cupiditate dicta dolores eius facilis illo,
+                                ipsam iure libero quaerat repudiandae ut!</p>
+                            <button type="button" class="btn btn-lg btn-block btn-outline-primary">Submit Paper</button>
+                        </a></div>
+                </div>
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <a href="{% url 'conference:review_list' slug=conference.slug %}" class="text-dark"
+                           style="text-decoration: none">
+                            <i class="icons1 fa-download"></i>
+                            <h3>Review Paper</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis doloremque ipsum
+                                molestias neque sit ullam? Atque aut beatae cupiditate dicta dolores eius facilis illo,
+                                ipsam iure libero quaerat repudiandae ut!</p>
+                            <button type="button" class="btn btn-lg btn-block btn-outline-primary">Review Paper</button>
+                        </a></div>
+                </div>
                 {% if user.is_staff %}
-                    <a href="{% url 'conference:create_conference' %}" class="button wide small">Create Conference</a>
+                 <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <a href="{% url 'conference:review_list' slug=conference.slug %}" class="text-dark"
+                           style="text-decoration: none">
+                            <i class="icons1 fa-download"></i>
+                            <h3>Add PC Member</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis doloremque ipsum
+                                molestias neque sit ullam? Atque aut beatae cupiditate dicta dolores eius facilis illo,
+                                ipsam iure libero quaerat repudiandae ut!</p>
+                            <button type="button" class="btn btn-lg btn-block btn-outline-primary">Add PC Member</button>
+                        </a></div>
+                </div>
                 {% endif %}
-                <br>
             </div>
         </div>
-    </div>
+    </main>
 {% endblock %}
+{% block script %}{% endblock %}

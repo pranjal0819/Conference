@@ -42,7 +42,7 @@ class ReviewPaperList(TemplateView):
             return render(request, self.template_name, {'slug': kwargs['slug'], 'accept': accept, 'paper_list': li})
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
+            return redirect('home')
             # except Exception:
             auth.logout(request)
             return redirect('home')
@@ -59,7 +59,7 @@ class AcceptPaper(TemplateView):
             return redirect('conference:review_paper', slug=kwargs['slug'], pk=kwargs['pk'])
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect("conference:welcome")
+            return redirect("home")
             # except Exception:
             auth.logout(request)
             return redirect('home')
@@ -77,7 +77,7 @@ class RejectPaper(TemplateView):
             return redirect('conference:review_paper', slug=kwargs['slug'], pk=kwargs['pk'])
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect("conference:welcome")
+            return redirect("home")
             # except Exception:
             auth.logout(request)
             return redirect('home')
@@ -94,7 +94,7 @@ class ReviewPaper(TemplateView):
             return render(request, self.template_name, {'slug': kwargs['slug'], 'con': con, 'record': record})
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect("conference:welcome")
+            return redirect("home")
             # except Exception:
             auth.logout(request)
             return redirect('home')
@@ -115,7 +115,7 @@ class ReviewPaper(TemplateView):
                 raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect("conference:welcome")
+            return redirect("home")
             # except Exception:
             auth.logout(request)
             return redirect('home')

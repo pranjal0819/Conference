@@ -1,26 +1,25 @@
-{% extends "base2.html" %}{% load staticfiles %}{% block head_title %}Submit Paper | {{ block.super }}{% endblock %}
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}Add Author | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
-    <div id="main" class="wrapper inner">
-        <div class="content">
-            {% for m in messages %}{{ m }}<br>{% endfor %}
-            <a href="{% url 'conference:view_all_paper' slug=slug %}">View Submitted Paper</a><br>
-            <h2>Submit Author Information</h2>
-            <form action="" method="post" class="highlights">{% csrf_token %}
-                <section>
-                    <h2>Author*</h2>
-                    {{ author_form.name }}<br>
-                    {{ author_form.email }}<br>
-                    {{ author_form.mobileNumber }}<br>
-                    {{ author_form.country }}<br>
-                    {{ author_form.organization }}<br>
-                    {{ author_form.url }}<br>
-                </section>
-                <div style="width: 85%; margin: 0; padding: 10px;">
-                    <button type="submit" class="primary wide">Save</button>
-                    <a href="{% url 'conference:view_detail' slug=slug pk=pk %}" class="button wide">Back</a>
+    <main role="main" class="container bg-white">
+        {% for m in messages %}{{ m }}<br>{% endfor %}
+        <div class="px-3 pt-4 pb-5">
+            <h2>Add Author</h2>
+            <form action="" method="post" class="px-4">{% csrf_token %}
+                <h3 class="px-3">Fill Author Detail</h3>
+                <div class="col-4">{{ author_form.name }}</div>
+                <div class="col-4 pt-4">{{ author_form.email }}</div>
+                <div class="col-4 pt-4">{{ author_form.mobileNumber }}</div>
+                <div class="col-4 pt-4">{{ author_form.country }}</div>
+                <div class="col-4 pt-4">{{ author_form.organization }}</div>
+                <div class="col-4 pt-4">{{ author_form.url }}</div>
+                <div class="px-3 py-3 clearfix">
+                    <button type="submit" class="px-5 btn btn-outline-primary">Submit</button>
+                    <button type="reset" class="btn btn-outline-danger">Reset</button>
+                    <a href="{% url 'conference:view_detail' slug=slug pk=pk %}"
+                       class="btn btn-outline-primary float-right">View Detail</a>
                 </div>
             </form>
         </div>
-    </div>
+    </main>
 {% endblock %}

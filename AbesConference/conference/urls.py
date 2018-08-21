@@ -8,7 +8,6 @@ from .views.views4 import *
 
 urlpatterns = [
     # views1
-    path('', Conference.as_view(), name='welcome'),
     path('create_conference', CreateConference.as_view(), name='create_conference'),
     path('<slug>/close_submission', login_required(CloseSubmission.as_view()), name='close_submission'),
     path('<slug>/close_review', login_required(CloseReview.as_view()), name='close_review'),
@@ -17,7 +16,7 @@ urlpatterns = [
     path('<slug>/open_review', login_required(OpenReview.as_view()), name='open_review'),
     path('<slug>/open_status', login_required(OpenStatus.as_view()), name='open_status'),
     # views2
-    path('<slug>', login_required(Welcome2.as_view()), name='slug_welcome'),
+    path('<slug>', login_required(Welcome.as_view()), name='slug_welcome'),
     path('<slug>/submit_paper', login_required(SubmitPaper.as_view()), name='submit_paper'),
     path('<slug>/view_all_paper', login_required(ViewAllPaper.as_view()), name='view_all_paper'),
     path('<slug>/view_paper/<int:pk>/detail', login_required(ViewDetail.as_view()), name='view_detail'),

@@ -24,7 +24,7 @@ class AddPcMember(TemplateView):
                 raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
+            return redirect('home')
             # except Exception:
             auth.logout(request)
             return redirect('home')
@@ -60,14 +60,14 @@ class AddPcMember(TemplateView):
                 raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
+            return redirect('home')
             # except Exception:
             auth.logout(request)
             return redirect('home')
 
 
 class PcMemberList(TemplateView):
-    template_name = 'pc_member_list2.html'
+    template_name = 'pc_member_list.html'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -90,7 +90,7 @@ class PcMemberList(TemplateView):
                 return redirect("conference:slug_welcome", slug=kwargs['slug'])
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted or Invalid Paper')
-            return redirect("conference:welcome")
+            return redirect("home")
             # except Exception:
             auth.logout(request)
             return redirect('home')
@@ -118,7 +118,7 @@ class SelectedUser(TemplateView):
                 return redirect("conference:slug_welcome", slug=kwargs['slug'])
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
+            return redirect('home')
             # except Exception:
             auth.logout(request)
             return redirect('home')
@@ -138,7 +138,7 @@ class ShowReviews(TemplateView):
                 raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
+            return redirect('home')
             # except Exception:
             auth.logout(request)
             return redirect('home')
@@ -157,7 +157,7 @@ class ShowReviews(TemplateView):
                 raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
+            return redirect('home')
             # except Exception:
             auth.logout(request)
             return redirect('home')

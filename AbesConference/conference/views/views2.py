@@ -9,8 +9,8 @@ from ..forms import PaperRecordForm, AuthorRecordForm
 from ..models import PaperRecord, AuthorRecord, ConferenceRecord
 
 
-class Welcome2(TemplateView):
-    template_name = 'welcome3.html'
+class Welcome(TemplateView):
+    template_name = 'welcome.html'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -18,14 +18,14 @@ class Welcome2(TemplateView):
             return render(request, self.template_name, {'conference': con})
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
+            return redirect('home')
             # except Exception:
             auth.logout(request)
             return redirect('home')
 
 
 class ViewAllPaper(TemplateView):
-    template_name = 'view_all_paper2.html'
+    template_name = 'view_all_paper.html'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -41,7 +41,7 @@ class ViewAllPaper(TemplateView):
             return render(request, self.template_name, {'slug': kwargs['slug'], 'paperList': li})
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
+            return redirect('home')
             # except Exception:
             auth.logout(request)
             return redirect('home')
@@ -61,14 +61,14 @@ class ViewDetail(TemplateView):
             return render(request, self.template_name, {'slug': kwargs['slug'], 'record': obj, 'authorList': li})
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
+            return redirect('home')
             # except Exception:
             auth.logout(request)
             return redirect('home')
 
 
 class SubmitPaper(TemplateView):
-    template_name = 'submit_paper2.html'
+    template_name = 'submit_paper.html'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -79,7 +79,7 @@ class SubmitPaper(TemplateView):
             return render(request, self.template_name, {'slug': kwargs['slug'], 'paper_form': paper_form})
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
+            return redirect('home')
             # except Exception:
             auth.logout(request)
             return redirect('home')
@@ -116,7 +116,7 @@ class SubmitPaper(TemplateView):
             return render(request, self.template_name, {'slug': kwargs['slug'], 'paper_form': paper_form})
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
+            return redirect('home')
             # except Exception:
             auth.logout(request)
             return redirect('home')
@@ -137,7 +137,7 @@ class UpdatePaper(TemplateView):
                 raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
+            return redirect('home')
             # except Exception:
             auth.logout(request)
             return redirect('home')
@@ -161,14 +161,14 @@ class UpdatePaper(TemplateView):
                 raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
+            return redirect('home')
             # except Exception:
             auth.logout(request)
             return redirect('home')
 
 
 class AddAuthor(TemplateView):
-    template_name = 'add_author2.html'
+    template_name = 'add_author.html'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -199,7 +199,7 @@ class AddAuthor(TemplateView):
                 return render(request, self.template_name, atr)
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
+            return redirect('home')
             # except Exception:
             auth.logout(request)
             return redirect('home')
@@ -218,7 +218,7 @@ class UpdateAuthor(TemplateView):
                 raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
+            return redirect('home')
             # except Exception:
             auth.logout(request)
             return redirect('home')
@@ -241,7 +241,7 @@ class UpdateAuthor(TemplateView):
                 raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
+            return redirect('home')
             # except Exception:
             auth.logout(request)
             return redirect('home')
@@ -269,7 +269,7 @@ class DeletePaper(TemplateView):
             return redirect("conference:view_all_paper", slug=kwargs['slug'])
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect('conference:welcome')
+            return redirect('home')
             # except Exception:
             auth.logout(request)
             return redirect('home')

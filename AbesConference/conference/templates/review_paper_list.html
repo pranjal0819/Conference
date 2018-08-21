@@ -1,4 +1,4 @@
-{% extends "base2.html" %}{% load staticfiles %}{% block head_title %}User List | {{ block.super }}{% endblock %}
+{% extends "base2.html" %}{% load staticfiles %}{% block head_title %}Review Paper List | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
     <div id="main" class="wrapper inner">
@@ -20,8 +20,7 @@
                 <a href="{% url 'conference:accept_to_review' slug %}" class="wide small primary button">Please Accept
                     to Review Paper</a>
             {% endif %}
-            <a href="{% url 'conference:slug_welcome' slug=slug %}" class="small wide button" style="float: right">Go
-                to {{ slug }}</a><br><br>
+
         </div>
     </div>
 {% endblock %}
