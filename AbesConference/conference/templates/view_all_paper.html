@@ -2,13 +2,13 @@
 {% block css %}{% endblock %}{% block content %}
     <main role="main" class="container bg-white">
         <div class="px-3 pt-4 pb-5 d-flex justify-content-between">
-            <h2>PC Member List</h2>
+            <h2>Paper List</h2>
             <div style="width: 300px">
                 <input type="text" class="form-control" id="search" onkeyup="myFunction()" placeholder="Search...">
             </div>
         </div>
         {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
-        {% if paperList %}
+        {% if paper_list %}
             <div class="px-3 py-3 pb-md-4 table-responsive-xl">
             <table class="table table-bordered table-hover" id="myTable">
                 <thead>
@@ -19,7 +19,7 @@
                     <th scope="col" width="15%">Category</th>
                     <th scope="col" style="font-size: 11px;">Detail</th>
                     <th scope="col" style="font-size: 11px;">Download</th>
-                    {% if user.is_staff %}
+                    {% if owner %}
                         <th scope="col" style="font-size: 11px;">Assign</th>
                         <th scope="col" style="font-size: 11px;">Reviews</th>
                         <th scope="col" style="font-size: 11px;">Update</th>{% endif %}
@@ -28,7 +28,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for list in paperList %}
+                {% for list in paper_list %}
                     <tr>
                         <td scope="row">{{ forloop.counter }}</td>
                         <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
@@ -40,7 +40,7 @@
                         <td style="text-align: center; vertical-align: middle; ">
                             <a href="/media/{{ list.file }}" target="_blank">
                                 <i class="material-icons table-icon">&#xe2c0;</i></a></td>
-                        {% if user.is_staff %}
+                        {% if owner %}
                             <td style="text-align: center; vertical-align: middle;">
                                 <a href="{% url 'conference:select_user' slug=slug pk=list.pk %}">
                                     <i class="material-icons table-icon">&#xe7f0;</i></a></td>

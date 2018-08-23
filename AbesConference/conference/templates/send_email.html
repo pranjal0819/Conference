@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}Send Email | {{ block.super }}{% endblock %}
+{% block css %}{% endblock %}
+{% block content %}
+    <main role="main" class="container bg-white">
+        {% for m in messages %}{{ m }}<br>{% endfor %}
+        <div class="px-3 pt-4 pb-5">
+            <h2>Contact Us</h2>
+            <form method="post" class="px-2">{% csrf_token %}
+                <div class="col-md-3 mb-3">
+                    <label>Subject </label>{{ form.subject }}
+                </div>
+                <div class="col-md-8 mb-3">
+                    <label>Detail</label>{{ form.message }}
+                </div>
+                <div class="px-3">
+                    <button type="submit" class="btn btn-outline-info px-4">Create Conference</button>
+                </div>
+            </form>
+        </div>
+    </main>
+{% endblock %}

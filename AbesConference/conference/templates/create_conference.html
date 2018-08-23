@@ -1,19 +1,28 @@
-{% extends "base2.html" %}{% load staticfiles %}{% block head_title %}Create Conference | {{ block.super }}{% endblock %}
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}Create Conference | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
-    <div id="main" class="wrapper inner">
-        <div class="content">
-            {% for m in messages %}{{ m }}<br>{% endfor %}
+    <main role="main" class="container bg-white">
+        {% for m in messages %}{{ m }}<br>{% endfor %}
+        <div class="px-3 pt-4 pb-5">
             <h2>Create Conference</h2>
-            <form method="post">{% csrf_token %}
-                <label>Conference Name</label>{{ form.slug }}<br>
-                <label>Description</label>{{ form.description }}<br>
-                <label>Start Date</label>{{ form.start_date }}<br>
-                <label>End Date</label>{{ form.end_date }}<br>
-                <button type="submit" class="primary">Create Conference</button>
-                <br>
-                <small style="color: red">*Once Conference Created Can not be deleted</small>
+            <form method="post" class="px-2">{% csrf_token %}
+                <div class="row px-3">
+                    <div class="col-md-4 mb-3">
+                        <label>Acronym </label>{{ form.slug }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label>End Date </label>{{ form.end_date }}
+                    </div>
+                </div>
+                <div class="col-md-8 mb-3">
+                    <label>Conference name </label>{{ form.name }}
+                </div>
+                <div class="col-md-8 mb-3">
+                    <label>Conference Detail</label>{{ form.description }}
+                </div>
+                <div class="px-3">
+                    <button type="submit" class="btn btn-outline-info px-4">Create Conference</button></div>
             </form>
         </div>
-    </div>
+    </main>
 {% endblock %}

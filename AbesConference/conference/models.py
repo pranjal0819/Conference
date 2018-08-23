@@ -15,14 +15,15 @@ def upload_path(instance, filename):
 
 
 class ConferenceRecord(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     slug = models.SlugField(unique=True, blank=True)
-    title = models.CharField(max_length=100, default="")
-    description = models.CharField(max_length=1000)
-    start_date = models.DateField()
+    name = models.CharField(max_length=151)
+    description = models.CharField(max_length=1005)
     end_date = models.DateField()
-    submission = models.BooleanField(default=True)
-    review = models.BooleanField(default=True)
-    status = models.BooleanField(default=True)
+    active = models.BooleanField(default=False)
+    submission = models.BooleanField(default=False)
+    review = models.BooleanField(default=False)
+    status = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
 
@@ -70,8 +71,9 @@ class PaperRecord(models.Model):
 class PcMemberRecord(models.Model):
     pcCon = models.ForeignKey(ConferenceRecord, on_delete=models.CASCADE, null=True, related_name='pcCon')
     pcEmail = models.EmailField(max_length=85)
+    name = models.CharField(max_length=80, default="")
     accepted = models.BooleanField(default=False)
-
+    totalPaper = models.IntegerField(default=0)
     def __str__(self):
         return str(self.pcEmail) + " -- " + str(self.pcCon)
 

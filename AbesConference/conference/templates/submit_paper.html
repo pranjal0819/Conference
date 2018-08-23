@@ -85,6 +85,11 @@
                     <div class="pb-4 col-8">{{ paper_form.abstract }}</div>
                     <div>{{ paper_form.file }}</div>
                 </div>
+                {% if owner %}
+                    <div class="col-4 px-5 pt-3">
+                        <label>Author User Name</label>
+                        <input type="text" class="form-control" name="user" placeholder="Author User Name*" required
+                               maxlength="50" value="{{ user }}"></div>{% endif %}
                 <div class="px-5 py-5 clearfix">
                     <button type="submit" class="px-5 btn btn-outline-primary">Submit</button>
                     <button type="reset" class="btn btn-outline-danger">Reset</button>

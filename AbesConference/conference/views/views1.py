@@ -18,20 +18,25 @@ class CreateConference(TemplateView):
 
     def post(self, request):
         form = ConferenceForm(request.POST)
-        if form.is_valid() and request.user.is_staff:
-            form.save()
+        if form.is_valid():
+            temp = form.save(commit=False)
+            temp.owner = request.user
+            temp.save()
             messages.success(request, 'Successfully Conference Created')
+            messages.success(request, 'Check your Email')
+            return redirect('home')
         else:
             messages.error(request, 'Contact to admin')
-        return redirect('home')
+            form = ConferenceForm()
+            return render(request, self.template_name, {'form':form})
 
 
 class CloseSubmission(TemplateView):
 
     def get(self, request, *args, **kwargs):
         try:
-            if request.user.is_staff:
-                instance = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            instance = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            if request.user == instance.owner:
                 instance.submission = False
                 instance.save(update_fields=['submission'])
                 msg = "Submission closed of " + kwargs['slug']
@@ -52,7 +57,7 @@ class OpenSubmission(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
             instance = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            if request.user.is_staff and instance.status:
+            if request.user == instance.owner and instance.status:
                 instance.submission = True
                 instance.save(update_fields=['submission'])
                 msg = "Submission open of " + kwargs['slug']
@@ -70,8 +75,8 @@ class CloseReview(TemplateView):
 
     def get(self, request, *args, **kwargs):
         try:
-            if request.user.is_staff:
-                instance = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            instance = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            if request.user == instance.owner:
                 instance.review = False
                 instance.save(update_fields=['review'])
                 msg = "Review closed of " + kwargs['slug']
@@ -90,7 +95,7 @@ class OpenReview(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
             instance = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            if request.user.is_staff and instance.status:
+            if request.user == instance.owner and instance.status:
                 instance.review = True
                 instance.save(update_fields=['review'])
                 msg = "Review open of " + kwargs['slug']
@@ -108,8 +113,8 @@ class CloseStatus(TemplateView):
 
     def get(self, request, *args, **kwargs):
         try:
-            if request.user.is_staff:
-                instance = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            instance = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            if request.user == instance.owner:
                 instance.status = False
                 instance.review = False
                 instance.submission = False
@@ -129,8 +134,8 @@ class OpenStatus(TemplateView):
 
     def get(self, request, *args, **kwargs):
         try:
-            if request.user.is_staff:
-                instance = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            instance = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            if request.user == instance.owner:
                 instance.status = True
                 instance.save(update_fields=['status'])
                 msg = kwargs['slug'] + " Open"

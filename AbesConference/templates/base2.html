@@ -29,7 +29,7 @@
             {% if user.is_staff %}(ChairPerson){% else %}(Author){% endif %}</spam>
         {% endif %}
         <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'conference:welcome' %}">Conference</a>
+{#        <a href="{% url 'conference:welcome' %}">Conference</a>#}
         {% if user.is_authenticated %}
             <a href="{% url 'account:profile' %}">Profile</a>
             <a href="mailto:pranjal0819@gmail.com">Contact Us</a>
@@ -47,7 +47,7 @@
 <nav id="menu">
     <ul class="links">
         <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'conference:welcome' %}">Conference</a></li>
+{#        <li><a href="{% url 'conference:welcome' %}">Conference</a></li>#}
         <li><a href="{% url 'registration' %}">Important Date/Registration</a></li>
         <li><a href="{% url 'callForPaper' %}">Call for Paper</a></li>
         <li><a href="#">Speaker Profile !</a></li>

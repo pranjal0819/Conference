@@ -4,30 +4,37 @@ from .models import PaperRecord, AuthorRecord, ReviewPaperRecord, ConferenceReco
 
 
 class ConferenceForm(forms.ModelForm):
+    name = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Conference Name'}), required=True, max_length=140)
     slug = forms.CharField(widget=forms.TextInput(
-        attrs={'placeholder': 'Conference Name', 'pattern': "[^'\x22]+", 'style': "width: 350px"}), max_length=30)
+        attrs={'class': 'form-control', 'placeholder': 'Acronym', 'pattern': "[^'\x22]+"}), required=True,
+        max_length=30)
     description = forms.CharField(widget=forms.Textarea(
-        attrs={'placeholder': 'Conference Detail', 'style': "width:350px; height:150px"}), max_length=100)
-    start_date = forms.DateField(widget=forms.widgets.DateInput(
-        attrs={'placeholder': 'yyyy-mm-dd', 'style': "width: 150px"}, format="%Y/%m/%d"))
+        attrs={'class': 'form-control', 'placeholder': 'Conference Detail'}), required=True, max_length=1000)
     end_date = forms.DateField(widget=forms.widgets.DateInput(
-        attrs={'placeholder': 'yyyy-mm-dd', 'style': "width: 150px"}, format="%Y/%m/%d"))
+        attrs={'class': 'form-control', 'placeholder': 'yyyy-mm-dd', 'style': "width: 150px"}, format="%Y/%m/%d"),
+        required=True, )
 
     class Meta:
         model = ConferenceRecord
-        fields = ['slug', 'description', 'start_date', 'end_date']
+        fields = ['slug', 'name', 'description', 'end_date']
 
 
 class AuthorRecordForm(forms.ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Name'}), max_length=50)
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Name'}),
+                           max_length=50)
     email = forms.CharField(widget=forms.EmailInput(
-        attrs={'class': 'form-control', 'placeholder': 'abcd@gmail.com', 'pattern': '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$'}), max_length=50)
+        attrs={'class': 'form-control', 'placeholder': 'abcd@gmail.com',
+               'pattern': '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$'}), max_length=50)
     mobileNumber = forms.CharField(widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Mobile Number', 'pattern': "[789][0-9]{9}"}), max_length=10)
-    country = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Country Name'}), max_length=50)
-    organization = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Organization'}), max_length=100)
+    country = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Country Name'}),
+                              max_length=50)
+    organization = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Organization'}), max_length=100)
     url = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'form-control', 'placeholder': 'http://example.com/', 'pattern': "https?://.+"}), required=False, max_length=50)
+        attrs={'class': 'form-control', 'placeholder': 'http://example.com/', 'pattern': "https?://.+"}),
+        required=False, max_length=50)
 
     class Meta:
         model = AuthorRecord
@@ -58,3 +65,7 @@ class ReviewPaperForm(forms.ModelForm):
     class Meta:
         model = ReviewPaperRecord
         fields = ['overallEvaluation', 'point', 'remark']
+
+class EmailForm(forms.Form):
+    subject = forms.CharField(required=True)
+    message = forms.CharField(widget=forms.Textarea, required=True)

@@ -21,16 +21,18 @@ urlpatterns = [
     path('<slug>/view_all_paper', login_required(ViewAllPaper.as_view()), name='view_all_paper'),
     path('<slug>/view_paper/<int:pk>/detail', login_required(ViewDetail.as_view()), name='view_detail'),
     path('<slug>/add_author/<int:pk>', login_required(AddAuthor.as_view()), name='add_author'),
-    path('<slug>/update_paper/<int:pk>', login_required(UpdatePaper.as_view()), name='update_paper'),
-    path('<slug>/update_author/<int:pk>', login_required(UpdateAuthor.as_view()), name='update_author'),
+    path('<slug>/update_paper/<int:pk>', login_required(UpdatePaper.as_view()), name='update_paper'),  # old
+    path('<slug>/update_author/<int:pk>', login_required(UpdateAuthor.as_view()), name='update_author'),  # old
     path('<slug>/view_paper/<int:pk>/delete', login_required(DeletePaper.as_view()), name='delete_paper'),
     # views3
+    path('<slug>/pc-member-list', login_required(PcMemberList.as_view()), name='pc_member_list'),
     path('<slug>/add_pc_member', login_required(AddPcMember.as_view()), name='add_pc_member'),
-    path('<slug>/<int:pk>/select-user', login_required(PcMemberList.as_view()), name='select_user'),
+    path('<slug>/confirm/<uidb64>/<token>/', confirm, name='confirm'),
+    path('<slug>/<int:pk>/email', login_required(SendEmail.as_view()), name='send_email'),
+    path('<slug>/<int:pk>/select-user', login_required(PcMembers.as_view()), name='select_user'),
     path('<slug>/<int:pk>/show_reviews', login_required(ShowReviews.as_view()), name='show_review'),
     path('<slug>/<int:paper_pk>/select/<int:user_pk>', login_required(SelectedUser.as_view()), name='selected_user'),
-    # path('view_paper/<int:paper_pk>/deselect/<int:user_pk>', login_required(deselect_user.as_view()),
-    #    name='deselect_user'),
+    path('<slug>/<int:paper_pk>/deselect/<int:user_pk>', login_required(DeselectUser.as_view()), name='deselect_user'),
     # views4
     path('<slug>/accepted', login_required(AcceptToReview.as_view()), name='accept_to_review'),
     path('<slug>/review_paper_list', login_required(ReviewPaperList.as_view()), name='review_list'),

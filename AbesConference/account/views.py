@@ -188,7 +188,7 @@ def activate(request, uidb64, token):
         user.save()
         auth.login(request, user)
         messages.success(request, 'Thank you for Email Confirmation. Now you can login to your Account.')
-        return redirect("account:login")
+        return redirect("home")
     else:
         messages.error(request, 'Activation link is invalid! Contact to Us')
         return redirect("account:signup")

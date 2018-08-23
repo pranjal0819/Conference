@@ -3,41 +3,41 @@
 {% block content %}
     <div id="main" class="wrapper inner">
         <div class="content">
-            {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}{% if record is not None %}
+            {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}{% if paper_record is not None %}
                 <h2>Detail Of Paper</h2>
                 <dl>
                     <form method="post" enctype="multipart/form-data">{% csrf_token %}
                         <dt>Title</dt>
                         <dd>
-                            <blockquote><h3>{{ record.title }}</h3>
+                            <blockquote><h3>{{ paper_record.title }}</h3>
                                 New Title: <input type="text" maxlength="200" required placeholder="Title" name="title"
-                                                  title="Edit Title" value="{{ record.title }}"></blockquote>
+                                                  title="Edit Title" value="{{ paper_record.title }}"></blockquote>
                         </dd>
                         <hr>
                         <dt>Keywords</dt>
                         <dd>
                             <blockquote>
-                                <pre style="font-style: inherit;">{{ record.keywords }}</pre>
+                                <pre style="font-style: inherit;">{{ paper_record.keywords }}</pre>
                                 <br>
                                 New Keywords: <textarea placeholder="Keywords" required maxlength="200" name="keyword"
-                                                        title="Edit Keywords" rows="5">{{ record.keywords }}</textarea>
+                                                        title="Edit Keywords" rows="5">{{ paper_record.keywords }}</textarea>
                             </blockquote>
                         </dd>
                         <hr>
                         <dt>Abstract</dt>
                         <dd>
                             <blockquote>
-                                <pre>{{ record.abstract }}</pre>
+                                <pre>{{ paper_record.abstract }}</pre>
                                 <br>New Abstract:
                                 <textarea placeholder="Abstract" required maxlength="1000" title="Edit Abstract"
-                                          name="abstract" rows="5">{{ record.abstract }}</textarea>
+                                          name="abstract" rows="5">{{ paper_record.abstract }}</textarea>
                             </blockquote>
                         </dd>
                         <hr>
-                        <h3>Status: {% if record.status == 5 %}<span style="color: green">Accepted</span>
-                        {% elif record.status == 3 %}<span style="color: #3eb1ff;">Pending</span>{% else %}
+                        <h3>Status: {% if paper_record.status == 5 %}<span style="color: green">Accepted</span>
+                        {% elif paper_record.status == 3 %}<span style="color: #3eb1ff;">Pending</span>{% else %}
                             <span style="color: red">Not Accepted</span>{% endif %}</h3>
-                        Current File: <a href="/media/{{ record.file }}" target="_blank" class="button small primary">
+                        Current File: <a href="/media/{{ paper_record.file }}" target="_blank" class="button small primary">
                             Download Paper</a>
                         <br><br>Upload new File: <input type="file" accept="application/pdf" name="upload"
                                                         title="Upload File"><br>
@@ -60,7 +60,7 @@
                             <th>Edit</th>
                         </tr>
                         </thead>
-                        <tbody>{% for name in authorList %}
+                        <tbody>{% for name in author_list %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
                                 <td>{{ name.name }}</td>
@@ -74,7 +74,7 @@
                                 <td><a href="{% url 'conference:update_author' slug=slug pk=name.pk %}">Edit</a></td>
                             </tr>{% endfor %}</tbody>
                     </table>
-                    <a href="{% url 'conference:add_author' slug=slug pk=record.pk %}"
+                    <a href="{% url 'conference:add_author' slug=slug pk=paper_record.pk %}"
                        class="button wide small primary" style="float: right;">Add another author</a><br><br></div>
             {% endif %}
             <a href="{% url 'conference:view_all_paper' slug=slug %}" class="button primary">Back to Paper list</a>
