@@ -18,12 +18,12 @@
                 <hr>
                 <div class="lead clearfix">
                     Status: {% if paper_record.status == 5 %}
-                        <span style="color: green">Accepted</span>
-                    {% elif paper_record.status == 3 %}
-                        <span style="color: #3eb1ff;">Pending</span>
-                    {% else %}
-                        <span style="color: red">Not Accepted</span>
-                    {% endif %}
+                    <span style="color: green">Accepted</span>
+                {% elif paper_record.status == 3 %}
+                    <span style="color: #3eb1ff;">Pending</span>
+                {% else %}
+                    <span style="color: red">Not Accepted</span>
+                {% endif %}
                     <a href="/media/{{ paper_record.file }}" target="_blank" class="btn btn-outline-info float-right">Download
                         Paper</a>
                 </div>

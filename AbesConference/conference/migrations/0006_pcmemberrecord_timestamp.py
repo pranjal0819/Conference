@@ -5,7 +5,6 @@ import django.utils.timezone
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('conference', '0005_pcmemberrecord_totalpaper'),
     ]

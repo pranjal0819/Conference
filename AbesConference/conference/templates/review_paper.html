@@ -29,8 +29,10 @@
                 <a href="/media/{{ record.paper.file }}" target="_blank" class="button primary">Download Paper</a><br>
             </dl>
             {% if record.accepted == 3 %}
-            <a href="{% url 'conference:accept_paper' slug=slug pk=record.pk %}" class="wide button primary small">Accept Paper to Review</a>
-            <a href="{% url 'conference:reject_paper' slug=slug pk=record.pk %}" class="wide button small">Reject from Review</a>
+                <a href="{% url 'conference:accept_paper' slug=slug pk=record.pk %}" class="wide button primary small">Accept
+                    Paper to Review</a>
+                <a href="{% url 'conference:reject_paper' slug=slug pk=record.pk %}" class="wide button small">Reject
+                    from Review</a>
             {% elif record.accepted == 5 %}
                 <h3>Give your Review</h3>
                 <form action="" method="post">{% csrf_token %}
@@ -53,9 +55,11 @@
                 </form>
             {% else %}
                 <h3>You reject this paper to review</h3>
-                <a href="{% url 'conference:accept_paper' slug=slug pk=record.pk %}" class="small wide button">Accept to review</a>
+                <a href="{% url 'conference:accept_paper' slug=slug pk=record.pk %}" class="small wide button">Accept to
+                    review</a>
             {% endif %}
-                <a href="{% url 'conference:review_list' slug=slug %}" class="button wide small" style="float: right">Review List</a>
+            <a href="{% url 'conference:review_list' slug=slug %}" class="button wide small" style="float: right">Review
+                List</a>
             <br>
         </div>
     </div>

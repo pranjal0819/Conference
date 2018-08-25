@@ -20,7 +20,8 @@
                                 <pre style="font-style: inherit;">{{ paper_record.keywords }}</pre>
                                 <br>
                                 New Keywords: <textarea placeholder="Keywords" required maxlength="200" name="keyword"
-                                                        title="Edit Keywords" rows="5">{{ paper_record.keywords }}</textarea>
+                                                        title="Edit Keywords"
+                                                        rows="5">{{ paper_record.keywords }}</textarea>
                             </blockquote>
                         </dd>
                         <hr>
@@ -37,7 +38,8 @@
                         <h3>Status: {% if paper_record.status == 5 %}<span style="color: green">Accepted</span>
                         {% elif paper_record.status == 3 %}<span style="color: #3eb1ff;">Pending</span>{% else %}
                             <span style="color: red">Not Accepted</span>{% endif %}</h3>
-                        Current File: <a href="/media/{{ paper_record.file }}" target="_blank" class="button small primary">
+                        Current File: <a href="/media/{{ paper_record.file }}" target="_blank"
+                                         class="button small primary">
                             Download Paper</a>
                         <br><br>Upload new File: <input type="file" accept="application/pdf" name="upload"
                                                         title="Upload File"><br>

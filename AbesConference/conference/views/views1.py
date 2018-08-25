@@ -28,7 +28,7 @@ class CreateConference(TemplateView):
         else:
             messages.error(request, 'Contact to admin')
             form = ConferenceForm()
-            return render(request, self.template_name, {'form':form})
+            return render(request, self.template_name, {'form': form})
 
 
 class CloseSubmission(TemplateView):

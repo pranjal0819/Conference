@@ -32,7 +32,7 @@ urlpatterns = [
     path('<slug>/<int:pk>/select-user', login_required(PcMembers.as_view()), name='select_user'),
     path('<slug>/<int:pk>/show_reviews', login_required(ShowReviews.as_view()), name='show_review'),
     path('<slug>/<int:paper_pk>/select/<int:user_pk>', login_required(SelectedUser.as_view()), name='selected_user'),
-    #path('<slug>/<int:paper_pk>/deselect/<int:user_pk>', login_required(DeselectUser.as_view()), name='deselect_user'),
+    # path('<slug>/<int:paper_pk>/deselect/<int:user_pk>', login_required(DeselectUser.as_view()), name='deselect_user'),
     # views4
     path('<slug>/accepted', login_required(AcceptToReview.as_view()), name='accept_to_review'),
     path('<slug>/demand_paper/<int:pk>', login_required(Demand.as_view()), name='demand_paper'),

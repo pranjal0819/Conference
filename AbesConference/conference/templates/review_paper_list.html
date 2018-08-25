@@ -2,7 +2,7 @@
 {% block css %}{% endblock %}{% block content %}
     <div id="main">
         <main class="container bg-white">
-        {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
+            {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
             <div class="px-3 pt-4 d-flex justify-content-between">
                 <h2>Paper List to Review</h2>
                 <div style="width: 300px">
@@ -64,9 +64,10 @@
                 <a href="{% url 'conference:accept_to_review' slug %}" class="btn btn-outline-danger">Please Accept to
                     Review Paper</a>
             {% endif %}
-        <div class="pb-3 py-2 clearfix">
-            <a href="{% url 'conference:slug_welcome' slug=slug %}" class="btn btn-outline-primary float-right">Back to
-                Conference</a></div>
+            <div class="pb-3 py-2 clearfix">
+                <a href="{% url 'conference:slug_welcome' slug=slug %}" class="btn btn-outline-primary float-right">Back
+                    to
+                    Conference</a></div>
         </main>
     </div>
 {% endblock %}

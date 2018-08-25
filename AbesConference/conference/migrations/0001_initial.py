@@ -7,7 +7,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -57,8 +56,10 @@ class Migration(migrations.Migration):
                 ('timestamp', models.DateTimeField(auto_now_add=True)),
                 ('update', models.DateTimeField(auto_now=True)),
                 ('author', models.ManyToManyField(to='conference.AuthorRecord')),
-                ('conference', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='conference', to='conference.ConferenceRecord')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user', to=settings.AUTH_USER_MODEL)),
+                ('conference', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='conference',
+                                                 to='conference.ConferenceRecord')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user',
+                                           to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -67,7 +68,9 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('pcEmail', models.EmailField(max_length=85)),
                 ('accepted', models.BooleanField(default=False)),
-                ('pcCon', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='pcCon', to='conference.ConferenceRecord')),
+                ('pcCon',
+                 models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='pcCon',
+                                   to='conference.ConferenceRecord')),
             ],
         ),
         migrations.CreateModel(
@@ -80,9 +83,15 @@ class Migration(migrations.Migration):
                 ('accepted', models.IntegerField(default=3)),
                 ('timestamp', models.DateTimeField(auto_now_add=True)),
                 ('update', models.DateTimeField(auto_now=True)),
-                ('paper', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='paper', to='conference.PaperRecord')),
-                ('reviewCon', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='reviewCon', to='conference.ConferenceRecord')),
-                ('reviewUser', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='reviewUser', to='conference.PcMemberRecord')),
+                ('paper',
+                 models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='paper',
+                                   to='conference.PaperRecord')),
+                ('reviewCon',
+                 models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='reviewCon',
+                                   to='conference.ConferenceRecord')),
+                ('reviewUser',
+                 models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='reviewUser',
+                                   to='conference.PcMemberRecord')),
             ],
         ),
     ]
