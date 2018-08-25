@@ -2,46 +2,46 @@
 {% block css %}{% endblock %}{% block content %}
     <div id="main">
         <main class="container bg-white">
-
+            {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
             <div class="px-3 pt-4 d-flex justify-content-between">
                 <h2>PC Member List</h2>
                 <div style="width: 300px">
                     <input type="text" class="form-control" id="search" onkeyup="myFunction()" placeholder="Search...">
                 </div>
             </div>
-            {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
-            {% if user_list %}
-                <div class="px-3 py-3 pb-md-4 table-responsive-xl">
+            <div class="px-3 py-3 pb-md-4 table-responsive-xl">
                 <table class="table table-bordered table-hover" id="myTable">
                     <thead>
                     <tr style="font-weight: 600;">
                         <th scope="col">#</th>
+                        <th scope="col" width="30%">Pc member Name</th>
                         <th scope="col" width="30%">Pc member Email</th>
-                        <th scope="col" width="30%">Assign</th>
-                        <th scope="col">Send Email</th>
+                        <th scope="col">Demand</th>
+                        <th scope="col" width="25%">Assign</th>
+                        <th scope="col"  width="15%">Send Email</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for list in user_list %}
                         <tr>
                             <td scope="row">{{ forloop.counter }}</td>
-                            <td>{{ list.0.pcEmail }}</td>
-                            <td>
-                                {% if list.0.accepted %}
-                                    {% if list.1 %}
-                                        <button class="btn btn-outline-danger w-50">Unassigned</button>
-                                    {% else %}
-                                        <button class="btn btn-outline-primary w-50"
-                                                onclick='loadDoc("{% url 'conference:selected_user' slug=slug paper_pk=paper.pk user_pk=list.0.id %}")'>
-                                            Assign
-                                        </button>
-                                    {% endif %}
-                                {% else %}<span class="btn btn-danger">Not Accepted yet</span>{% endif %}
-                            </td>
-                            <td><a href="#">Send Email</a></td>
+                            <td width="25%">{{ list.0.name }}</td>
+                            <td width="25%">{{ list.0.pcEmail }}</td>
+                            <td>{% if list.1 %}Demanded{% endif %}</td>
+                            <td width="25%">{% if list.2 %}
+                                <button class="btn btn-outline-danger"
+                                        onclick='loadDoc("{% url 'conference:selected_user' slug=slug paper_pk=paper.pk user_pk=list.0.id %}")'>
+                                    Unassigned
+                                </button>{% else %}
+                                <button class="btn btn-outline-success"
+                                        onclick='loadDoc("{% url 'conference:selected_user' slug=slug paper_pk=paper.pk user_pk=list.0.id %}")'>
+                                    Assign
+                                </button>{% endif %}</td>
+                            <td><a href="{% url 'conference:send_email' slug=slug pk=list.0.pk %}">Send Email</a></td>
                         </tr>
                     {% endfor %}</tbody>
-                </table>{% endif %}</div>
+                </table>
+            </div>
             <div class="px-3 py-4 clearfix">
                 <a href="{% url 'conference:add_pc_member' slug %}" class="btn btn-outline-primary">Add PC Member</a>
                 <a href="{% url 'conference:view_all_paper' slug=slug %}" class="btn btn-outline-primary float-right">Back
@@ -53,7 +53,7 @@
 {% block script %}
     <script>
         function myFunction() {
-            var input, filter, table, tr, td1, td2, td3, i;
+            var input, filter, table, tr, td1, td2, td3, td4, i;
             input = document.getElementById("search");
             filter = input.value.toUpperCase();
             table = document.getElementById("myTable");
@@ -61,8 +61,10 @@
             for (i = 0; i < tr.length; i++) {
                 td1 = tr[i].getElementsByTagName("td")[1];
                 td2 = tr[i].getElementsByTagName("td")[2];
+                td3 = tr[i].getElementsByTagName("td")[3];
+                td4 = tr[i].getElementsByTagName("td")[4];
                 if (td1 || td2) {
-                    if ((td1.innerHTML.toUpperCase().indexOf(filter) > -1) || (td2.innerHTML.toUpperCase().indexOf(filter) > -1)) {
+                    if ((td1.innerHTML.toUpperCase().indexOf(filter) > -1) || (td2.innerHTML.toUpperCase().indexOf(filter) > -1) || (td3.innerHTML.toUpperCase().indexOf(filter) > -1) || (td4.innerHTML.toUpperCase().indexOf(filter) > -1)) {
                         tr[i].style.display = "";
                     } else {
                         tr[i].style.display = "none";

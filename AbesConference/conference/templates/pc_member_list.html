@@ -9,33 +9,36 @@
                 </div>
             </div>
             {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
-        <div class="px-3 py-3 pb-md-4 table-responsive-xl">
-            {% if member_list %}
-                <table class="table table-bordered table-hover" id="myTable">
-                    <thead>
-                    <tr style="font-weight: 600;">
-                        <th scope="col" width="5%">#</th>
-                        <th scope="col" width="30%">Name</th>
-                        <th scope="col" width="30%">Pc member Email</th>
-                        <th scope="col" width="10%">Delete</th>
-                        <th scope="col" width="10%">Send Email</th>
-                        <th scope="col" width="15%">Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for list in member_list %}
-                        <tr>
-                            <td scope="row">{{ forloop.counter }}</td>
-                            <td>{{ list.name }}</td>
-                            <td>{{ list.pcEmail }}</td>
-                            <td><a href="#">Delete</a></td>
-                            <td><a href="{% url 'conference:send_email' slug=slug pk=list.pk %}">Send Email</a></td>
-                            <td>{% if list.accepted %}Accepted{% else %}Not Accepted{% endif %}</td>
+            <div class="px-3 py-3 pb-md-4 table-responsive-xl">
+                {% if member_list %}
+                    <table class="table table-bordered table-hover" id="myTable">
+                        <thead>
+                        <tr style="font-weight: 600;">
+                            <th scope="col" width="5%">#</th>
+                            <th scope="col" width="30%">Name</th>
+                            <th scope="col" width="30%">Pc member Email</th>
+                            <th scope="col" width="10%">Delete</th>
+                            <th scope="col" width="10%">Send Email</th>
+                            <th scope="col" width="15%">Status</th>
                         </tr>
-                    {% endfor %}</tbody>
-                </table>{% endif %}</div>
-            <div class="px-3 py-4 ">
-                <a href="{% url 'conference:add_pc_member' slug %}" class="btn btn-outline-primary">Add PC Member</a>
+                        </thead>
+                        <tbody>
+                        {% for list in member_list %}
+                            <tr>
+                                <td scope="row">{{ forloop.counter }}</td>
+                                <td>{{ list.name }}</td>
+                                <td>{{ list.pcEmail }}</td>
+                                <td><a href="#">Delete</a></td>
+                                <td><a href="{% url 'conference:send_email' slug=slug pk=list.pk %}">Send Email</a></td>
+                                <td>{% if list.accepted == 5 %}Accepted{% elif list.accepted == 3 %}Rejected{% else %}
+                                    Not Accepted{% endif %}</td>
+                            </tr>
+                        {% endfor %}</tbody>
+                    </table>{% endif %}</div>
+            <div class="px-3 py-4 clearfix">
+                <a href="{% url 'conference:slug_welcome' slug %}" class="btn btn-outline-info float-right">Back to
+                    Conference</a>
+                <a href="{% url 'conference:add_pc_member' slug %}" class="btn btn-outline-info">Add PC Member</a>
             </div>
         </main>
     </div>
@@ -43,7 +46,7 @@
 {% block script %}
     <script>
         function myFunction() {
-            var input, filter, table, tr, td1, td2, td3, i;
+            var input, filter, table, tr, td1, td2, td5, i;
             input = document.getElementById("search");
             filter = input.value.toUpperCase();
             table = document.getElementById("myTable");
@@ -51,8 +54,9 @@
             for (i = 0; i < tr.length; i++) {
                 td1 = tr[i].getElementsByTagName("td")[1];
                 td2 = tr[i].getElementsByTagName("td")[2];
+                td5 = tr[i].getElementsByTagName("td")[5];
                 if (td1 || td2) {
-                    if ((td1.innerHTML.toUpperCase().indexOf(filter) > -1) || (td2.innerHTML.toUpperCase().indexOf(filter) > -1)) {
+                    if ((td1.innerHTML.toUpperCase().indexOf(filter) > -1) || (td2.innerHTML.toUpperCase().indexOf(filter) > -1) || (td5.innerHTML.toUpperCase().indexOf(filter) > -1)) {
                         tr[i].style.display = "";
                     } else {
                         tr[i].style.display = "none";

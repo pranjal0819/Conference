@@ -72,8 +72,11 @@ class PcMemberRecord(models.Model):
     pcCon = models.ForeignKey(ConferenceRecord, on_delete=models.CASCADE, null=True, related_name='pcCon')
     pcEmail = models.EmailField(max_length=85)
     name = models.CharField(max_length=80, default="")
-    accepted = models.BooleanField(default=False)
+    accepted = models.IntegerField(default=0)
     totalPaper = models.IntegerField(default=0)
+    demand = models.ManyToManyField(PaperRecord)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return str(self.pcEmail) + " -- " + str(self.pcCon)
 

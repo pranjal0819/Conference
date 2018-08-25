@@ -66,6 +66,13 @@ class ReviewPaperForm(forms.ModelForm):
         model = ReviewPaperRecord
         fields = ['overallEvaluation', 'point', 'remark']
 
+
 class EmailForm(forms.Form):
     subject = forms.CharField(required=True)
     message = forms.CharField(widget=forms.Textarea, required=True)
+
+
+class AddPcMemberForm(forms.Form):
+    emails = forms.CharField(widget=forms.Textarea(
+        attrs={'placeholder': 'FirstName,LastName,example@abc.com', 'class': 'form-control col-7'}), required=True)
+    message = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Message', 'class': 'form-control col-7'}), required=False)
