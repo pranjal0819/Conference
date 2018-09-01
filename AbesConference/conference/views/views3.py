@@ -227,10 +227,12 @@ class PcMembers(TemplateView):
                 list1 = []
                 for user in user_list:
                     try:
-                        ReviewPaperRecord.objects.get(reviewUser=user, paper=paper)
-                        li = [user, False, True]
+                        instance = ReviewPaperRecord.objects.get(reviewUser=user, paper=paper)
+                        li = [user, False, True, False]
+                        if instance.complete:
+                            li[3] = True
                     except ObjectDoesNotExist:
-                        li = [user, False, False]
+                        li = [user, False, False, False]
                     if paper in user.demand.all():
                         li[1] = True
                     list1.append(li)

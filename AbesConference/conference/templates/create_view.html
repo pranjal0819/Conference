@@ -1,3 +1,4 @@
+{% autoescape off %}
 # Paper related view
 
 from django.contrib import messages, auth
@@ -29,7 +30,7 @@ class Welcome(TemplateView):
 
 
 class ViewAllPaper(TemplateView):
-    template_name = 'submitted_paper.html'
+    template_name = 'view_all_paper.html'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -296,3 +297,4 @@ class DeletePaper(TemplateView):
             # except Exception:
             # auth.logout(request)
             # return redirect('home')
+{% endautoescape %}

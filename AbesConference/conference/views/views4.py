@@ -83,9 +83,13 @@ class Demand(TemplateView):
             paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
             if paper in pc_member.demand.all():
                 pc_member.demand.remove(paper)
+                pc_member.totalPaper = pc_member.totalPaper - 1
+                pc_member.save(update_fields=['totalPaper'])
                 messages.error(request, 'Remove from your List')
             else:
                 pc_member.demand.add(paper)
+                pc_member.totalPaper = pc_member.totalPaper + 1
+                pc_member.save(update_fields=['totalPaper'])
                 messages.success(request, 'Add to your List')
             return redirect('conference:review_list', slug=kwargs['slug'])
         except ObjectDoesNotExist:

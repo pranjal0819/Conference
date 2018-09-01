@@ -1,39 +1,50 @@
-{% extends "base2.html" %}{% load staticfiles %}{% block head_title %}Signup |
-    {{ block.super }}{% endblock head_title %}
-{% block css %}
-    <script src='https://www.google.com/recaptcha/api.js'></script>{% endblock %}
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}Signup | {{ block.super }}{% endblock %}
+{% block css %}{% endblock %}
 {% block content %}
-    <div id="heading" style="top: 3.0rem;"><h1>5TH INTERNATIONAL CONFERENCE ON CICT 2019</h1></div>
-    <div class="inner"><br><br><br>
-        <div class="form" style="margin: auto;">
-            <section>
-                <div class="content">
-                    <h2>Create a Account</h2>
-                    <h4>{% if messages %}{% for m in messages %}{{ m }}{% endfor %}{% endif %}</h4>
-                    <form method="post" action="" style="text-align: left;">{% csrf_token %}
-                        {{ form.username }}{{ form.username.errors }}<br>
-                        {{ form.first_name }}<br>{{ form.last_name }}<br>{{ form.email }}
-                        {{ form.email.errors }}<br>{{ form.password }}{{ form.password.errors }}<br>
-                        <ul>
-                            <li>Use at least one lowercase and uppercase letter, one numeral, one symbol and 8
-                                character
-                            </li>
-                            <li>Your password can&#39;t be a commonly used password.</li>
-                            <li>Your password can&#39;t be entirely numeric.</li>
-                            <li>Your password can&#39;t be too similar to your other personal information.</li>
-                        </ul>
-                        {{ form.confirm_password }}{{ form.confirm_password.errors }}<br>
-                        <div style="float: right;">
-                            <script src='https://www.google.com/recaptcha/api.js'></script>
-                            <div class="g-recaptcha" data-sitekey="6Ld5a2gUAAAAAA7LIc7ugPczbREEnZ3FVB2o2Cvu"></div>
-                        </div>
-                        <br style="clear: both"><br>
-                        <button type="submit" class="primary button fit">Signup</button>
-                        <br><br>
-                        <a href="{% url 'account:login' %}" class="button fit">Login</a>
-                    </form>
+    <main role="main" class="container col-md-6 bg-white">
+        <div class="px-3 pt-4 pb-5">
+            <div style="text-align: center">
+                <h3>Create Your Account</h3>{% if request.GET.next %}<h3>Required</h3>{% endif %}
+                {% for m in messages %}{{ m }}<br>{% endfor %}</div>
+            <form method="post">{% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label>Username</label>
+                        {{ form.username }}{{ form.username.errors }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Email</label>
+                        {{ form.email }}{{ form.email.errors }}
+                    </div>
                 </div>
-            </section>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label>First Name</label>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Last Name</label>
+                        {{ form.last_name }}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label>Password</label>
+                    {{ form.password }}{{ form.password.errors }}</div>
+                <div class="mb-3" style="font-size: 14px">
+                    <li>Use at least one lowercase and uppercase letter, one numeral, one symbol and 8 character</li>
+                    <li>Your password can&#39;t be a commonly used password.</li>
+                    <li>Your password can&#39;t be entirely numeric.</li>
+                    <li>Your password can&#39;t be too similar to your other personal information.</li>
+                </div>
+                <div class="mb-3">
+                    <label>Confirm Password</label>
+                    {{ form.confirm_password }}{{ form.confirm_password.errors }}
+                </div>
+                <script src='https://www.google.com/recaptcha/api.js'></script>
+                <div class="mb-3 g-recaptcha" data-sitekey="6Ld5a2gUAAAAAA7LIc7ugPczbREEnZ3FVB2o2Cvu"></div>
+                <button type="submit" class="btn btn-outline-info btn-block mb-3">Signup</button>
+                <a href="{% url 'account:login' %}" class="btn btn-outline-success btn-block">Login</a>
+            </form>
         </div>
-        <br></div>
+    </main>
 {% endblock %}

@@ -5,21 +5,24 @@ from django.core.validators import validate_email
 
 
 class SignupForm(forms.ModelForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Username', 'title': 'Username'}),
-                               required=True, max_length=30)
-    first_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'First Name', 'title': 'First Name'}),
-                                 required=True, max_length=20)
-    last_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Last Name', 'title': 'Last Name'}),
-                                required=False, max_length=30)
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}), required=True,
+        max_length=30)
+    first_name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}), required=True,
+        max_length=20)
+    last_name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}), required=False,
+        max_length=30)
     email = forms.CharField(widget=forms.EmailInput(
-        attrs={'placeholder': 'abcd@gmail.com', 'pattern': '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$',
-               'title': 'Email'}), required=True, max_length=40)
+        attrs={'class': 'form-control', 'placeholder': 'abcd@gmail.com',
+               'pattern': '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$'}), required=True, max_length=40)
     password = forms.CharField(widget=forms.PasswordInput(
-        attrs={'placeholder': 'Password', 'pattern': "(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}", 'title': 'Password'}),
+        attrs={'class': 'form-control', 'placeholder': 'Password', 'pattern': "(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"}),
         required=True, max_length=20)
     confirm_password = forms.CharField(widget=forms.PasswordInput(
-        attrs={'placeholder': 'Confirm Password', 'pattern': "(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
-               'title': 'Confirmation Password'}), required=True, max_length=20)
+        attrs={'class': 'form-control', 'placeholder': 'Confirm Password',
+               'pattern': "(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"}), required=True, max_length=20)
 
     class Meta:
         model = models.User

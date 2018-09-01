@@ -1,28 +1,27 @@
-{% extends "base2.html" %}{% load staticfiles %}{% block head_title %}Login | {{ block.super }}{% endblock head_title %}
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}Login | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
-    <div id="heading" style="top: 3.0rem;"><h1>5TH INTERNATIONAL CONFERENCE ON CICT 2019</h1></div>
-    <div class="inner"><br><br><br>
-        <div class="form" style="margin: auto;">
-            <section>
-                <div class="content">
-                    <h2>Login To Your Account</h2>{% if request.GET.next %}<h2>Required</h2>{% endif %}
-                    <h3>
-                        <small>{% if messages %}{% for m in messages %}{{ m }}{% endfor %}{% endif %}</small>
-                    </h3>
-                    <form method="post" action="">{% csrf_token %}
-                        <input type="text" name="user" placeholder="Username"><br>
-                        <input type="password" name="pass" placeholder="Password"><br>
-                        {% if request.GET.next %}
-                            <input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
-                        <script src='https://www.google.com/recaptcha/api.js'></script>
-                        <div class="g-recaptcha" data-sitekey="6Ld5a2gUAAAAAA7LIc7ugPczbREEnZ3FVB2o2Cvu"></div>
-                        <br>
-                        <button type="submit" class="primary button fit">Login</button>
-                        <br><br>
-                        <a href="{% url 'account:signup' %}" class="button fit">Signup</a></form>
+    <main role="main" class="container bg-white" style="width: 360px;">
+        <div class="px-3 pt-4 pb-5">
+            <div style="text-align: center">
+                <h3>Login To Your Account</h3>{% if request.GET.next %}<h3>Required</h3>{% endif %}
+                {% for m in messages %}{{ m }}<br>{% endfor %}</div>
+            <form method="post">{% csrf_token %}
+                <div class="mb-3">
+                    <label>Username</label>
+                    <input type="text" class="form-control" name="user" placeholder="Username">
                 </div>
-            </section>
+                <div class="mb-3">
+                    <label>Password</label>
+                    <input type="password" class="form-control" name="pass" placeholder="Password">
+                </div>
+                {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
+                <script src='https://www.google.com/recaptcha/api.js'></script>
+                <div class="mb-3 g-recaptcha" data-sitekey="6Ld5a2gUAAAAAA7LIc7ugPczbREEnZ3FVB2o2Cvu"></div>
+                <button type="submit" class="btn btn-outline-info btn-block mb-3">Login</button>
+                <a href="{% url 'account:signup' %}" class="btn btn-outline-danger btn-block">Signup</a>
+            </form>
         </div>
-        <br></div>
+    </main>
 {% endblock %}
+
