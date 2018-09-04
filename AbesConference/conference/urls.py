@@ -25,10 +25,11 @@ urlpatterns = [
     path('<slug>/update_author/<int:pk>', login_required(UpdateAuthor.as_view()), name='update_author'),  # old
     path('<slug>/view_paper/<int:pk>/delete', login_required(DeletePaper.as_view()), name='delete_paper'),
     # views3
-    path('<slug>/pc-member-list', login_required(PcMemberList.as_view()), name='pc_member_list'),
+    path('<slug>/manage_pc_member', login_required(ManagePCMember.as_view()), name='manage_pc_member'),
     path('<slug>/add_pc_member', login_required(AddPcMember.as_view()), name='add_pc_member'),
     path('<slug>/confirm/<uidb64>/<token>/', confirm, name='confirm'),
     path('<slug>/<int:pk>/email', login_required(SendEmail.as_view()), name='send_email'),
+    path('<slug>/delete/<email>', login_required(DeletePCMember.as_view()), name='delete_pc_member'),
     path('<slug>/<int:pk>/select-user', login_required(PcMembers.as_view()), name='select_user'),
     path('<slug>/<int:pk>/show_reviews', login_required(ShowReviews.as_view()), name='show_review'),
     path('<slug>/<int:paper_pk>/select/<int:user_pk>', login_required(SelectedUser.as_view()), name='selected_user'),
@@ -37,7 +38,7 @@ urlpatterns = [
     path('<slug>/accepted', login_required(AcceptToReview.as_view()), name='accept_to_review'),
     path('<slug>/demand_paper/<int:pk>', login_required(Demand.as_view()), name='demand_paper'),
     path('<slug>/review_paper_list', login_required(ReviewPaperList.as_view()), name='review_list'),
+    path('<slug>/review_paper/<int:pk>', login_required(ReviewPaper.as_view()), name='review_paper'),
     path('<slug>/accept_paper/<int:pk>', login_required(AcceptPaper.as_view()), name='accept_paper'),
     path('<slug>/reject_paper/<int:pk>', login_required(RejectPaper.as_view()), name='reject_paper'),
-    path('<slug>/review_paper/<int:pk>', login_required(ReviewPaper.as_view()), name='review_paper'),
 ]

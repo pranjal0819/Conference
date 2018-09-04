@@ -1,0 +1,63 @@
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}Welcome |{{ block.super }}{% endblock head_title %}
+{% block css %}{% endblock %}
+{% block content %}
+    <main role="main" class="container col-11">
+        {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
+        <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center bg-white">
+            <h1>Welcome to</h1>
+            <h2>{{ slug }}</h2>
+            <p class="lead ">{{ slug.name }}</p>
+            <p class="lead px-3 py-3">{{ slug.description }}</p>
+        </div>
+
+        <div class="pb-4 pt-4">
+            <div class="card-deck mb-3 text-center">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <a href="{% url 'conference:view_all_paper' slug %}" class="text-dark"
+                           style="text-decoration: none">
+                            <i class="icons1 fa-list-ul"></i>
+                            <h3>List of Submitted Paper</h3>
+                            <p></p>
+                            <button type="button" class="btn btn-lg btn-block btn-outline-primary">View all Paper
+                            </button>
+                        </a></div>
+                </div>
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <a href="{% url 'conference:submit_paper' slug %}" class="text-dark"
+                           style="text-decoration: none">
+                            <i class="icons1 fa-file-pdf-o"></i>
+                            <h3>Submit Paper</h3>
+                            <p></p>
+                            <button type="button" class="btn btn-lg btn-block btn-outline-primary">Submit Paper</button>
+                        </a></div>
+                </div>
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <a href="{% url 'conference:review_list' slug %}" class="text-dark"
+                           style="text-decoration: none">
+                            <i class="icons1 fa-download"></i>
+                            <h3>Review Paper</h3>
+                            <p></p>
+                            <button type="button" class="btn btn-lg btn-block btn-outline-primary">Review Paper</button>
+                        </a></div>
+                </div>
+                {% if owner %}
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <a href="{% url 'conference:manage_pc_member' slug %}" class="text-dark"
+                               style="text-decoration: none">
+                                <i class="icons1 fa-download"></i>
+                                <h3>Manage PC Member</h3>
+                                <p></p>
+                                <button type="button" class="btn btn-lg btn-block btn-outline-primary">Manage PC Member
+                                </button>
+                            </a></div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+{% endblock %}
+{% block script %}{% endblock %}

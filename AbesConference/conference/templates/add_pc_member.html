@@ -12,7 +12,7 @@
                 <div class="p-2">Add Message (optional){{ form.message }}</div>
                 <div class="px-2 pt-4 clearfix">
                     <button type="submit" class="btn btn-outline-info">Send Email</button>
-                    <a href="{% url 'conference:pc_member_list' slug=slug %}" class="btn btn-outline-info float-right">Back
+                    <a href="{% url 'conference:manage_pc_member' slug=slug %}" class="btn btn-outline-info float-right">Back
                         to Pc Member List</a>
                 </div>
             </form>

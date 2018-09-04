@@ -1,0 +1,76 @@
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}PC Member list | {{ block.super }}{% endblock %}
+{% block css %}{% endblock %}{% block content %}
+    <div id="main">
+        <main class="container bg-white">
+            <div class="px-3 pt-4 d-flex justify-content-between">
+                <h2>Program Committee Member List</h2>
+                <div style="width: 300px">
+                    <input type="text" class="form-control" id="search" onkeyup="myFunction()" placeholder="Search...">
+                </div>
+            </div>
+            {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
+            <div class="px-3 py-3 pb-md-4 table-responsive-xl">
+                {% if member_list %}
+                    <table class="table table-bordered table-hover" id="myTable">
+                        <thead>
+                        <tr style="font-weight: 600;">
+                            <th scope="col" width="5%">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">PC member Email</th>
+                            <th scope="col" width="5%" style="text-align: center;">Detail</th>
+                            <th scope="col" width="10%" style="text-align: center;">Send Email</th>
+                            <th scope="col" width="12%" style="text-align: center;">Status</th>
+                            <th scope="col" width="8%" style="text-align: center;">Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for list in member_list %}
+                            <tr>
+                                <td scope="row">{{ forloop.counter }}</td>
+                                <td>{{ list.name }}</td>
+                                <td>{{ list.pcEmail }}</td>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <a href="#">
+                                        <i class="material-icons table-icon" style="font-size: 22px;">&#xe88f;</i></a>
+                                </td>
+                                <td style="text-align: center;"><a
+                                        href="{% url 'conference:send_email' slug=slug pk=list.pk %}">Send Email</a>
+                                </td>
+                                <td style="text-align: center;">{% if list.accepted == 5 %}
+                                    Accepted{% elif list.accepted == 3 %}Rejected{% else %}
+                                    Pending{% endif %}</td>
+                                <td style="text-align: center;">
+                                    <a href="{% url 'conference:delete_pc_member' slug=slug email=list.pcEmail %}">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}</tbody>
+                    </table>
+                {% else %}
+                    <h3>Add Program Committee Members</h3>{% endif %}
+                <a href="{% url 'conference:add_pc_member' slug %}" class="btn btn-outline-info">Add PC Member</a></div>
+        </main>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        function myFunction() {
+            var input, filter, table, tr, td1, td2, td5, i;
+            input = document.getElementById("search");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td1 = tr[i].getElementsByTagName("td")[1];
+                td2 = tr[i].getElementsByTagName("td")[2];
+                td5 = tr[i].getElementsByTagName("td")[5];
+                if (td1 || td2) {
+                    if ((td1.innerHTML.toUpperCase().indexOf(filter) > -1) || (td2.innerHTML.toUpperCase().indexOf(filter) > -1) || (td5.innerHTML.toUpperCase().indexOf(filter) > -1)) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+{% endblock %}

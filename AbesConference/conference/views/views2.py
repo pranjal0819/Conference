@@ -7,11 +7,11 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
 from ..forms import PaperRecordForm, AuthorRecordForm
-from ..models import PaperRecord, AuthorRecord, ConferenceRecord
+from ..models import PaperRecord, AuthorRecord, ConferenceRecord, PcMemberRecord, ReviewPaperRecord
 
 
 class Welcome(TemplateView):
-    template_name = 'welcome.html'
+    template_name = 'view2/welcome.html'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -19,17 +19,17 @@ class Welcome(TemplateView):
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
             if request.user == con.owner or request.user.is_staff:
                 owner = True
-            return render(request, self.template_name, {'owner': owner, 'conference': con})
+            return render(request, self.template_name, {'owner': owner, 'slug': con})
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('home')
-        except Exception:
-            auth.logout(request)
-            return redirect('home')
+        # except Exception:
+        #     auth.logout(request)
+        #     return redirect('home')
 
 
 class ViewAllPaper(TemplateView):
-    template_name = 'submitted_paper.html'
+    template_name = 'view2/submitted_paper.html'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -54,22 +54,44 @@ class ViewAllPaper(TemplateView):
 
 
 class ViewDetail(TemplateView):
-    template_name = 'detail.html'
+    template_name = 'view2/paper_detail.html'
 
     def get(self, request, *args, **kwargs):
         try:
             conference = ConferenceRecord.objects.get(slug=kwargs['slug'])
             owner = False
+            paper_user = False
+            view = False
+            pc_users = None
+            obj = PaperRecord.objects.get(conference=conference, pk=kwargs['pk'])
+            try:
+                pc_user = PcMemberRecord.objects.get(pcCon=conference, pcEmail=request.user.email)
+                view = True
+                ReviewPaperRecord.objects.get(reviewUser=pc_user, paper=obj)
+                pc_member = True
+            except ObjectDoesNotExist:
+                pc_member = False
             if request.user == conference.owner or request.user.is_staff:
                 owner = True
-                obj = PaperRecord.objects.get(conference=conference, pk=kwargs['pk'])
+                pc_users = PcMemberRecord.objects.filter(pcCon=conference, demand=obj)
+            elif obj.user == request.user:
+                paper_user = True
+            elif pc_member or view:
+                pass
             else:
-                obj = PaperRecord.objects.get(conference=conference, user=request.user, pk=kwargs['pk'])
-            li = obj.author.all()
-            return render(request, self.template_name,
-                          {'owner': owner, 'slug': kwargs['slug'], 'paper_record': obj, 'author_list': li})
+                raise PermissionDenied
+            attr = {'owner': owner,
+                    'slug': kwargs['slug'],
+                    'paper_user': paper_user,
+                    'pc_member': pc_member,
+                    'paper_record': obj,
+                    'pc_users': pc_users}
+            return render(request, self.template_name, attr)
         except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
+            messages.error(request, 'Paper Not Found')
+            return redirect('home')
+        except PermissionDenied:
+            auth.logout(request)
             return redirect('home')
             # except Exception:
             # auth.logout(request)
@@ -77,7 +99,7 @@ class ViewDetail(TemplateView):
 
 
 class SubmitPaper(TemplateView):
-    template = 'submit_paper.html'
+    template = 'view2/paper_submission.html'
 
     def get(self, request, *args, **kwargs):
         try:

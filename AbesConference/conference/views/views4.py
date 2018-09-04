@@ -25,13 +25,14 @@ class AcceptToReview(TemplateView):
 
 
 class ReviewPaperList(TemplateView):
-    template = 'review_paper_list.html'
+    template = 'view4/review_paper_list.html'
 
     def get(self, request, *args, **kwargs):
         try:
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            li = None
-            paper = None
+            list1 = []
+            list2 = []
+            list3 = []
             accept = False
             owner = False
             pc_member = None
@@ -40,18 +41,58 @@ class ReviewPaperList(TemplateView):
             try:
                 pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
                 if pc_member.accepted == 5:
-                    paper = PaperRecord.objects.filter(conference=con)
-                    li = ReviewPaperRecord.objects.filter(reviewCon=con, reviewUser=pc_member)
                     accept = True
+                    paper_list = PaperRecord.objects.filter(conference=con)
+                    for paper in paper_list:
+                        try:
+                            obj = ReviewPaperRecord.objects.get(reviewCon=con, paper=paper, reviewUser=pc_member)
+                            if obj.complete:
+                                list2.append(paper)
+                            else:
+                                list1.append(paper)
+                        except ObjectDoesNotExist:
+                            list3.append(paper)
                 else:
                     raise ObjectDoesNotExist
             except ObjectDoesNotExist:
                 messages.error(request, 'You are not a Pc Member')
             return render(request, self.template,
-                          {'owner': owner, 'slug': kwargs['slug'], 'accept': accept,
-                           'pc_member': pc_member, 'paper_list': paper, 'review_paper_list': li})
+                          {'owner': owner, 'slug': kwargs['slug'], 'accept': accept, 'pc_member': pc_member,
+                           'list1': list1, 'list2': list2, 'list3': list3})
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
+            return redirect('home')
+            # except Exception:
+            # auth.logout(request)
+            # return redirect('home')
+
+
+class Demand(TemplateView):
+    def get(self, request, *args, **kwargs):
+        try:
+            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
+            paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
+            try:
+                ReviewPaperRecord.objects.get(reviewCon=con, paper=paper, reviewUser=pc_member)
+                raise PermissionDenied
+            except ObjectDoesNotExist:
+                if paper in pc_member.demand.all():
+                    pc_member.demand.remove(paper)
+                    pc_member.totalPaper = pc_member.totalPaper - 1
+                    pc_member.save(update_fields=['totalPaper'])
+                    messages.error(request, 'Remove from your List')
+                else:
+                    pc_member.demand.add(paper)
+                    pc_member.totalPaper = pc_member.totalPaper + 1
+                    pc_member.save(update_fields=['totalPaper'])
+                    messages.success(request, 'Add to your List')
+                return redirect('conference:review_list', slug=kwargs['slug'])
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('home')
+        except PermissionDenied:
+            auth.logout(request)
             return redirect('home')
             # except Exception:
             # auth.logout(request)
@@ -70,31 +111,6 @@ class AcceptPaper(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect("home")
-            # except Exception:
-            # auth.logout(request)
-            # return redirect('home')
-
-
-class Demand(TemplateView):
-    def get(self, request, *args, **kwargs):
-        try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
-            paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
-            if paper in pc_member.demand.all():
-                pc_member.demand.remove(paper)
-                pc_member.totalPaper = pc_member.totalPaper - 1
-                pc_member.save(update_fields=['totalPaper'])
-                messages.error(request, 'Remove from your List')
-            else:
-                pc_member.demand.add(paper)
-                pc_member.totalPaper = pc_member.totalPaper + 1
-                pc_member.save(update_fields=['totalPaper'])
-                messages.success(request, 'Add to your List')
-            return redirect('conference:review_list', slug=kwargs['slug'])
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
-            return redirect('home')
             # except Exception:
             # auth.logout(request)
             # return redirect('home')

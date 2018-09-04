@@ -1,8 +1,6 @@
 {% autoescape off %}
-This letter of invitation to the program committee of {{ conference_name }} was sent to
-you by Abes EC Conference user {{ chair_name }} {{ chair_email }}. To accept or decline this invitation
-and/or answer the letter please access http://
-{{ domain }}{% url 'conference:confirm' slug=slug uidb64=uid token=token %}
+This letter of invitation to the program committee of {{ conference_name }} was sent to you by Abes EC Conference user {{ chair_name }} {{ chair_email }}. To accept or decline this invitation and/or answer the letter please access
+http://{{ domain }}{% url 'conference:confirm' slug=slug uidb64=uid token=token %}
 -----------------------------------
 Dear {{ sender_name }},
 {{ mess }}
@@ -18,7 +16,6 @@ ABES EC messenger.
 
 
 __________________________________________________
-Please be aware that this is an unmonitored email alias,
-so please do not reply to this email.
+Please be aware that this is an unmonitored email alias, so please do not reply to this email.
 To contact ABES EC use the {{ domail }} contact Web page
 {% endautoescape %}

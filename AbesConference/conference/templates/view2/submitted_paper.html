@@ -1,0 +1,96 @@
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}View All Paper | {{ block.super }}{% endblock %}
+{% block css %}{% endblock %}{% block content %}
+    <main role="main" class="container bg-white">
+        <div class="px-3 pt-4 pb-5 d-flex justify-content-between">
+            <h2>Paper List</h2>
+            <div style="width: 300px">
+                <input type="text" class="form-control" id="search" onkeyup="myFunction()" placeholder="Search...">
+            </div>
+        </div>
+        {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
+        {% if paper_list %}
+            <div class="px-3 py-3 pb-md-4 table-responsive-xl">
+            <table class="table table-bordered table-hover" id="myTable">
+                <thead>
+                <tr style="font-weight: 600;">
+                    <th scope="col">#</th>
+                    <th scope="col" width="15%">Author Name</th>
+                    <th scope="col" width="30%">Title</th>
+                    <th scope="col" width="15%">Keywords</th>
+                    <th scope="col" style="font-size: 11px;">Detail</th>
+                    <th scope="col" style="font-size: 11px;">Download</th>
+                    {% if owner %}
+                        <th scope="col" style="font-size: 11px;">Assign</th>
+                        <th scope="col" style="font-size: 11px;">Reviews</th>
+                        <th scope="col" style="font-size: 11px;">Update</th>{% endif %}
+                    <th scope="col" style="font-size: 11px;">Status</th>
+                    <th scope="col" style="font-size: 11px; text-align: center">Submission Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for list in paper_list %}
+                    <tr>
+                        <td scope="row">{{ forloop.counter }}</td>
+                        <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
+                        <td>{{ list.title }}</td>
+                        <td>{{ list.keywords }}</td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            <a href="{% url 'conference:view_detail' slug=slug pk=list.pk %}">
+                                <i class="material-icons table-icon">&#xe88f;</i></a></td>
+                        <td style="text-align: center; vertical-align: middle; ">
+                            <a href="/media/{{ list.file }}" target="_blank">
+                                <i class="material-icons table-icon">&#xe2c0;</i></a></td>
+                        {% if owner %}
+                            <td style="text-align: center; vertical-align: middle;">
+                                <a href="{% url 'conference:select_user' slug=slug pk=list.pk %}">
+                                    <i class="material-icons table-icon">&#xe7f0;</i></a></td>
+                            <td style="text-align: center; vertical-align: middle;">
+                                <a href="{% url 'conference:show_review' slug=slug pk=list.pk %}">
+                                    <i class="material-icons table-icon">&#xe02f;</i></a></td>
+                            <td style="text-align: center; vertical-align: middle;">
+                                <a href="{% url 'conference:update_paper' slug=slug pk=list.pk %}"><i
+                                        class="material-icons table-icon">&#xe5d5;</i></a></td>
+                        {% endif %}
+                        <td style="text-align: center; vertical-align: middle;">
+                            {% if list.status == 5 %}
+                                <i class="material-icons table-icon" style="color: #00bb00">&#xe876;</i>
+                            {% elif list.status == 3 %}
+                                <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
+                            {% else %}
+                                <i class="material-icons table-icon" style="color: red">&#xe5cd;</i>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            {{ list.timestamp|date:'M-d-Y' }}</td>
+                    </tr>
+                {% endfor %}</tbody>
+            </table>{% endif %}</div>
+        <div class="px-3 py-4 clearfix">
+            <a href="{% url 'conference:slug_welcome' slug=slug %}" class="btn btn-outline-primary float-right">Back
+                to {{ slug }}</a>
+        </div>
+    </main>
+{% endblock %}
+{% block script %}
+    <script>
+        function myFunction() {
+            var input, filter, table, tr, td1, td2, td3, i;
+            input = document.getElementById("search");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td1 = tr[i].getElementsByTagName("td")[1];
+                td2 = tr[i].getElementsByTagName("td")[2];
+                td3 = tr[i].getElementsByTagName("td")[3];
+                if (td1 || td2 || td3) {
+                    if ((td1.innerHTML.toUpperCase().indexOf(filter) > -1) || (td2.innerHTML.toUpperCase().indexOf(filter) > -1) || (td3.innerHTML.toUpperCase().indexOf(filter) > -1)) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+{% endblock %}

@@ -17,8 +17,8 @@ from ..models import PaperRecord, ReviewPaperRecord, ConferenceRecord, PcMemberR
 from ..tokens import account_activation_token
 
 
-class PcMemberList(TemplateView):
-    template = 'pc_member_list.html'
+class ManagePCMember(TemplateView):
+    template = 'view3/manage_pc_member.html'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -36,10 +36,10 @@ class PcMemberList(TemplateView):
             messages.error(request, 'Permission Denied')
             auth.logout(request)
             return redirect('home')
-        except Exception:
-            messages.error(request, 'Have Some Error')
-            auth.logout(request)
-            return redirect('home')
+        # except Exception:
+        #     messages.error(request, 'Have Some Error')
+        #     auth.logout(request)
+        #     return redirect('home')
 
 
 class AddPcMember(TemplateView):
@@ -87,10 +87,10 @@ class AddPcMember(TemplateView):
                             name = info[0] + ' ' + info[1]
                             try:
                                 user = PcMemberRecord.objects.get(pcCon=con, pcEmail=info[2])
+                                if user.accepted == 5:
+                                    raise ValidationError('Accepted')
                             except ObjectDoesNotExist:
                                 user = PcMemberRecord.objects.create(pcCon=con, pcEmail=info[2], name=name)
-                            if user.accepted == 5:
-                                raise ValidationError('Already Exit')
                             list1.append(info[2])
                             current_site = get_current_site(request)
                             mail_subject = 'Invitation to ' + con.slug + ' program committee'
@@ -112,7 +112,11 @@ class AddPcMember(TemplateView):
                         except ValidationError:
                             list2.append(info[2])
                     t = tuple(email_list)
-                    send_mass_mail(t, fail_silently=False)
+                    try:
+                        send_mass_mail(t, fail_silently=False)
+                    except Exception:
+                        messages.error(request, 'Email Sending Failed')
+                        list1 = []
                 else:
                     messages.error(request, 'Try Again')
                 form = AddPcMemberForm()
@@ -203,6 +207,29 @@ class SendEmail(TemplateView):
                 raise PermissionDenied
         except BadHeaderError:
             return redirect('home')
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('home')
+        except PermissionDenied:
+            messages.error(request, 'Permission Denied')
+            auth.logout(request)
+            return redirect('home')
+            # except Exception:
+            # auth.logout(request)
+            # return redirect('home')
+
+
+class DeletePCMember(TemplateView):
+    def get(self, request, *args, **kwargs):
+        try:
+            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            if con.owner == request.user or request.user.is_staff:
+                member = PcMemberRecord.objects.get(pcCon=con, pcEmail=kwargs['email'])
+                member.delete()
+                messages.success(request, 'successfully Deleted')
+                return redirect('conference:manage_pc_member', slug=kwargs['slug'])
+            else:
+                raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('home')

@@ -1,0 +1,144 @@
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}PC Member list | {{ block.super }}{% endblock %}
+{% block css %}{% endblock %}{% block content %}
+    <div id="main">
+        <main class="container bg-white">
+            {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
+            <div class="px-md-3 pt-4 d-flex justify-content-between">
+                <h2>Paper List to Review</h2>
+                <div style="width: 300px">
+                    <input type="text" class="form-control" id="search" onkeyup="myFunction()" placeholder="Search...">
+                </div>
+            </div>
+            {% if accept %}
+                <div class="px-md-3 py-3 pb-4 table-responsive-xl">
+                    <table class="table table-bordered table-hover" id="myTable">
+                        <thead>
+                        <tr style="font-weight: 500;">
+                            <th scope="col" width="5px">#</th>
+                            <th scope="col" width="20%">Author Name</th>
+                            <th scope="col">Title</th>
+                            <th scope="col" width="20%">Keyword</th>
+                            <th scope="col" width="5px" style="font-size: 14px">Detail</th>
+                            <th scope="col" width="5px" style="font-size: 14px">Download</th>
+                            <th scope="col" width="5px" style="font-size: 14px">Bid</th>
+                            <th scope="col" width="5px" style="font-size: 14px">Review</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if list1 %}
+                            <tr>
+                                <td colspan="8" style="text-align: center">Submissions assigned to me but missing my
+                                    review
+                                </td>
+                            </tr>
+                            {% for list in list1 %}
+                                <tr>
+                                    <td scope="row">{{ forloop.counter }}</td>
+                                    <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
+                                    <td>{{ list.title }}</td>
+                                    <td>{{ list.keywords }}</td>
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <a href="{% url 'conference:view_detail' slug=slug pk=list.pk %}">
+                                            <i class="material-icons table-icon">&#xe88f;</i></a></td>
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <a href="/media/{{ list.file }}" target="_blank">
+                                            <i class="material-icons table-icon">&#xe2c0;</i></a></td>
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
+                                    </td>
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <a href="{% url 'conference:review_paper' slug=slug pk=list.pk %}">Review</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td colspan="8"></td>
+                            </tr>
+                            {% endif %}
+                        {% if list2 %}
+                            <tr>
+                                <td colspan="8" style="text-align: center">Submissions reviewed by me</td>
+                            </tr>
+                            {% for list in list2 %}
+                                <tr>
+                                    <td scope="row">{{ forloop.counter }}</td>
+                                    <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
+                                    <td>{{ list.title }}</td>
+                                    <td>{{ list.keywords }}</td>
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <a href="{% url 'conference:view_detail' slug=slug pk=list.pk %}">
+                                            <i class="material-icons table-icon">&#xe88f;</i></a></td>
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <a href="/media/{{ list.file }}" target="_blank">
+                                            <i class="material-icons table-icon">&#xe2c0;</i></a></td>
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
+                                    </td>
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td colspan="8"></td>
+                            </tr>{% endif %}
+                        {% if list3 %}
+                            <tr>
+                                <td colspan="8" style="text-align: center">Other submissions</td>
+                            </tr>
+                            {% for list in list3 %}
+                                <tr>
+                                    <td scope="row">{{ forloop.counter }}</td>
+                                    <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
+                                    <td>{{ list.title }}</td>
+                                    <td>{{ list.keywords }}</td>
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <a href="{% url 'conference:view_detail' slug=slug pk=list.pk %}">
+                                            <i class="material-icons table-icon">&#xe88f;</i></a></td>
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
+                                    </td>
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <a href="{% url 'conference:demand_paper' slug=slug pk=list.pk %}">
+                                            {% if list in pc_member.demand.all %}Unbid
+                                            {% else %}Bid{% endif %}</a></td>
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
+                                    </td>
+                                </tr>
+                            {% endfor %}{% endif %}</tbody>
+                    </table>
+                </div>
+            {% else %}
+                <a href="{% url 'conference:accept_to_review' slug %}" class="btn btn-outline-danger">Please Accept to
+                    Review Paper</a>
+            {% endif %}
+            <div class="pb-5 py-2 clearfix">
+                <a href="{% url 'conference:slug_welcome' slug=slug %}" class="btn btn-outline-primary float-right">Back
+                    to Conference</a></div>
+        </main>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        function myFunction() {
+            var input, filter, table, tr, td1, td2, td3, i;
+            input = document.getElementById("search");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td1 = tr[i].getElementsByTagName("td")[1];
+                td2 = tr[i].getElementsByTagName("td")[2];
+                td3 = tr[i].getElementsByTagName("td")[3];
+                if (td1 || td2 || td3) {
+                    if ((td1.innerHTML.toUpperCase().indexOf(filter) > -1) || (td2.innerHTML.toUpperCase().indexOf(filter) > -1) || (td3.innerHTML.toUpperCase().indexOf(filter) > -1)) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+{% endblock %}
