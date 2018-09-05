@@ -1,5 +1,6 @@
 import json
-import urllib
+import urllib.parse
+import urllib.request
 
 from django.conf import settings
 from django.contrib import messages, auth
@@ -95,7 +96,7 @@ class Login(TemplateView):
             response = urllib.request.urlopen(req)
             result = json.loads(response.read().decode())
             ''' End reCAPTCHA validation '''
-            if True or result['success']:
+            if result['success']:
                 username = request.POST['user']
                 password = request.POST['pass']
                 if username is not "":
