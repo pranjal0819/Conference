@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/h.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/extra.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/button.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/form.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/highlights.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/list.css' %}"/>
@@ -29,89 +28,18 @@
                 {% if user.is_staff %}(ChairPerson){% else %}(Author){% endif %}</spam>
         {% endif %}
         <a href="{% url 'home' %}">Home</a>
-        {#        <a href="{% url 'conference:welcome' %}">Conference</a>#}
         {% if user.is_authenticated %}
             <a href="{% url 'account:profile' %}">Profile</a>
             <a href="mailto:pranjal0819@gmail.com">Contact Us</a>
             <a href="{% url 'account:logout' %}" style="color: red">Logout</a>
-        {% else %}
-            <a href="mailto:pranjal0819@gmail.com">Contact Us</a>
-            <a href="{% url 'account:login' %}">Login</a>
-            <a href="{% url 'account:signup' %}">Signup</a>
         {% endif %}
-        <a href="#menu">Menu</a>
     </nav>
 </header>
 
-<!-- Nav -->
-<nav id="menu">
-    <ul class="links">
-        <li><a href="{% url 'home' %}">Home</a></li>
-        {#        <li><a href="{% url 'conference:welcome' %}">Conference</a></li>#}
-        <li><a href="{% url 'registration' %}">Important Date/Registration</a></li>
-        <li><a href="{% url 'callForPaper' %}">Call for Paper</a></li>
-        <li><a href="#">Speaker Profile !</a></li>
-        <li><a href="#">Committees !</a></li>
-        <li><a href="#">Tour !</a></li>
-        {% if user.is_authenticated %}
-            <li><a href="{% url 'account:profile' %}">Profile</a></li>
-            <li><a href="mailto:pranjal0819@gmail.com">Contact Us</a></li>
-            <li><a href="{% url 'account:logout' %}" style="color: red">Logout</a></li>
-        {% else %}
-            <li><a href="{% url 'account:login' %}">Login</a></li>
-            <li><a href="{% url 'account:signup' %}">Signup</a></li>
-            <li><a href="mailto:pranjal0819@gmail.com">Contact Us</a></li>
-        {% endif %}
-    </ul>
-</nav>
 
 <!-- - - - - - - - - - START - - - - - - - - - - - -->
 {% block content %}{% endblock content %}
 <!-- - - - - - - - - - END - - - - - - - - - - - - -->
-
-<!-- Footer -->
-<footer id="footer">
-    <div class="inner">
-        <div class="content">
-            <section>
-                <h4>About Us</h4>
-                <p>The International Conference on Computational intelligence and communication technology (CICT-2019)
-                    is organized to address various issues to prosper the creation of intelligent solutions in future.
-                    The aim is to bring together worldwide leading researchers, developers, practitioners and educators
-                    interested in advancing the state of the art in computational intelligence and communication
-                    technology for exchanging knowledge that encompasses a broad range of disciplines among various
-                    distinct communities. It is expected that researchers will bring new prospect for collaboration
-                    across disciplines and gain idea facilitating novel breakthrough.</p>
-            </section>
-            <section>
-                <h4>Previous CICT Conference</h4>
-                <ul class="alt">
-                    <li><a href="#">1st CICT-2015</a></li>
-                    <li><a href="#">2nd CICT-2016</a></li>
-                    <li><a href="#">3rd CICT-2017</a></li>
-                    <li><a href="#">4th CICT-2018</a></li>
-                </ul>
-            </section>
-            <section>
-                <h4>Contact Us</h4>
-                <ul class="plain">
-                    <li><a href="#"><i class="icon fa-twitter">&nbsp;</i>Twitter</a></li>
-                    <li><a href="#"><i class="icon fa-facebook">&nbsp;</i>Facebook</a></li>
-                </ul>
-            </section>
-        </div>
-        <div class="copyright">
-            &copy; ABES EC
-        </div>
-    </div>
-</footer>
-
-<!-- Scripts -->
-<script src="{% static 'js/jquery.min.js' %}"></script>
-<script src="{% static 'js/browser.min.js' %}"></script>
-<script src="{% static 'js/breakpoints.min.js' %}"></script>
-<script src="{% static 'js/util.js' %}"></script>
-<script src="{% static 'js/main.js' %}"></script>
 
 </body>
 </html>
