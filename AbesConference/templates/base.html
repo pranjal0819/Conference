@@ -12,33 +12,13 @@
     {% block css %}{% endblock css %}
 </head>
 <body>
-<div class="d-flex flex-column fixed-top flex-md-row align-items-center px-md-4 mb-3 bg-light border-bottom shadow-sm">
+<div class="d-flex flex-column flex-md-row align-items-center px-md-4 bg-light border-bottom shadow-sm">
     <a class="mr-md-auto" href="http://www.abes.ac.in/" target="_blank"><img src="{% static 'images/logo.png' %}"
                                                                              alt="ABES EC" style="width: 195px;"></a>
-    <nav class="my-2 my-md-0 mr-md-3 align-item-center">
+    <nav class="my-2 my-md-0 mr-md-3 align-items-md-center">
         {% if user.is_authenticated %}Welcome {{ user.first_name }}{% if owner %} (Chair Person){% endif %}{% endif %}
         <a class="p-2 text-dark" href="{% url 'home' %}">Home</a>
         {% if user.is_authenticated %}
-            {% if slug %}
-                <a class="p-1 text-dark" href="{% url 'conference:slug_welcome' slug %}">Conference</a>
-                {% if owner %}
-                    <a class="p-1 text-dark dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">Submissions</a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                {% else %}
-                    <a class="p-1 text-dark" href="{% url 'conference:view_all_paper' slug %}">Submissions</a>
-                {% endif %}
-                <a class="p-1 text-dark" href="{% url 'conference:submit_paper' slug %}">Submit</a>
-                <a class="p-1 text-dark" href="{% url 'conference:review_list' slug %}">Review</a>
-                {% if owner %}
-                    PC Member
-                {% endif %}
-            {% endif %}
             <a class="p-1 text-dark" href="{% url 'account:profile' %}">Profile</a>
             <a class="p-1" href="{% url 'account:logout' %}" style="color: red">Logout</a>
         {% else %}
@@ -47,18 +27,55 @@
         {% endif %}
     </nav>
 </div>
-
-<!-- - - - - - - - - - START - - - - - - - - - - - -->
-{% block content %}{% endblock content %}
-<!-- - - - - - - - - - END - - - - - - - - - - - - -->
-
+{% if slug %}
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top border-bottom shadow-sm">
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#collapse_target">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapse_target">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="{% url 'conference:slug_welcome' slug %}">conference</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" data-target="dropdown_target" href="#">
+                        Submissions<span class="caret"></span></a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown_target">
+                        <a class="dropdown-item" href="{% url 'conference:view_all_paper' slug %}">Submissions</a>
+                        <a class="dropdown-item" href="{% url 'conference:submit_paper' slug %}">Submit Paper</a>
+                        {% if owner %}
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'conference:email_to_author' slug %}">Email to authors</a>
+                            <a class="dropdown-item">Download Submissions</a>
+                        {% endif %}
+                    </div>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'conference:review_list' slug %}">Review</a></li>
+                {% if owner %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" data-target="dropdown_target"
+                           href="#">
+                            PC<span class="caret"></span></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown_target">
+                            <a class="dropdown-item" href="{% url 'conference:manage_pc_member' slug %}">PC Member</a>
+                            <a class="dropdown-item" href="{% url 'conference:add_pc_member' slug %}">Add PC Member</a>
+                        </div>
+                    </li>{% endif %}
+            </ul>
+        </div>
+    </nav>
+{% endif %}
+<div class="mt-4">
+    <!-- - - - - - - - - - START - - - - - - - - - - - -->
+    {% block content %}{% endblock content %}
+    <!-- - - - - - - - - - END - - - - - - - - - - - - -->
+</div>
 <!-- Footer -->
 <div class="bg-dark">
-    <footer class="pt-3 mt-5 text-white container">
+    <footer class="pt-3 mt-4 text-white container">
         <div class="row pt-md-5 pb-md-4 mx-lg-5">
             <div class="col-12 col-md">
                 <img class="mb-2" src="" alt="ABES EC" width="24" height="24">
-                <small class="d-block mb-3 text-muted">&copy; ABES EC</small>
+                <small class="d-block mb-3 text-muted">&copy; Pranjal</small>
             </div>
             <div class="col-6 col-md">
                 <h4 style="color: white">Other Links</h4>
@@ -93,6 +110,16 @@
     </footer>
 </div>
 <!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
 {% block script %}{% endblock script %}
 </body>
 </html>

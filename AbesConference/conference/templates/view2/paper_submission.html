@@ -1,9 +1,9 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}Submit Paper | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
-    <main role="main" class="container bg-white">
+    <main role="main" class="container bg-white pb-4">
         {% for m in messages %}{{ m }}<br>{% endfor %}
-        <div class="px-md-3 pt-4 pb-5">
+        <div class="px-md-3 pt-4">
             <h2>Submit Paper</h2>
             <form enctype="multipart/form-data" action="" method="post" class="px-md-2">{% csrf_token %}
                 <h3>Author Information</h3>

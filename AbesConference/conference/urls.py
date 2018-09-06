@@ -5,6 +5,7 @@ from .views.views1 import *
 from .views.views2 import *
 from .views.views3 import *
 from .views.views4 import *
+from .views.views5 import *
 
 urlpatterns = [
     # views1
@@ -41,4 +42,6 @@ urlpatterns = [
     path('<slug>/review_paper/<int:pk>', login_required(ReviewPaper.as_view()), name='review_paper'),
     path('<slug>/accept_paper/<int:pk>', login_required(AcceptPaper.as_view()), name='accept_paper'),
     path('<slug>/reject_paper/<int:pk>', login_required(RejectPaper.as_view()), name='reject_paper'),
+    # view5
+    path('<slug>/email_to_author', login_required(EmailToAuthor.as_view()), name='email_to_author'),
 ]

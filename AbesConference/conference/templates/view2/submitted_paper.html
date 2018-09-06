@@ -1,6 +1,6 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}View All Paper | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}{% block content %}
-    <main role="main" class="container bg-white">
+    <main role="main" class="container bg-white pb-4">
         <div class="px-3 pt-4 pb-5 d-flex justify-content-between">
             <h2>Paper List</h2>
             <div style="width: 300px">
@@ -64,7 +64,7 @@
                             {{ list.timestamp|date:'M-d-Y' }}</td>
                     </tr>
                 {% endfor %}</tbody>
-            </table>{% endif %}</div>
+            </table></div>{% endif %}
         <div class="px-3 py-4 clearfix">
             <a href="{% url 'conference:slug_welcome' slug=slug %}" class="btn btn-outline-primary float-right">Back
                 to {{ slug }}</a>

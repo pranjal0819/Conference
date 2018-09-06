@@ -1,13 +1,13 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}Welcome |{{ block.super }}{% endblock head_title %}
 {% block css %}{% endblock %}
 {% block content %}
-    <main role="main" class="container col-11">
+    <main role="main" class="container {% if owner %}col-md-11{% endif %}">
         {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
         <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center bg-white">
             <h1>Welcome to</h1>
             <h2>{{ slug }}</h2>
             <p class="lead ">{{ slug.name }}</p>
-            <p class="lead px-3 py-3">{{ slug.description }}</p>
+            <p class="lead px-3 py-3" style="text-align: justify">{{ slug.description }}</p>
         </div>
 
         <div class="pb-4 pt-4">

@@ -63,7 +63,7 @@
                 td1 = tr[i].getElementsByTagName("td")[1];
                 td2 = tr[i].getElementsByTagName("td")[2];
                 td5 = tr[i].getElementsByTagName("td")[5];
-                if (td1 || td2) {
+                if (td1 || td2 || td5) {
                     if ((td1.innerHTML.toUpperCase().indexOf(filter) > -1) || (td2.innerHTML.toUpperCase().indexOf(filter) > -1) || (td5.innerHTML.toUpperCase().indexOf(filter) > -1)) {
                         tr[i].style.display = "";
                     } else {
