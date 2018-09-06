@@ -157,7 +157,7 @@ class Signup(TemplateView):
                     '''Begin Email Sending '''
                     current_site = get_current_site(request)
                     mail_subject = 'Activate your Conference Account.'
-                    message = render_to_string('acc_active_email.html', {
+                    message = render_to_string('acc_active_email.txt', {
                         'user': user,
                         'domain': current_site.domain,
                         'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),

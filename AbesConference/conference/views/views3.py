@@ -94,7 +94,7 @@ class AddPcMember(TemplateView):
                             list1.append(info[2])
                             current_site = get_current_site(request)
                             mail_subject = 'Invitation to ' + con.slug + ' program committee'
-                            message = render_to_string('pc_confirm_mail.html', {
+                            message = render_to_string('pc_confirm_mail.txt', {
                                 'sender_name': name,
                                 'mess': mess,
                                 'chair_name': request.user.first_name + ' ' + request.user.last_name,
