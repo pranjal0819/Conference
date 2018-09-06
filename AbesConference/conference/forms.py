@@ -77,3 +77,9 @@ class AddPcMemberForm(forms.Form):
         attrs={'placeholder': 'FirstName,LastName,example@abc.com', 'class': 'form-control col-7'}), required=True)
     message = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Message', 'class': 'form-control col-7'}),
                               required=False)
+
+class EmailToAuthorsForm(forms.Form):
+    subject = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Subject', 'class': 'form-control col-7'}),
+                              required=True)
+    message = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Message', 'class': 'form-control col-7'}),
+                              required=True)

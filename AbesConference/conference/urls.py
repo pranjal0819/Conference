@@ -43,5 +43,5 @@ urlpatterns = [
     path('<slug>/accept_paper/<int:pk>', login_required(AcceptPaper.as_view()), name='accept_paper'),
     path('<slug>/reject_paper/<int:pk>', login_required(RejectPaper.as_view()), name='reject_paper'),
     # view5
-    path('<slug>/email_to_author', login_required(EmailToAuthor.as_view()), name='email_to_author'),
+    path('<slug>/email_to_author', login_required(EmailToAuthors.as_view()), name='email_to_author'),
 ]

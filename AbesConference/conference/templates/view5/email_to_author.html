@@ -1,7 +1,7 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}Email to Author | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}{% block content %}
     <main role="main" class="container bg-white pb-4">
-        <div class="px-3 pt-4 pb-5 d-flex justify-content-between">
+        <div class="px-3 pt-4 pb-2 d-flex justify-content-between">
             <h2>Send Notification</h2>
             <div style="width: 300px">
                 <input type="text" class="form-control" id="search" onkeyup="myFunction()" placeholder="Search...">
@@ -10,7 +10,16 @@
         {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
         {% if paper_list %}
             <form method="post">{% csrf_token %}
+                <div class="px-3">
+                    <div class="p-2 checkbox">
+                        <label><input type="checkbox" name="notification" value="notification">Notification</label>
+                        <label><input type="checkbox" name="notification" value="notification">Review</label>
+                    </div>
+                    <div class="p-2">Subject{{ form.subject }}</div>
+                    <div class="p-2">Add Message{{ form.message }}</div>
+                </div>
                 <div class="px-3 py-3 pb-md-4 table-responsive-xl">
+                    Paper List
                     <table class="table table-bordered table-hover" id="myTable">
                         <thead>
                         <tr style="font-weight: 600;">
@@ -44,12 +53,13 @@
                                     {% endif %}
                                 </td>
                                 <td style="text-align: center; vertical-align: middle;">
-                                    <input type="checkbox" name="check{{ forloop.counter }}" value="{{ list.pk }}" title="Select"></td>
+                                    <input type="checkbox" name="check{{ forloop.counter }}" value="{{ list.pk }}"
+                                           title="Select"></td>
                             </tr>
                         {% endfor %}</tbody>
                     </table>
                 </div>
-                    <button type="submit" class="mb-2 btn btn-outline-info col-md-2">Send Email</button>
+                <button type="submit" class="mb-2 btn btn-outline-info col-md-2">Send Email</button>
             </form>{% endif %}
     </main>
 {% endblock %}
@@ -65,7 +75,6 @@
                 td1 = tr[i].getElementsByTagName("td")[1];
                 td2 = tr[i].getElementsByTagName("td")[2];
                 td3 = tr[i].getElementsByTagName("td")[3];
-
                 if (td1 || td2 || td3) {
                     if ((td1.innerHTML.toUpperCase().indexOf(filter) > -1) || (td2.innerHTML.toUpperCase().indexOf(filter) > -1) || (td3.innerHTML.toUpperCase().indexOf(filter) > -1)) {
                         tr[i].style.display = "";
