@@ -9,48 +9,48 @@
         </div>
         {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
         {% if paper_list %}
-            <form method="post">{{ csrf_token }}
-            <div class="px-3 py-3 pb-md-4 table-responsive-xl">
-            <table class="table table-bordered table-hover" id="myTable">
-                <thead>
-                <tr style="font-weight: 600;">
-                    <th scope="col">#</th>
-                    <th scope="col" width="15%">Author Name</th>
-                    <th scope="col" width="50%">Title</th>
-                    <th scope="col" width="15%">Keywords</th>
-                    <th scope="col" style="font-size: 11px;">Detail</th>
-                    <th scope="col" style="font-size: 11px;">Status</th>
-                    <th scope="col" style="font-size: 11px;">Selected</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for list in paper_list %}
-                    <tr>
-                        <td scope="row">{{ forloop.counter }}</td>
-                        <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
-                        <td>{{ list.title }}</td>
-                        <td>{{ list.keywords }}</td>
-                        <td style="text-align: center; vertical-align: middle;">
-                            <a href="{% url 'conference:view_detail' slug=slug pk=list.pk %}">
-                                <i class="material-icons table-icon">&#xe88f;</i></a></td>
-                        <td style="text-align: center; vertical-align: middle;">
-                            {% if list.status == 5 %}
-                                <i class="material-icons table-icon" style="color: #00bb00">&#xe876;</i>
-                            {% elif list.status == 3 %}
-                                <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
-                            {% else %}
-                                <i class="material-icons table-icon" style="color: red">&#xe5cd;</i>
-                            {% endif %}
-                        </td>
-                        <td style="text-align: center; vertical-align: middle;">
-                            <input type="checkbox" name="check" value="{{ list.pk }}" title="Select"></td>
-                    </tr>
-                {% endfor %}</tbody>
-            </table></div>{% endif %}
-        <div class="px-3 py-4 clearfix">
-            <a href="{% url 'conference:slug_welcome' slug=slug %}" class="btn btn-outline-primary float-right">Back
-                to {{ slug }}</a>
-        </div>
+            <form method="post">{% csrf_token %}
+                <div class="px-3 py-3 pb-md-4 table-responsive-xl">
+                    <table class="table table-bordered table-hover" id="myTable">
+                        <thead>
+                        <tr style="font-weight: 600;">
+                            <th scope="col">#</th>
+                            <th scope="col" width="15%">Author Name</th>
+                            <th scope="col" width="50%">Title</th>
+                            <th scope="col" width="15%">Keywords</th>
+                            <th scope="col" style="font-size: 11px;">Detail</th>
+                            <th scope="col" style="font-size: 11px;">Status</th>
+                            <th scope="col" style="font-size: 11px;">Selected</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for list in paper_list %}
+                            <tr>
+                                <td scope="row"><input type="hidden" name="total" value="{{ forloop.counter }}">
+                                    {{ forloop.counter }}</td>
+                                <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
+                                <td>{{ list.title }}</td>
+                                <td>{{ list.keywords }}</td>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <a href="{% url 'conference:view_detail' slug=slug pk=list.pk %}">
+                                        <i class="material-icons table-icon">&#xe88f;</i></a></td>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    {% if list.status == 5 %}
+                                        <i class="material-icons table-icon" style="color: #00bb00">&#xe876;</i>
+                                    {% elif list.status == 3 %}
+                                        <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
+                                    {% else %}
+                                        <i class="material-icons table-icon" style="color: red">&#xe5cd;</i>
+                                    {% endif %}
+                                </td>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <input type="checkbox" name="check{{ forloop.counter }}" value="{{ list.pk }}" title="Select"></td>
+                            </tr>
+                        {% endfor %}</tbody>
+                    </table>
+                </div>
+                    <button type="submit" class="mb-2 btn btn-outline-info col-md-2">Send Email</button>
+            </form>{% endif %}
     </main>
 {% endblock %}
 {% block script %}
