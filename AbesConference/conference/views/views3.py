@@ -80,6 +80,8 @@ class AddPcMember(TemplateView):
                     li = request.POST['emails'].split('\r\n')
                     mess = request.POST['message']
                     email_list = []
+                    current_site = get_current_site(request)
+                    mail_subject = 'Invitation to ' + con.slug + ' program committee'
                     for l in li:
                         info = l.split(',')
                         try:
@@ -92,8 +94,6 @@ class AddPcMember(TemplateView):
                             except ObjectDoesNotExist:
                                 user = PcMemberRecord.objects.create(pcCon=con, pcEmail=info[2], name=name)
                             list1.append(info[2])
-                            current_site = get_current_site(request)
-                            mail_subject = 'Invitation to ' + con.slug + ' program committee'
                             message = render_to_string('pc_confirm_mail.txt', {
                                 'sender_name': name,
                                 'mess': mess,

@@ -1,0 +1,16 @@
+{% autoescape off %}
+Dear {{ name }},
+{{ mess }}
+...
+
+Best regards,
+{{ chair_name }} {{ chair_email }}
+
+-----------------------------------
+
+Best regards,
+ABES EC messenger.
+
+__________________________________________________
+To contact ABES EC use the {{ domail }} contact Web page
+{% endautoescape %}
