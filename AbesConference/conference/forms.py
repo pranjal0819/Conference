@@ -48,9 +48,8 @@ class PaperRecordForm(forms.ModelForm):
                                required=True, max_length=1000)
     keywords = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Keywords*'}),
                                required=True, max_length=200)
-    file = forms.FileField(
-        widget=forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': '.pdf', 'style': "border:none"}),
-        required=True)
+    file = forms.FileField(widget=forms.ClearableFileInput(
+        attrs={'class': 'form-control', 'accept': '.pdf', 'style': "border:none"}), required=True)
 
     class Meta:
         model = PaperRecord
@@ -75,11 +74,14 @@ class EmailForm(forms.Form):
 class AddPcMemberForm(forms.Form):
     emails = forms.CharField(widget=forms.Textarea(
         attrs={'placeholder': 'FirstName,LastName,example@abc.com', 'class': 'form-control col-7'}), required=True)
-    message = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Message', 'class': 'form-control col-7'}),
-                              required=False)
+    message = forms.CharField(widget=forms.Textarea(
+        attrs={'placeholder': 'Message', 'class': 'form-control col-7'}), required=False)
+    file = forms.FileField(widget=forms.ClearableFileInput(
+        attrs={'class': 'form-control', 'style': "border:none"}), required=False)
+
 
 class EmailToAuthorsForm(forms.Form):
-    subject = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Subject', 'class': 'form-control col-7'}),
-                              required=True)
-    message = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Message', 'class': 'form-control col-7'}),
-                              required=True)
+    subject = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'Subject', 'class': 'form-control col-7'}), required=True)
+    message = forms.CharField(widget=forms.Textarea(
+        attrs={'placeholder': 'Message', 'class': 'form-control col-7'}), required=True)

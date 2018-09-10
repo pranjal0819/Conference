@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib import messages, auth
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ValidationError
-from django.core.mail import send_mail, BadHeaderError, send_mass_mail
+from django.core.mail import send_mail, BadHeaderError, EmailMessage
 from django.core.validators import validate_email
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -42,6 +42,7 @@ class ManagePCMember(TemplateView):
         #     return redirect('home')
 
 
+# noinspection PyBroadException
 class AddPcMember(TemplateView):
     template_name = 'add_pc_member.html'
 
@@ -73,13 +74,17 @@ class AddPcMember(TemplateView):
         try:
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
             if con.owner == request.user or request.user.is_staff:
-                form = AddPcMemberForm(request.POST)
+                form = AddPcMemberForm(request.POST, request.FILES)
                 list1 = []
                 list2 = []
+                file = None
                 if form.is_valid():
                     li = request.POST['emails'].split('\r\n')
                     mess = request.POST['message']
-                    email_list = []
+                    try:
+                        file = request.FILES['file']
+                    except Exception:
+                        pass
                     current_site = get_current_site(request)
                     mail_subject = 'Invitation to ' + con.slug + ' program committee'
                     for l in li:
@@ -105,18 +110,16 @@ class AddPcMember(TemplateView):
                                 'uid': urlsafe_base64_encode(force_bytes(user.pcEmail)).decode(),
                                 'token': account_activation_token.make_token(user),
                             })
-                            email = (mail_subject, message, settings.EMAIL_HOST_USER, [user.pcEmail])
-                            email_list.append(email)
+                            email = EmailMessage(mail_subject, message, to=[user.pcEmail])
+                            if file:
+                                email.attach(file.name, None, 'application/pdf')
+                            email.send()
                         except IndexError:
                             pass
                         except ValidationError:
                             list2.append(info[2])
-                    t = tuple(email_list)
-                    try:
-                        send_mass_mail(t, fail_silently=False)
-                    except Exception:
-                        messages.error(request, 'Email Sending Failed')
-                        list1 = []
+                        # except Exception:
+                        #     messages.error(request, 'Mail Sending Fail')
                 else:
                     messages.error(request, 'Try Again')
                 form = AddPcMemberForm()

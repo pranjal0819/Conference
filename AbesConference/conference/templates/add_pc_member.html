@@ -10,6 +10,7 @@
             <form method="post" class="px-2" enctype="multipart/form-data">{% csrf_token %}
                 <div class="p-2">Pc Members Name & Emails:{{ form.emails }}</div>
                 <div class="p-2">Add Message (optional){{ form.message }}</div>
+                <div class="p-2">Attach File{{ form.file }}</div>
                 <div class="px-2 pt-4 clearfix">
                     <button type="submit" class="btn btn-outline-info">Send Email</button>
                     <a href="{% url 'conference:manage_pc_member' slug=slug %}" class="btn btn-outline-info float-right">Back
