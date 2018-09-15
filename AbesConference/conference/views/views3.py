@@ -17,6 +17,7 @@ from ..models import PaperRecord, ReviewPaperRecord, ConferenceRecord, PcMemberR
 from ..tokens import account_activation_token
 
 
+# noinspection PyBroadException
 class ManagePCMember(TemplateView):
     template = 'view3/manage_pc_member.html'
 
@@ -79,10 +80,10 @@ class AddPcMember(TemplateView):
                 list2 = []
                 file = None
                 if form.is_valid():
-                    li = request.POST['emails'].split('\r\n')
-                    mess = request.POST['message']
+                    li = form.cleaned_data['emails'].split('\r\n')
+                    mess = form.cleaned_data['message']
                     try:
-                        file = request.FILES['file']
+                        file = form.cleaned_data['file']
                     except Exception:
                         pass
                     current_site = get_current_site(request)
@@ -95,7 +96,7 @@ class AddPcMember(TemplateView):
                             try:
                                 user = PcMemberRecord.objects.get(pcCon=con, pcEmail=info[2])
                                 if user.accepted == 5:
-                                    raise ValidationError('Accepted')
+                                    raise ValidationError('Email Invalid')
                             except ObjectDoesNotExist:
                                 user = PcMemberRecord.objects.create(pcCon=con, pcEmail=info[2], name=name)
                             list1.append(info[2])
@@ -112,7 +113,7 @@ class AddPcMember(TemplateView):
                             })
                             email = EmailMessage(mail_subject, message, to=[user.pcEmail])
                             if file:
-                                email.attach(file.name, None, 'application/pdf')
+                                email.attach(file.name, file.content_type, 'application/pdf')
                             email.send()
                         except IndexError:
                             pass
@@ -143,6 +144,7 @@ class AddPcMember(TemplateView):
             # return redirect('home')
 
 
+# noinspection PyBroadException
 def confirm(request, slug, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
@@ -168,6 +170,7 @@ def confirm(request, slug, uidb64, token):
         return redirect("home")
 
 
+# noinspection PyBroadException
 class SendEmail(TemplateView):
     template = 'send_email.html'
 
@@ -222,6 +225,7 @@ class SendEmail(TemplateView):
             # return redirect('home')
 
 
+# noinspection PyBroadException
 class DeletePCMember(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
@@ -245,6 +249,7 @@ class DeletePCMember(TemplateView):
             # return redirect('home')
 
 
+# noinspection PyBroadException
 class PcMembers(TemplateView):
     template = 'pc_members.html'
 
@@ -282,6 +287,7 @@ class PcMembers(TemplateView):
         #     return redirect('home')
 
 
+# noinspection PyBroadException
 class SelectedUser(TemplateView):
 
     def get(self, request, *args, **kwargs):
@@ -311,32 +317,7 @@ class SelectedUser(TemplateView):
             # return redirect('home')
 
 
-# class DeselectUser(TemplateView):
-#
-#     def get(self, request, *args, **kwargs):
-#         try:
-#             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-#             if con.owner == request.user or request.user.is_staff:
-#                 user = PcMemberRecord.objects.get(pk=kwargs['user_pk'])
-#                 paper = PaperRecord.objects.get(conference=con, pk=kwargs['paper_pk'])
-#                 try:
-#                     instance = ReviewPaperRecord.objects.get(reviewUser=user, paper=paper)
-#                     instance.delete()
-#                     messages.success(request, 'Updated')
-#                 except ObjectDoesNotExist:
-#                     messages.error(request, 'Invalid request')
-#                 return redirect("conference:select_user", slug=kwargs['slug'], pk=kwargs['paper_pk'])
-#             else:
-#                 messages.error(request, 'Review Closed or Invalid User')
-#                 return redirect("conference:slug_welcome", slug=kwargs['slug'])
-#         except ObjectDoesNotExist:
-#             messages.error(request, 'Conference Closed or Deleted')
-#             return redirect('home')
-#             # except Exception:
-#             # auth.logout(request)
-#             # return redirect('home')
-
-
+# noinspection PyBroadException
 class ShowReviews(TemplateView):
     template_name = 'all_reviews.html'
 

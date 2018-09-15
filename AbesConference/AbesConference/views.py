@@ -1,5 +1,6 @@
-from django.shortcuts import render
 from conference.models import ConferenceRecord
+from django.http import Http404
+from django.shortcuts import render
 
 
 # Create your views here.
@@ -18,3 +19,7 @@ def call_for_paper(request):
 
 def proceeding(request):
     return render(request, 'proceeding.html')
+
+
+def media(request, slug, pk):
+    raise Http404

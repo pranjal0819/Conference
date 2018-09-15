@@ -3,6 +3,7 @@
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.http import FileResponse
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
@@ -168,6 +169,35 @@ class SubmitPaper(TemplateView):
             # return redirect('home')
 
 
+class DownloadPaper(TemplateView):
+    def get(self, request, *args, **kwargs):
+        try:
+            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
+            if paper.user == request.user or con.owner == request.user or request.user.is_staff:
+                response = FileResponse(paper.file)
+                response["Content-Disposition"] = "attachment; filename=" + str(paper.file)
+                return response
+            else:
+                pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
+                if pc_member.accepted == 5:
+                    ReviewPaperRecord.objects.get(reviewCon=con, paper=paper, reviewUser=pc_member)
+                    response = FileResponse(paper.file)
+                    response["Content-Disposition"] = "attachment; filename=" + str(paper.file)
+                    return response
+                raise PermissionDenied
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('home')
+        except PermissionDenied:
+            auth.logout(request)
+            return redirect('home')
+        # except Exception:
+        #     auth.logout(request)
+        #     return redirect('home')
+
+
+# noinspection PyBroadException
 class UpdatePaper(TemplateView):
     template = 'update_paper.html'
 

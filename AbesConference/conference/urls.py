@@ -21,6 +21,7 @@ urlpatterns = [
     path('<slug>/submit_paper', login_required(SubmitPaper.as_view()), name='submit_paper'),
     path('<slug>/view_all_paper', login_required(ViewAllPaper.as_view()), name='view_all_paper'),
     path('<slug>/view_paper/<int:pk>/detail', login_required(ViewDetail.as_view()), name='view_detail'),
+    path('<slug>/download_paper/<int:pk>', login_required(DownloadPaper.as_view()), name='download_paper'),
     path('<slug>/add_author/<int:pk>', login_required(AddAuthor.as_view()), name='add_author'),
     path('<slug>/update_paper/<int:pk>', login_required(UpdatePaper.as_view()), name='update_paper'),  # old
     path('<slug>/update_author/<int:pk>', login_required(UpdateAuthor.as_view()), name='update_author'),  # old
