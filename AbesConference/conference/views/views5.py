@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.views.generic import TemplateView
 
 from ..forms import EmailToAuthorsForm
-from ..models import PaperRecord, ConferenceRecord
+from ..models import PaperRecord, ConferenceRecord, ReviewPaperRecord
 
 
 # noinspection PyBroadException
@@ -21,8 +21,8 @@ class EmailToAuthors(TemplateView):
             if con.owner == request.user or request.user.is_staff:
                 paper = PaperRecord.objects.filter(conference=con).order_by('id')
                 form = EmailToAuthorsForm()
-                return render(request, self.template_name, {'slug': kwargs['slug'], 'owner': True,
-                                                            'form': form, 'paper_list': paper})
+                attr = {'slug': kwargs['slug'], 'owner': True, 'form': form, 'paper_list': paper}
+                return render(request, self.template_name, attr)
             else:
                 raise PermissionDenied
         except ObjectDoesNotExist:
@@ -43,20 +43,28 @@ class EmailToAuthors(TemplateView):
             if con.owner == request.user or request.user.is_staff:
                 form = EmailToAuthorsForm(request.POST)
                 if form.is_valid():
+                    review = None
+                    email_list = []
+                    review_list = None
                     current_site = get_current_site(request)
-                    notification = request.POST['notification']
-                    review = request.POST['review']
+                    # notification = request.POST['notification']
+                    try:
+                        review = request.POST['review']
+                    except Exception:
+                        pass
                     sub = request.POST['subject']
                     msg = request.POST['message']
                     num = int(request.POST['total'])
-                    email_list = []
-                    for i in range(num + 1):
+                    for i in range(1, num + 1, 1):
                         try:
                             pk = request.POST['check' + str(i)]
-                            paper = PaperRecord.objects.get(pk=pk)
+                            paper = PaperRecord.objects.get(conference=con, pk=pk)
+                            if review:
+                                review_list = ReviewPaperRecord.objects.filter(paper=paper, complete=True)
                             message = render_to_string('email_to_author.txt', {
                                 'name': paper.user.username,
                                 'mess': msg,
+                                'review_list': review_list,
                                 'chair_name': request.user.first_name + ' ' + request.user.last_name,
                                 'chair_email': request.user.email,
                                 'conference_name': con.slug,
@@ -67,17 +75,18 @@ class EmailToAuthors(TemplateView):
                             email_list.append(email)
                         except Exception:
                             pass
-                        try:
-                            t = tuple(email_list)
-                            send_mass_mail(t, fail_silently=False)
-                        except Exception:
-                            messages.error(request, 'Email Sending Failed')
+                    try:
+                        t = tuple(email_list)
+                        send_mass_mail(t, fail_silently=False)
+                        messages.success(request, 'Email Send Successfully')
+                    except Exception:
+                        messages.error(request, 'Email Sending Failed')
                 else:
                     messages.error(request, 'Invalid Inputs')
                 paper = PaperRecord.objects.filter(conference=con).order_by('-status')
                 form = EmailToAuthorsForm()
-                return render(request, self.template_name, {'slug': kwargs['slug'], 'owner': True,
-                                                            'form': form, 'paper_list': paper})
+                attr = {'slug': kwargs['slug'], 'owner': True, 'form': form, 'paper_list': paper}
+                return render(request, self.template_name, attr)
             else:
                 raise PermissionDenied
         except ObjectDoesNotExist:

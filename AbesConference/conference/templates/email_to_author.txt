@@ -2,6 +2,12 @@
 Dear {{ name }},
 {{ mess }}
 ...
+{% if review_list %}
+Your Paper Review
+-----------------------------------
+{% for review in review_list %}
+review.overallEvaluation
+{% endfor %}{% endif %}
 
 Best regards,
 {{ chair_name }} {{ chair_email }}
