@@ -50,23 +50,21 @@
                         {% endif %}
                     </div>
                 </li>
-                {% if owner %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" data-target="dropdown_target"
-                           href="#">Review<span class="caret"></span></a>
-                        <div class="dropdown-menu" aria-labelledby="dropdown_target">
-                            <a class="dropdown-item" href="{% url 'conference:review_list' slug %}">Review</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" data-target="dropdown_target"
+                       href="#">Review<span class="caret"></span></a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown_target">
+                        <a class="dropdown-item" href="{% url 'conference:review_list' slug %}">Review</a>
+                        <a class="dropdown-item" href="{% url 'conference:review_list' slug %}">My Reviews</a>
+                        <a class="dropdown-item" href="{% url 'conference:review_list' slug %}">Pending Review</a>
+                        {% if owner %}
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{% url 'conference:review_list' slug %}">All Reviews</a>
                             <a class="dropdown-item" href="{% url 'conference:review_list' slug %}">All Pending
                                 Reviews</a>
-                        </div>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'conference:review_list' slug %}">Review</a>
-                    </li>
-                {% endif %}
+                        {% endif %}
+                    </div>
+                </li>
                 {% if owner %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" data-target="dropdown_target"

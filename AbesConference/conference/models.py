@@ -88,7 +88,7 @@ class ReviewPaperRecord(models.Model):
     overallEvaluation = models.TextField()
     point = models.IntegerField()
     remark = models.CharField(max_length=110)
-    accepted = models.IntegerField(default=3)
+    accepted = models.IntegerField(default=5)
     complete = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)

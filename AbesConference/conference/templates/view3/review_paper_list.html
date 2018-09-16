@@ -34,14 +34,14 @@
                             {% for list in list1 %}
                                 <tr>
                                     <td scope="row">{{ forloop.counter }}</td>
-                                    <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
-                                    <td>{{ list.title }}</td>
-                                    <td>{{ list.keywords }}</td>
+                                    <td>{% for name in list.paper.author.all %}{{ name }}<br>{% endfor %}</td>
+                                    <td>{{ list.paper.title }}</td>
+                                    <td>{{ list.paper.keywords }}</td>
                                     <td style="text-align: center; vertical-align: middle;">
-                                        <a href="{% url 'conference:view_detail' slug=slug pk=list.pk %}">
+                                        <a href="{% url 'conference:view_detail' slug=slug pk=list.paper.pk %}">
                                             <i class="material-icons table-icon">&#xe88f;</i></a></td>
                                     <td style="text-align: center; vertical-align: middle;">
-                                        <a href="{% url 'conference:download_paper' slug=slug pk=list.pk %}"
+                                        <a href="{% url 'conference:download_paper' slug=slug pk=list.paper.pk %}"
                                            target="_blank"><i class="material-icons table-icon">&#xe2c0;</i></a></td>
                                     <td style="text-align: center; vertical-align: middle;">
                                         <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
@@ -62,20 +62,20 @@
                             {% for list in list2 %}
                                 <tr>
                                     <td scope="row">{{ forloop.counter }}</td>
-                                    <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
-                                    <td>{{ list.title }}</td>
-                                    <td>{{ list.keywords }}</td>
+                                    <td>{% for name in list.paper.author.all %}{{ name }}<br>{% endfor %}</td>
+                                    <td>{{ list.paper.title }}</td>
+                                    <td>{{ list.paper.keywords }}</td>
                                     <td style="text-align: center; vertical-align: middle;">
-                                        <a href="{% url 'conference:view_detail' slug=slug pk=list.pk %}">
+                                        <a href="{% url 'conference:view_detail' slug=slug pk=list.paper.pk %}">
                                             <i class="material-icons table-icon">&#xe88f;</i></a></td>
                                     <td style="text-align: center; vertical-align: middle;">
-                                        <a href="{% url 'conference:download_paper' slug=slug pk=list.pk %}"
+                                        <a href="{% url 'conference:download_paper' slug=slug pk=list.paper.pk %}"
                                            target="_blank"><i class="material-icons table-icon">&#xe2c0;</i></a></td>
                                     <td style="text-align: center; vertical-align: middle;">
                                         <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
                                     </td>
                                     <td style="text-align: center; vertical-align: middle;">
-                                        <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
+                                        <a href="{% url 'conference:review_paper' slug=slug pk=list.pk %}">Edit Review</a>
                                     </td>
                                 </tr>
                             {% endfor %}

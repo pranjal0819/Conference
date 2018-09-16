@@ -1,0 +1,56 @@
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}Review Paper | {{ block.super }}{% endblock %}
+{% block css %}{% endblock %}
+{% block content %}
+    <main role="main" class="container bg-white pb-4">
+        {% for m in messages %}{{ m }}<br>{% endfor %}
+        <div class="px-md-3 pt-4">
+            {% if not con.review %}<h3 style="color: red">Review Submission Closed</h3>{% endif %}
+            <h2>Detail of Paper</h2>
+            <div class="px-3">
+                <h4>Title</h4>
+                <p class="lead px-3">{{ record.paper.title }}</p>
+                <hr>
+                <h4>Keywords</h4>
+                <pre style="white-space: pre-wrap" class="px-3">{{ record.paper.keywords }}</pre>
+                <hr>
+                <h4>Abstract</h4>
+                <pre style="white-space: pre-wrap" class="px-3">{{ record.paper.abstract }}</pre>
+                <hr>
+                <a href="{% url 'conference:download_paper' slug=slug pk=record.paper.pk %}" target="_blank"
+                   class="btn btn-outline-info">Download Paper</a>
+                <hr>
+            </div>
+            {% if record.accepted == 5 %}
+                <h3>Give your Review</h3>
+                <form action="" method="post" class="px-md-2">{% csrf_token %}
+                    <h4>Evaluation:</h4>
+                    <textarea name="evaluation" cols="40" rows="8" placeholder="Evaluation" maxlength="500" required
+                              class="form-control">{{ record.overallEvaluation }}</textarea><br>
+                    <h4>Point: {{ record.point }}</h4>
+                    <input type="radio" id="five" name="point" value="5" class="form-control"><label
+                            for="five">5</label>
+                    <input type="radio" id="four" name="point" value="4" class="form-control"><label
+                            for="four">4</label>
+                    <input type="radio" id="three" name="point" value="3" class="form-control"><label
+                            for="three">3</label>
+                    <input type="radio" id="two" name="point" value="2" class="form-control"><label
+                            for="two">2</label>
+                    <input type="radio" id="one" name="point" value="1" class="form-control"><label
+                            for="one">1</label>
+                    <input type="radio" id="zero" name="point" value="0" class="form-control" checked><label for="zero">0</label><br>
+                    <h4>Remark:</h4>
+                    <textarea name="remark" cols="40" rows="5" placeholder="Remark" maxlength="100" class="form-control"
+                              required>{{ record.remark }}</textarea><br>
+                    {% if con.review %}
+                        <button type="submit" title="Save" class="btn btn-outline-primary">Save Review</button>
+                    {% else %}
+                        <h3>Review Submission Closed</h3>
+                    {% endif %}
+                </form>
+            {% else %}
+                <h3>You reject this paper to review</h3>
+                <a href="{% url 'conference:accept_paper' slug=slug pk=record.pk %}" class="btn btn-outline-primary">Accept to review</a>
+            {% endif %}
+        </div>
+    </main>
+{% endblock %}

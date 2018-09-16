@@ -8,6 +8,7 @@ from django.views.generic import TemplateView
 from ..models import ReviewPaperRecord, ConferenceRecord, PcMemberRecord, PaperRecord
 
 
+# noinspection PyBroadException
 class AcceptToReview(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
@@ -36,7 +37,7 @@ class ReviewPaperList(TemplateView):
             accept = False
             owner = False
             pc_member = None
-            if con.owner == request.user:
+            if con.owner == request.user or request.user.is_staff:
                 owner = True
             try:
                 pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
@@ -47,9 +48,9 @@ class ReviewPaperList(TemplateView):
                         try:
                             obj = ReviewPaperRecord.objects.get(reviewCon=con, paper=paper, reviewUser=pc_member)
                             if obj.complete:
-                                list2.append(paper)
+                                list2.append(obj)
                             else:
-                                list1.append(paper)
+                                list1.append(obj)
                         except ObjectDoesNotExist:
                             list3.append(paper)
                 else:
@@ -135,14 +136,18 @@ class RejectPaper(TemplateView):
 
 
 class ReviewPaper(TemplateView):
-    template_name = 'review_paper.html'
+    template_name = 'view3/review_paper.html'
 
     def get(self, request, *args, **kwargs):
         try:
+            owner = False
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
             pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
             record = ReviewPaperRecord.objects.get(reviewCon=con, reviewUser=pc_member, pk=kwargs['pk'])
-            return render(request, self.template_name, {'slug': kwargs['slug'], 'con': con, 'record': record})
+            if con.owner == request.user or request.user.is_staff:
+                owner = True
+            return render(request, self.template_name,
+                          {'slug': kwargs['slug'], 'owner': owner, 'con': con, 'record': record})
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect("home")
@@ -159,7 +164,8 @@ class ReviewPaper(TemplateView):
                 record.overallEvaluation = request.POST['evaluation']
                 record.point = int(request.POST['point'])
                 record.remark = request.POST['remark']
-                record.save(update_fields=['overallEvaluation', 'point', 'remark'])
+                record.complete = True
+                record.save(update_fields=['overallEvaluation', 'point', 'remark', 'complete'])
                 messages.success(request, 'Successfully save')
                 return redirect("conference:review_list", slug=kwargs['slug'])
             else:
