@@ -25,7 +25,7 @@
                     <span style="color: red">Not Accepted</span>
                 {% endif %}
                     {% if pc_member or owner or paper_user %}
-                        <a href="/media/{{ paper_record.file }}" target="_blank"
+                        <a href="{% url 'conference:download_paper' slug=slug pk=paper_record.pk %}" target="_blank"
                            class="btn btn-outline-info float-right">Download Paper</a>
                     {% endif %}<br>
                     Submission Date: {{ paper_record.timestamp }}<br>

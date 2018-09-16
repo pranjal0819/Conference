@@ -41,8 +41,8 @@
                                         <a href="{% url 'conference:view_detail' slug=slug pk=list.pk %}">
                                             <i class="material-icons table-icon">&#xe88f;</i></a></td>
                                     <td style="text-align: center; vertical-align: middle;">
-                                        <a href="/media/{{ list.file }}" target="_blank">
-                                            <i class="material-icons table-icon">&#xe2c0;</i></a></td>
+                                        <a href="{% url 'conference:download_paper' slug=slug pk=list.pk %}"
+                                           target="_blank"><i class="material-icons table-icon">&#xe2c0;</i></a></td>
                                     <td style="text-align: center; vertical-align: middle;">
                                         <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
                                     </td>
@@ -54,7 +54,7 @@
                             <tr>
                                 <td colspan="8"></td>
                             </tr>
-                            {% endif %}
+                        {% endif %}
                         {% if list2 %}
                             <tr>
                                 <td colspan="8" style="text-align: center">Submissions reviewed by me</td>
@@ -69,8 +69,8 @@
                                         <a href="{% url 'conference:view_detail' slug=slug pk=list.pk %}">
                                             <i class="material-icons table-icon">&#xe88f;</i></a></td>
                                     <td style="text-align: center; vertical-align: middle;">
-                                        <a href="/media/{{ list.file }}" target="_blank">
-                                            <i class="material-icons table-icon">&#xe2c0;</i></a></td>
+                                        <a href="{% url 'conference:download_paper' slug=slug pk=list.pk %}"
+                                           target="_blank"><i class="material-icons table-icon">&#xe2c0;</i></a></td>
                                     <td style="text-align: center; vertical-align: middle;">
                                         <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
                                     </td>

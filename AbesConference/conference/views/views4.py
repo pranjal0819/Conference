@@ -1,175 +1,167 @@
-# Reviewer related view
+# PC Member related Views
 
 from django.contrib import messages, auth
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
-from ..models import ReviewPaperRecord, ConferenceRecord, PcMemberRecord, PaperRecord
+from ..models import PaperRecord, ReviewPaperRecord, ConferenceRecord, PcMemberRecord
 
 
-class AcceptToReview(TemplateView):
-    def get(self, request, *args, **kwargs):
-        try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
-            pc_member.accepted = 5
-            pc_member.save(update_fields=['accepted'])
-            return redirect('conference:review_list', slug=kwargs['slug'])
-        except ObjectDoesNotExist:
-            messages.error(request, 'You have not selected as Pc Member')
-            return redirect('conference:slug_welcome', slug=kwargs['slug'])
-        except Exception:
-            auth.logout(request)
-            return redirect('home')
-
-
-class ReviewPaperList(TemplateView):
-    template = 'view4/review_paper_list.html'
+# noinspection PyBroadException
+class ManagePCMember(TemplateView):
+    template = 'view4/manage_pc_member.html'
 
     def get(self, request, *args, **kwargs):
         try:
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            list1 = []
-            list2 = []
-            list3 = []
-            accept = False
-            owner = False
-            pc_member = None
-            if con.owner == request.user:
-                owner = True
-            try:
-                pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
-                if pc_member.accepted == 5:
-                    accept = True
-                    paper_list = PaperRecord.objects.filter(conference=con)
-                    for paper in paper_list:
-                        try:
-                            obj = ReviewPaperRecord.objects.get(reviewCon=con, paper=paper, reviewUser=pc_member)
-                            if obj.complete:
-                                list2.append(paper)
-                            else:
-                                list1.append(paper)
-                        except ObjectDoesNotExist:
-                            list3.append(paper)
-                else:
-                    raise ObjectDoesNotExist
-            except ObjectDoesNotExist:
-                messages.error(request, 'You are not a Pc Member')
-            return render(request, self.template,
-                          {'owner': owner, 'slug': kwargs['slug'], 'accept': accept, 'pc_member': pc_member,
-                           'list1': list1, 'list2': list2, 'list3': list3})
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
-            return redirect('home')
-            # except Exception:
-            # auth.logout(request)
-            # return redirect('home')
-
-
-class Demand(TemplateView):
-    def get(self, request, *args, **kwargs):
-        try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
-            paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
-            try:
-                ReviewPaperRecord.objects.get(reviewCon=con, paper=paper, reviewUser=pc_member)
+            if con.owner == request.user or request.user.is_staff:
+                member_list = PcMemberRecord.objects.all()
+                return render(request, self.template,
+                              {'owner': True, 'slug': kwargs['slug'], 'member_list': member_list})
+            else:
                 raise PermissionDenied
-            except ObjectDoesNotExist:
-                if paper in pc_member.demand.all():
-                    pc_member.demand.remove(paper)
-                    pc_member.totalPaper = pc_member.totalPaper - 1
-                    pc_member.save(update_fields=['totalPaper'])
-                    messages.error(request, 'Remove from your List')
-                else:
-                    pc_member.demand.add(paper)
-                    pc_member.totalPaper = pc_member.totalPaper + 1
-                    pc_member.save(update_fields=['totalPaper'])
-                    messages.success(request, 'Add to your List')
-                return redirect('conference:review_list', slug=kwargs['slug'])
         except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
+            messages.error(request, 'Conference Closed or Deleted or Invalid Paper')
             return redirect('home')
         except PermissionDenied:
+            messages.error(request, 'Permission Denied')
             auth.logout(request)
             return redirect('home')
-            # except Exception:
-            # auth.logout(request)
-            # return redirect('home')
+        # except Exception:
+        #     messages.error(request, 'Have Some Error')
+        #     auth.logout(request)
+        #     return redirect('home')
 
 
-class AcceptPaper(TemplateView):
+# noinspection PyBroadException
+class DeletePCMember(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
             con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
-            record = ReviewPaperRecord.objects.get(reviewCon=con, reviewUser=pc_member, pk=kwargs['pk'])
-            record.accepted = 5
-            record.save(update_fields=['accepted'])
-            return redirect('conference:review_paper', slug=kwargs['slug'], pk=kwargs['pk'])
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
-            return redirect("home")
-            # except Exception:
-            # auth.logout(request)
-            # return redirect('home')
-
-
-class RejectPaper(TemplateView):
-    def get(self, request, *args, **kwargs):
-        try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
-            record = ReviewPaperRecord.objects.get(reviewCon=con, reviewUser=pc_member, pk=kwargs['pk'])
-            if record.accepted == 3:
-                record.accepted = 0
-                record.save(update_fields=['accepted'])
-            return redirect('conference:review_paper', slug=kwargs['slug'], pk=kwargs['pk'])
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
-            return redirect("home")
-            # except Exception:
-            # auth.logout(request)
-            # return redirect('home')
-
-
-class ReviewPaper(TemplateView):
-    template_name = 'review_paper.html'
-
-    def get(self, request, *args, **kwargs):
-        try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
-            record = ReviewPaperRecord.objects.get(reviewCon=con, reviewUser=pc_member, pk=kwargs['pk'])
-            return render(request, self.template_name, {'slug': kwargs['slug'], 'con': con, 'record': record})
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
-            return redirect("home")
-            # except Exception:
-            # auth.logout(request)
-            # return redirect('home')
-
-    def post(self, request, **kwargs):
-        try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            if con.review:
-                pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
-                record = ReviewPaperRecord.objects.get(reviewCon=con, reviewUser=pc_member, pk=kwargs['pk'])
-                record.overallEvaluation = request.POST['evaluation']
-                record.point = int(request.POST['point'])
-                record.remark = request.POST['remark']
-                record.save(update_fields=['overallEvaluation', 'point', 'remark'])
-                messages.success(request, 'Successfully save')
-                return redirect("conference:review_list", slug=kwargs['slug'])
+            if con.owner == request.user or request.user.is_staff:
+                member = PcMemberRecord.objects.get(pcCon=con, pcEmail=kwargs['email'])
+                member.delete()
+                messages.success(request, 'successfully Deleted')
+                return redirect('conference:manage_pc_member', slug=kwargs['slug'])
             else:
                 raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
-            return redirect("home")
+            return redirect('home')
         except PermissionDenied:
-            messages.error(request, 'Review Closed')
-            return redirect('conference:slug_welcome', slug=kwargs['slug'])
+            messages.error(request, 'Permission Denied')
+            auth.logout(request)
+            return redirect('home')
+            # except Exception:
+            # auth.logout(request)
+            # return redirect('home')
+
+
+# noinspection PyBroadException
+class PcMembers(TemplateView):
+    template = 'pc_members.html'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            if con.owner == request.user or request.user.is_staff:
+                paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
+                user_list = PcMemberRecord.objects.filter(pcCon=con, accepted=5)
+                list1 = []
+                for user in user_list:
+                    try:
+                        instance = ReviewPaperRecord.objects.get(reviewUser=user, paper=paper)
+                        li = [user, False, True, False]
+                        if instance.complete:
+                            li[3] = True
+                    except ObjectDoesNotExist:
+                        li = [user, False, False, False]
+                    if paper in user.demand.all():
+                        li[1] = True
+                    list1.append(li)
+                return render(request, self.template,
+                              {'owner': True, 'slug': kwargs['slug'], 'paper': paper, 'user_list': list1})
+            else:
+                raise PermissionDenied
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted or Invalid Paper')
+            return redirect('home')
+        except PermissionDenied:
+            messages.error(request, 'Permission Denied')
+            auth.logout(request)
+            return redirect('home')
+        # except Exception:
+        #     auth.logout(request)
+        #     return redirect('home')
+
+
+# noinspection PyBroadException
+class SelectedUser(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            if con.owner == request.user or request.user.is_staff:
+                user = PcMemberRecord.objects.get(pk=kwargs['user_pk'])
+                paper = PaperRecord.objects.get(conference=con, pk=kwargs['paper_pk'])
+                try:
+                    instance = ReviewPaperRecord.objects.get(reviewUser=user, paper=paper)
+                    instance.delete()
+                    messages.success(request, 'Removed successfully')
+                except ObjectDoesNotExist:
+                    instance = ReviewPaperRecord.objects.create(reviewUser=user, paper=paper, reviewCon=con,
+                                                                overallEvaluation='', remark='', point=0)
+                    instance.save()
+                    messages.success(request, 'Successfully record save')
+                return redirect("conference:select_user", slug=kwargs['slug'], pk=kwargs['paper_pk'])
+            else:
+                messages.error(request, 'Review Closed or Invalid User')
+                return redirect("conference:slug_welcome", slug=kwargs['slug'])
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('home')
+            # except Exception:
+            # auth.logout(request)
+            # return redirect('home')
+
+
+# noinspection PyBroadException
+class ShowReviews(TemplateView):
+    template_name = 'all_reviews.html'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            if con.owner == request.user or request.user.is_staff:
+                paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
+                reviews = ReviewPaperRecord.objects.filter(paper=paper)
+                return render(request, self.template_name,
+                              {'owner': True, 'slug': kwargs['slug'], 'paper': paper, 'reviews': reviews})
+            else:
+                raise PermissionDenied
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('home')
+            # except Exception:
+            # auth.logout(request)
+            # return redirect('home')
+
+    def post(self, request, *args, **kwargs):
+        try:
+            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            if con.owner == request.user or request.user.is_staff:
+                paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
+                paper.status = int(request.POST['point'])
+                paper.review = request.POST['review']
+                paper.save(update_fields=['status', 'review'])
+                messages.success(request, 'Successfully update remarks')
+                return redirect('conference:view_detail', slug=kwargs['slug'], pk=kwargs['pk'])
+            else:
+                raise PermissionDenied
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('home')
             # except Exception:
             # auth.logout(request)
             # return redirect('home')
