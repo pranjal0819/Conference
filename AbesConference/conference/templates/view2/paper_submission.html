@@ -92,7 +92,9 @@
                     <div class="pb-4 col-md-12">{{ paper_form.title }}</div>
                     <div class="pb-4 col-md-4">{{ paper_form.keywords }}</div>
                     <div class="pb-4 col-md-8">{{ paper_form.abstract }}</div>
-                    <div>{{ paper_form.file }}</div>
+                    <div class="custom-file col-md-3">{{ paper_form.file }}
+                    <label class="custom-file-label" for="id_file">Upload pdf file*</label>
+                    </div>
                 </div>
                 {% if owner %}
                     <div class="col-md-4 px-md-5 pt-3">

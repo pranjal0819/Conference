@@ -179,3 +179,44 @@ class ReviewPaper(TemplateView):
             # except Exception:
             # auth.logout(request)
             # return redirect('home')
+
+
+# noinspection PyBroadException
+class ShowReviews(TemplateView):
+    template_name = 'all_reviews.html'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            if con.owner == request.user or request.user.is_staff:
+                paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
+                reviews = ReviewPaperRecord.objects.filter(paper=paper)
+                return render(request, self.template_name,
+                              {'owner': True, 'slug': kwargs['slug'], 'paper': paper, 'reviews': reviews})
+            else:
+                raise PermissionDenied
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('home')
+            # except Exception:
+            # auth.logout(request)
+            # return redirect('home')
+
+    def post(self, request, *args, **kwargs):
+        try:
+            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            if con.owner == request.user or request.user.is_staff:
+                paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
+                paper.status = int(request.POST['point'])
+                paper.review = request.POST['review']
+                paper.save(update_fields=['status', 'review'])
+                messages.success(request, 'Successfully update remarks')
+                return redirect('conference:view_detail', slug=kwargs['slug'], pk=kwargs['pk'])
+            else:
+                raise PermissionDenied
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('home')
+            # except Exception:
+            # auth.logout(request)
+            # return redirect('home')

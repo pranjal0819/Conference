@@ -45,11 +45,11 @@ class PaperRecordForm(forms.ModelForm):
     title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title*'}),
                             required=True, max_length=200)
     abstract = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Abstract*'}),
-                               required=True, max_length=1000)
+                               required=True, max_length=2000)
     keywords = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Keywords*'}),
                                required=True, max_length=200)
     file = forms.FileField(widget=forms.ClearableFileInput(
-        attrs={'class': 'form-control', 'accept': '.pdf', 'style': "border:none"}), required=True)
+        attrs={'class': 'custom-file-input', 'accept': '.pdf', 'style': "border:none"}), required=True)
 
     class Meta:
         model = PaperRecord

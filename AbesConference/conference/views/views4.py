@@ -34,6 +34,31 @@ class ManagePCMember(TemplateView):
         #     return redirect('home')
 
 
+class ProfilePcMember(TemplateView):
+    template_name = 'view4/pc_profile.html'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            if con.owner == request.user or request.user.is_staff:
+                member = PcMemberRecord.objects.get(pcCon=con, pcEmail=kwargs['email'])
+                paper_list = ReviewPaperRecord.objects.filter(reviewCon=con, reviewUser=member)
+                return render(request, self.template_name,
+                              {'owner': True, 'slug': kwargs['slug'], 'member': member, 'paper_list': paper_list})
+            else:
+                raise PermissionDenied
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('home')
+        except PermissionDenied:
+            messages.error(request, 'Permission Denied')
+            auth.logout(request)
+            return redirect('home')
+            # except Exception:
+            # auth.logout(request)
+            # return redirect('home')
+
+
 # noinspection PyBroadException
 class DeletePCMember(TemplateView):
     def get(self, request, *args, **kwargs):
@@ -59,8 +84,8 @@ class DeletePCMember(TemplateView):
 
 
 # noinspection PyBroadException
-class PcMembers(TemplateView):
-    template = 'pc_members.html'
+class PcMembersForPaper(TemplateView):
+    template = 'view4/pc_members_paper.html'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -97,7 +122,7 @@ class PcMembers(TemplateView):
 
 
 # noinspection PyBroadException
-class SelectedUser(TemplateView):
+class SelectForPaper(TemplateView):
 
     def get(self, request, *args, **kwargs):
         try:
@@ -118,47 +143,6 @@ class SelectedUser(TemplateView):
             else:
                 messages.error(request, 'Review Closed or Invalid User')
                 return redirect("conference:slug_welcome", slug=kwargs['slug'])
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
-            return redirect('home')
-            # except Exception:
-            # auth.logout(request)
-            # return redirect('home')
-
-
-# noinspection PyBroadException
-class ShowReviews(TemplateView):
-    template_name = 'all_reviews.html'
-
-    def get(self, request, *args, **kwargs):
-        try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            if con.owner == request.user or request.user.is_staff:
-                paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
-                reviews = ReviewPaperRecord.objects.filter(paper=paper)
-                return render(request, self.template_name,
-                              {'owner': True, 'slug': kwargs['slug'], 'paper': paper, 'reviews': reviews})
-            else:
-                raise PermissionDenied
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
-            return redirect('home')
-            # except Exception:
-            # auth.logout(request)
-            # return redirect('home')
-
-    def post(self, request, *args, **kwargs):
-        try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            if con.owner == request.user or request.user.is_staff:
-                paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
-                paper.status = int(request.POST['point'])
-                paper.review = request.POST['review']
-                paper.save(update_fields=['status', 'review'])
-                messages.success(request, 'Successfully update remarks')
-                return redirect('conference:view_detail', slug=kwargs['slug'], pk=kwargs['pk'])
-            else:
-                raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('home')

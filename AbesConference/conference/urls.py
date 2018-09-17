@@ -33,16 +33,16 @@ urlpatterns = [
     path('<slug>/review_paper/<int:pk>', login_required(ReviewPaper.as_view()), name='review_paper'),
     path('<slug>/accept_paper/<int:pk>', login_required(AcceptPaper.as_view()), name='accept_paper'),
     path('<slug>/reject_paper/<int:pk>', login_required(RejectPaper.as_view()), name='reject_paper'),
+    path('<slug>/<int:pk>/show_reviews', login_required(ShowReviews.as_view()), name='show_review'),
     # views4
     path('<slug>/manage_pc_member', login_required(ManagePCMember.as_view()), name='manage_pc_member'),
+    path('<slug>/profile/<email>', login_required(ProfilePcMember.as_view()), name='profile_pc_member'),
+    path('<slug>/delete/<email>', login_required(DeletePCMember.as_view()), name='delete_pc_member'),
+    path('<slug>/<int:pk>/select-user', login_required(PcMembersForPaper.as_view()), name='select_user'),# Pending
+    path('<slug>/<int:paper_pk>/select/<int:user_pk>', login_required(SelectForPaper.as_view()), name='selected_user'),
+    # view5
     path('<slug>/add_pc_member', login_required(AddPcMember.as_view()), name='add_pc_member'),
     path('<slug>/confirm/<uidb64>/<token>/', confirm, name='confirm'),
     path('<slug>/<int:pk>/email', login_required(SendEmail.as_view()), name='send_email'),
-    path('<slug>/delete/<email>', login_required(DeletePCMember.as_view()), name='delete_pc_member'),
-    path('<slug>/<int:pk>/select-user', login_required(PcMembers.as_view()), name='select_user'),
-    path('<slug>/<int:pk>/show_reviews', login_required(ShowReviews.as_view()), name='show_review'),
-    path('<slug>/<int:paper_pk>/select/<int:user_pk>', login_required(SelectedUser.as_view()), name='selected_user'),
-    # path('<slug>/<int:paper_pk>/deselect/<int:user_pk>', login_required(DeselectUser.as_view()), name='deselect_user'),
-    # view5
     path('<slug>/email_to_author', login_required(EmailToAuthors.as_view()), name='email_to_author'),
 ]

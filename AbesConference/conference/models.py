@@ -55,7 +55,7 @@ class PaperRecord(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
     conference = models.ForeignKey(ConferenceRecord, on_delete=models.CASCADE, related_name='conference')
     title = models.CharField(max_length=210)
-    abstract = models.TextField(max_length=1010)
+    abstract = models.TextField(max_length=2010)
     keywords = models.TextField(max_length=210)
     file = models.FileField(upload_to=upload_path)
     status = models.IntegerField(default=3)

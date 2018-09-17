@@ -10,7 +10,7 @@ from ..models import ConferenceRecord
 
 
 class CreateConference(TemplateView):
-    template_name = 'create_conference.html'
+    template_name = 'view1/create_conference.html'
 
     def get(self, request, *args, **kwargs):
         form = ConferenceForm()
