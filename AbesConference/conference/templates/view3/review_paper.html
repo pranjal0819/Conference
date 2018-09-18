@@ -23,37 +23,44 @@
             <h3>Give your Review</h3>
             <form action="" method="post" class="px-md-2">{% csrf_token %}
                 <h4>Evaluation:</h4>
-                <textarea name="evaluation" cols="40" rows="8" placeholder="Evaluation" maxlength="500" required
-                          class="form-control">{{ record.overallEvaluation }}</textarea><br>
+                <textarea name="evaluation" class="form-control" cols="40" rows="8" placeholder="Evaluation" required
+                          maxlength="500" {% if slug.review %}disabled{% endif %}>
+                    {{ record.overallEvaluation }}</textarea><br>
                 <h4>Point:</h4>
                 <div class="custom-control custom-radio">
                     <input type="radio" class="custom-control-input" {% if record.point == 5 %}checked{% endif %}
-                           id="five" name="point" value="5"><label class="custom-control-label" for="five">5</label>
+                           id="five" name="point" value="5" {% if slug.review %}disabled{% endif %}>
+                    <label class="custom-control-label" for="five">5</label>
                 </div>
                 <div class="custom-control custom-radio">
                     <input type="radio" class="custom-control-input" {% if record.point == 4 %}checked{% endif %}
-                           id="four" name="point" value="4"><label class="custom-control-label" for="four">4</label>
+                           id="four" name="point" value="4" {% if slug.review %}disabled{% endif %}>
+                    <label class="custom-control-label" for="four">4</label>
                 </div>
                 <div class="custom-control custom-radio">
                     <input type="radio" class="custom-control-input" {% if record.point == 3 %}checked{% endif %}
-                           id="three" name="point" value="3"><label class="custom-control-label" for="three">3</label>
+                           id="three" name="point" value="3" {% if slug.review %}disabled{% endif %}>
+                    <label class="custom-control-label" for="three">3</label>
                 </div>
                 <div class="custom-control custom-radio">
                     <input type="radio" class="custom-control-input" {% if record.point == 2 %}checked{% endif %}
-                           id="two" name="point" value="2"><label class="custom-control-label" for="two">2</label>
+                           id="two" name="point" value="2" {% if slug.review %}disabled{% endif %}>
+                    <label class="custom-control-label" for="two">2</label>
                 </div>
                 <div class="custom-control custom-radio">
                     <input type="radio" class="custom-control-input" {% if record.point == 1 %}checked{% endif %}
-                           id="one" name="point" value="1"><label class="custom-control-label" for="one">1</label>
+                           id="one" name="point" value="1" {% if slug.review %}disabled{% endif %}>
+                    <label class="custom-control-label" for="one">1</label>
                 </div>
                 <div class="custom-control custom-radio">
                     <input type="radio" class="custom-control-input" {% if record.point == 0 %}checked{% endif %}
-                           id="zero" name="point" value="0"><label class="custom-control-label" for="zero">0</label>
+                           id="zero" name="point" value="0" {% if slug.review %}disabled{% endif %}>
+                    <label class="custom-control-label" for="zero">0</label>
                 </div>
                 <br>
                 <h4>Remark:</h4>
                 <textarea name="remark" cols="40" rows="5" placeholder="Remark" maxlength="100" class="form-control"
-                          required>{{ record.remark }}</textarea><br>
+                          required {% if slug.review %}disabled{% endif %}>{{ record.remark }}</textarea><br>
                 {% if con.review %}
                     <button type="submit" title="Save" class="btn btn-outline-primary">Save Review</button>
                 {% else %}
