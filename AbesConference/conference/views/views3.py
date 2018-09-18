@@ -183,7 +183,7 @@ class ReviewPaper(TemplateView):
 
 # noinspection PyBroadException
 class ShowReviews(TemplateView):
-    template_name = 'all_reviews.html'
+    template_name = 'view3/show_review.html'
 
     def get(self, request, *args, **kwargs):
         try:

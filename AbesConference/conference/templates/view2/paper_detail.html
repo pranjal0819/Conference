@@ -3,8 +3,7 @@
 {% block content %}
     <main role="main" class="container bg-white pb-4">
         {% for m in messages %}{{ m }}<br>{% endfor %}
-        {% if paper_record is not None %}
-            <div class="px-3 pt-4 pb-5">
+        <div class="px-3 pt-4 pb-5">
             <h2>Paper Information</h2>
             <div class="px-3">
                 <h4>Title</h4>
@@ -80,9 +79,8 @@
                        class="btn btn-sm btn-outline-info float-right">Show all Review</a>
                 {% endif %}
             </div>
-        {% endif %}
-        <a href="{% url 'conference:view_all_paper' slug=slug %}" class="btn btn-outline-info btn-sm"
-           style="width:150px; float: right">Back to Paper List</a></div>
+            <a href="{% url 'conference:view_all_paper' slug=slug %}" class="btn btn-outline-info btn-sm"
+               style="width:150px; float: right">Back to Paper List</a></div>
     </main>
 {% endblock %}
 {% block script %}{% endblock %}

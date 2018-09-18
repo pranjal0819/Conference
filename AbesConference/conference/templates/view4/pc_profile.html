@@ -1,0 +1,40 @@
+{% extends 'base.html' %}{% load staticfiles %}{% block head_title %}PC Detail | {{ block.super }}{% endblock %}
+{% block css %}{% endblock %}
+{% block content %}
+    <main role="main" class="container bg-white pb-4">
+        {% for m in messages %}{{ m }}<br>{% endfor %}
+        <div class="px-md-3 pt-4 pb-5">
+            <h2>PC Information</h2>
+            <div class="px-md-3">
+                <h4>Name</h4>
+                <p class="lead px-3">{{ member.name }}</p>
+                <hr>
+                <h4>Email</h4>
+                <p class="lead px-3">{{ member.pcEmail }}</p>
+                <hr>
+                <h4>Accepted</h4>
+                <p class="lead px-3">{% if member.accepted %}<span class="text-success">Yes</span>{% else %}
+                    <span class="text-danger">No</span>{% endif %}</p>
+                <hr>
+                <h4>Total Assigned Paper</h4>
+                <p class="lead px-3">{{ member.totalPaper }}</p>
+                <hr>
+                <h4>Assigned</h4>
+                <p class="lead px-3">
+                    {% for paper in paper_list %}{{ forloop.counter }}.
+                        <a href="{% url 'conference:view_detail' slug=slug pk=paper.paper.pk %}" class="text-dark">
+                            {{ paper.paper.title }}</a><br>{% endfor %}</p>
+                <hr>
+                <h4>Bid</h4>
+                <p class="lead px-3">
+                    {% for bid in member.demand.all %}{{ forloop.counter }}.
+                        <a href="{% url 'conference:view_detail' slug=slug pk=bid.pk %}" class="text-dark">
+                            {{ bid.title }}</a><br>{% endfor %}</p>
+                <hr>
+            </div>
+            <a href="{% url 'conference:view_all_paper' slug=slug %}"
+               class="btn btn-outline-primary col-sm-3 float-right">Back to paper list</a>
+        </div>
+    </main>
+{% endblock %}
+{% block script %}{% endblock %}

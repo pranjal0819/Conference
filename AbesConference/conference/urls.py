@@ -38,7 +38,7 @@ urlpatterns = [
     path('<slug>/manage_pc_member', login_required(ManagePCMember.as_view()), name='manage_pc_member'),
     path('<slug>/profile/<email>', login_required(ProfilePcMember.as_view()), name='profile_pc_member'),
     path('<slug>/delete/<email>', login_required(DeletePCMember.as_view()), name='delete_pc_member'),
-    path('<slug>/<int:pk>/select-user', login_required(PcMembersForPaper.as_view()), name='select_user'),# Pending
+    path('<slug>/<int:pk>/select-user', login_required(PcMembersForPaper.as_view()), name='select_user'),
     path('<slug>/<int:paper_pk>/select/<int:user_pk>', login_required(SelectForPaper.as_view()), name='selected_user'),
     # view5
     path('<slug>/add_pc_member', login_required(AddPcMember.as_view()), name='add_pc_member'),
