@@ -50,19 +50,22 @@
                         {% endif %}
                     </div>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" data-target="dropdown_target"
-                       href="#">Review<span class="caret"></span></a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown_target">
-                        <a class="dropdown-item" href="{% url 'conference:review_list' slug %}">Review</a>
-                        {% if owner %}
+                {% if owner %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" data-target="dropdown_target"
+                           href="#">Review<span class="caret"></span></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown_target">
+                            <a class="dropdown-item" href="{% url 'conference:review_list' slug %}">Review</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{% url 'conference:review_list' slug %}">All Reviews</a>
-                            <a class="dropdown-item" href="{% url 'conference:review_list' slug %}">All Pending
+                            <a class="dropdown-item" href="{% url 'conference:all_review' slug %}">All Reviews</a>
+                            <a class="dropdown-item" href="{% url 'conference:all_pending_review' slug %}">All Pending
                                 Reviews</a>
-                        {% endif %}
-                    </div>
-                </li>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'conference:review_list' slug %}">Review</a>
+                    </li>
+                {% endif %}
                 {% if owner %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" data-target="dropdown_target"
@@ -72,6 +75,8 @@
                             <a class="dropdown-item" href="{% url 'conference:add_pc_member' slug %}">Add PC Member</a>
                         </div>
                     </li>{% endif %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'conference:slug_welcome' slug %}">Email Chair
+                    Person</a></li>
             </ul>
         </div>
     </nav>
@@ -131,6 +136,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
+<script src="{% static 'js/search.js' %}"></script>
 {% block script %}{% endblock script %}
 </body>
 </html>

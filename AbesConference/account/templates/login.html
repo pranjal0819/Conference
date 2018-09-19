@@ -6,14 +6,14 @@
             <div style="text-align: center">
                 <h3>Login To Your Account</h3>{% if request.GET.next %}<h3>Required</h3>{% endif %}
                 {% for m in messages %}{{ m }}<br>{% endfor %}</div>
-            <form method="post" onsubmit="fun()">{% csrf_token %}
+            <form method="post">{% csrf_token %}
                 <div class="mb-3">
                     <label>Username</label>
-                    <input type="text" class="form-control" name="user" placeholder="Username">
+                    <input type="text" class="form-control" name="user" placeholder="Username" required>
                 </div>
                 <div class="mb-3">
                     <label>Password</label>
-                    <input type="password" class="form-control" name="pass" placeholder="Password">
+                    <input type="password" class="form-control" name="pass" placeholder="Password" required>
                 </div>
                 {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
                 <script src='https://www.google.com/recaptcha/api.js'></script>
@@ -26,9 +26,11 @@
     </main>
 {% endblock %}
 {% block script %}
-function fun() {
-    if(allowSubmit) return true;
-    e.preventDefault();
-    alert('Fill in the capcha!');
-}
+<script>
+  grecaptcha.ready(function() {
+      grecaptcha.execute('reCAPTCHA_site_key', {action: 'homepage'}).then(function(token) {
+         alert("error");
+      });
+  });
+  </script>
 {% endblock %}

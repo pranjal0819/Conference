@@ -198,6 +198,9 @@ class ShowReviews(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('home')
+        except PermissionDenied:
+            auth.logout(request)
+            return redirect('home')
             # except Exception:
             # auth.logout(request)
             # return redirect('home')
@@ -216,6 +219,53 @@ class ShowReviews(TemplateView):
                 raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
+            return redirect('home')
+        except PermissionDenied:
+            auth.logout(request)
+            return redirect('home')
+            # except Exception:
+            # auth.logout(request)
+            # return redirect('home')
+
+
+class ShowAllReview(TemplateView):
+    template_name = 'view3/all_review.html'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            if con.owner == request.user or request.user.is_staff:
+                obj = ReviewPaperRecord.objects.filter(reviewCon=con)
+                return render(request, self.template_name, {'owner': True, 'slug': kwargs['slug'], 'reviews': obj})
+            else:
+                raise PermissionDenied
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('home')
+        except PermissionDenied:
+            auth.logout(request)
+            return redirect('home')
+            # except Exception:
+            # auth.logout(request)
+            # return redirect('home')
+
+
+class ShowAllPendingReview(TemplateView):
+    template_name = 'view3/all_pending_review.html'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
+            if con.owner == request.user or request.user.is_staff:
+                obj = ReviewPaperRecord.objects.filter(reviewCon=con, complete=False)
+                return render(request, self.template_name, {'owner': True, 'slug': kwargs['slug'], 'reviews': obj})
+            else:
+                raise PermissionDenied
+        except ObjectDoesNotExist:
+            messages.error(request, 'Conference Closed or Deleted')
+            return redirect('home')
+        except PermissionDenied:
+            auth.logout(request)
             return redirect('home')
             # except Exception:
             # auth.logout(request)

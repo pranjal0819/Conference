@@ -23,20 +23,9 @@
             <h3>Give your Review</h3>
             <form action="" method="post" class="px-md-2">{% csrf_token %}
                 <h4>Evaluation:</h4>
-                <textarea name="evaluation" class="form-control" cols="40" rows="8" placeholder="Evaluation" required
-                          maxlength="500" {% if slug.review %}disabled{% endif %}>
-                    {{ record.overallEvaluation }}</textarea><br>
+                <textarea name="evaluation" class="form-control" placeholder="Evaluation" required maxlength="500"
+                          rows="8" {% if slug.review %}disabled{% endif %}>{{ record.overallEvaluation }}</textarea><br>
                 <h4>Point:</h4>
-                <div class="custom-control custom-radio">
-                    <input type="radio" class="custom-control-input" {% if record.point == 5 %}checked{% endif %}
-                           id="five" name="point" value="5" {% if slug.review %}disabled{% endif %}>
-                    <label class="custom-control-label" for="five">5</label>
-                </div>
-                <div class="custom-control custom-radio">
-                    <input type="radio" class="custom-control-input" {% if record.point == 4 %}checked{% endif %}
-                           id="four" name="point" value="4" {% if slug.review %}disabled{% endif %}>
-                    <label class="custom-control-label" for="four">4</label>
-                </div>
                 <div class="custom-control custom-radio">
                     <input type="radio" class="custom-control-input" {% if record.point == 3 %}checked{% endif %}
                            id="three" name="point" value="3" {% if slug.review %}disabled{% endif %}>
@@ -56,6 +45,21 @@
                     <input type="radio" class="custom-control-input" {% if record.point == 0 %}checked{% endif %}
                            id="zero" name="point" value="0" {% if slug.review %}disabled{% endif %}>
                     <label class="custom-control-label" for="zero">0</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" class="custom-control-input" {% if record.point == -1 %}checked{% endif %}
+                           id="negative_one" name="point" value="-1" {% if slug.review %}disabled{% endif %}>
+                    <label class="custom-control-label" for="negative_one">-1</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" class="custom-control-input" {% if record.point == -2 %}checked{% endif %}
+                           id="negative_two" name="point" value="-2" {% if slug.review %}disabled{% endif %}>
+                    <label class="custom-control-label" for="negative_two">-2</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" class="custom-control-input" {% if record.point == -3 %}checked{% endif %}
+                           id="negative_three" name="point" value="-3" {% if slug.review %}disabled{% endif %}>
+                    <label class="custom-control-label" for="negative_three">-3</label>
                 </div>
                 <br>
                 <h4>Remark:</h4>
