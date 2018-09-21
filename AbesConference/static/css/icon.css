@@ -34,12 +34,12 @@
 /* Icon */
 .icons1 {
     display: inline-block;
-    font: normal normal normal 52px/1 FontAwesome;
+    font: normal normal normal 32px/1 FontAwesome;
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #dc190b;
-    margin-bottom: 25px;
+    color: #1bafb4;
+    margin-bottom: 10px;
 }
 
 .icons1 > .label {
