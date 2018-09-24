@@ -30,7 +30,7 @@
                                 <td>{{ list.name }}</td>
                                 <td>{{ list.pcEmail }}</td>
                                 <td style="text-align: center; vertical-align: middle;">
-                                    <a href="#">
+                                    <a href="{% url 'conference:profile_pc_member' slug=slug email=list.pcEmail %}">
                                         <i class="material-icons table-icon" style="font-size: 22px;">&#xe88f;</i></a>
                                 </td>
                                 <td style="text-align: center;"><a

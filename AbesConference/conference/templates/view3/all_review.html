@@ -19,6 +19,7 @@
                         <th scope="col" style="font-size: 12px">PC Member Name</th>
                         <th scope="col">PC Member Email</th>
                         <th scope="col" style="font-size: 14px">Complete</th>
+                        <th scope="col" style="font-size: 14px">Delete</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -38,6 +39,10 @@
                             </td>
                             <td style="text-align: center; vertical-align: middle;">{% if list.complete %}Done{% else %}
                                 Pending{% endif %}</td>
+                            <td style="text-align: center; vertical-align: middle;">
+                                <a href="{% url 'conference:selected_user' slug=slug paper_pk=list.paper.pk user_pk=list.reviewUser.pk %}">
+                                    Delete</a>
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>

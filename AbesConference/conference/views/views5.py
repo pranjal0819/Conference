@@ -110,7 +110,7 @@ class EmailToAuthors(TemplateView):
 
 # noinspection PyBroadException
 class AddPcMember(TemplateView):
-    template_name = 'add_pc_member.html'
+    template_name = 'view5/add_pc_member.html'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -149,7 +149,9 @@ class AddPcMember(TemplateView):
                     mess = form.cleaned_data['message']
                     try:
                         file = form.cleaned_data['file']
+                        content = file.read()
                     except Exception:
+                        content = None
                         pass
                     current_site = get_current_site(request)
                     mail_subject = 'Invitation to ' + con.slug + ' program committee'
@@ -177,15 +179,15 @@ class AddPcMember(TemplateView):
                                 'token': account_activation_token.make_token(user),
                             })
                             email = EmailMessage(mail_subject, message, to=[user.pcEmail])
-                            if file:
-                                email.attach(file.name, file.content_type, 'application/pdf')
+                            if file and content:
+                                email.attach(file.name, content, 'application/pdf')
                             email.send()
                         except IndexError:
                             pass
                         except ValidationError:
                             list2.append(info[2])
-                        # except Exception:
-                        #     messages.error(request, 'Mail Sending Fail')
+                        except Exception:
+                            messages.error(request, 'Mail Sending Fail')
                 else:
                     messages.error(request, 'Try Again')
                 form = AddPcMemberForm()
