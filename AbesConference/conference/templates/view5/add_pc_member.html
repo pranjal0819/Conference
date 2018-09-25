@@ -10,12 +10,12 @@
                 <p class="px-2">Using this page you can invite PC members on your program committee.<br>
                     Write down PC members, one per line, using the following format:</p>
                 <h5>FirstName,LastName,EmailAddress</h5>
-                <div class="pb-4 col-md-6">Pc Members Name & Emails:{{ form.emails }}</div>
-                <div class="pb-4 col-md-6">Add Message (optional){{ form.message }}</div>
+                Pc Members Name & Emails:{{ form.emails }}<br>
+                Add Message (optional){{ form.message }}<br>
                 <div class="custom-file col-md-3">{{ form.file }}
                     <label class="custom-file-label" for="id_file">Choose pdf file</label>
                 </div>
-                <div class="px-md-5 py-md-5 pt-3 clearfix">
+                <div class="py-md-5 pt-3 clearfix">
                     <button type="submit" class="px-md-5 btn btn-outline-primary">Send Email</button>
                     <button type="reset" class="btn btn-outline-danger">Reset</button>
                     <a href="{% url 'conference:manage_pc_member' slug=slug %}"

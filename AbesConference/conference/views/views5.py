@@ -55,11 +55,11 @@ class EmailToAuthors(TemplateView):
                     current_site = get_current_site(request)
                     # notification = request.POST['notification']
                     try:
-                        review = request.POST['review']
+                        review = form.cleaned_data['review']
                     except Exception:
                         pass
-                    sub = request.POST['subject']
-                    msg = request.POST['message']
+                    sub = form.cleaned_data['subject']
+                    msg = form.cleaned_data['message']
                     num = int(request.POST['total'])
                     for i in range(1, num + 1, 1):
                         try:

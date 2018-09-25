@@ -71,17 +71,17 @@ class EmailForm(forms.Form):
     message = forms.CharField(widget=forms.Textarea, required=True)
 
 
-class AddPcMemberForm(forms.Form):
-    emails = forms.CharField(widget=forms.Textarea(
-        attrs={'placeholder': 'FirstName,LastName,example@abc.com', 'class': 'form-control'}), required=True)
-    message = forms.CharField(widget=forms.Textarea(
-        attrs={'placeholder': 'Message', 'class': 'form-control'}), required=False)
-    file = forms.FileField(widget=forms.ClearableFileInput(
-        attrs={'class': 'custom-file-input', 'accept': '.pdf'}), required=False)
-
-
 class EmailToAuthorsForm(forms.Form):
     subject = forms.CharField(widget=forms.TextInput(
-        attrs={'placeholder': 'Subject', 'class': 'form-control col-7'}), required=True)
+        attrs={'placeholder': 'Subject', 'class': 'form-control col-md-7'}), required=True)
     message = forms.CharField(widget=forms.Textarea(
-        attrs={'class': 'custom-file-input', 'accept': '.pdf'}), required=True)
+        attrs={'placeholder': 'Message', 'class': 'form-control col-md-7'}), required=True)
+
+
+class AddPcMemberForm(forms.Form):
+    emails = forms.CharField(widget=forms.Textarea(
+        attrs={'placeholder': 'FirstName,LastName,example@abc.com', 'class': 'form-control col-md-7'}), required=True)
+    message = forms.CharField(widget=forms.Textarea(
+        attrs={'placeholder': 'Message', 'class': 'form-control col-md-7'}), required=False)
+    file = forms.FileField(widget=forms.ClearableFileInput(
+        attrs={'class': 'custom-file-input', 'accept': '.pdf'}), required=False)

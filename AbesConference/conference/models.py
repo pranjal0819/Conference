@@ -95,3 +95,17 @@ class ReviewPaperRecord(models.Model):
 
     def __str__(self):
         return str(self.reviewUser) + " -- " + str(self.paper)
+
+
+class EmailRecord(models.Model):
+    emailCon = models.ForeignKey(ConferenceRecord, on_delete=models.CASCADE, related_name='emailCon')
+    emailSender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='emailSender')
+    subject = models.CharField(max_length=1005)
+    message = models.TextField()
+    receiverPc = models.ManyToManyField(PcMemberRecord)
+    receiverAuthor = models.ManyToManyField(User)
+    success = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.subject
