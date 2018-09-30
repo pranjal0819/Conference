@@ -6,7 +6,8 @@
             <div class="px-3 pt-4 d-flex justify-content-between">
                 <h2>PC Member List</h2>
                 <div style="width: 300px">
-                    <input type="text" class="form-control" id="search" onkeyup="myFunction()" placeholder="Search...">
+                    <input type="text" class="form-control" id="search" onkeyup="myFunction12345()"
+                           placeholder="Search...">
                 </div>
             </div>
             <div class="px-3 py-3 pb-md-4 table-responsive-xl">
@@ -16,11 +17,11 @@
                         <th scope="col">#</th>
                         <th scope="col" width="30%">Pc member Name</th>
                         <th scope="col" width="30%">Pc member Email</th>
-                        <th scope="col">Bid</th>
-                        <th scope="col">Assign</th>
-                        <th scope="col">Review</th>
-                        <th scope="col" width="10px">Total Assigned</th>
-                        <th scope="col" width="10%">Detail</th>
+                        <th scope="col" style="text-align: center">Bid</th>
+                        <th scope="col" style="text-align: center">Assign</th>
+                        <th scope="col" style="text-align: center">Review</th>
+                        <th scope="col" width="10px" style="text-align: center; font-size: 12px;">Total Assigned</th>
+                        <th scope="col" width="10px" style="text-align: center">Detail</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -30,20 +31,20 @@
                             <td>{{ list.0.name }}</td>
                             <td>{{ list.0.pcEmail }}</td>
                             <td>{% if list.1 %}Yes{% else %}No{% endif %}</td>
-                            <td>{% if list.2 %}
+                            <td id="update{{ list.0.id }}">{% if list.2 %}
                                 <button class="btn btn-outline-danger btn-sm col-12"
-                                        onclick='loadDoc("{% url 'conference:selected_user' slug=slug paper_pk=paper.pk user_pk=list.0.id %}")'>
+                                        onclick='loadDoc("{% url 'conference:selected_user' slug=slug paper_pk=paper.pk user_pk=list.0.id %}", {{ list.0.id }})'>
                                     Unassigned
                                 </button>{% else %}
                                 <button class="btn btn-outline-success btn-sm col-12"
-                                        onclick='loadDoc("{% url 'conference:selected_user' slug=slug paper_pk=paper.pk user_pk=list.0.id %}")'>
+                                        onclick='loadDoc("{% url 'conference:selected_user' slug=slug paper_pk=paper.pk user_pk=list.0.id %}", {{ list.0.id }})'>
                                     Assign
                                 </button>{% endif %}</td>
-                            <td>{% if list.3 %}Done{% endif %}</td>
-                            <td>{{ list.0.totalPaper }}</td>
+                            <td style="text-align: center">{% if list.3 %}Done{% else %}Pending{% endif %}</td>
+                            <td style="text-align: center">{{ list.0.totalPaper }}</td>
                             <td><a href="{% url 'conference:profile_pc_member' slug=slug email=list.0.pcEmail %}"
-                            class="btn btn-outline-info btn-sm col-12">Detail</a></td>
-                            {#                        <a href="{% url 'conference:send_email' slug=slug pk=list.0.pk %}">Send Email</a>#}
+                                   class="btn btn-outline-info btn-sm col-12">Detail</a></td>
+                            {#<a href="{% url 'conference:send_email' slug=slug pk=list.0.pk %}">Send Email</a>#}
                         </tr>
                     {% endfor %}</tbody>
                 </table>
@@ -57,38 +58,15 @@
     </div>
 {% endblock %}
 {% block script %}
-    <script>
-        function myFunction() {
-            var input, filter, table, tr, td1, td2, td3, td4, i;
-            input = document.getElementById("search");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("myTable");
-            tr = table.getElementsByTagName("tr");
-            for (i = 0; i < tr.length; i++) {
-                td1 = tr[i].getElementsByTagName("td")[1];
-                td2 = tr[i].getElementsByTagName("td")[2];
-                td3 = tr[i].getElementsByTagName("td")[3];
-                td4 = tr[i].getElementsByTagName("td")[4];
-                if (td1 || td2) {
-                    if ((td1.innerHTML.toUpperCase().indexOf(filter) > -1) || (td2.innerHTML.toUpperCase().indexOf(filter) > -1) || (td3.innerHTML.toUpperCase().indexOf(filter) > -1) || (td4.innerHTML.toUpperCase().indexOf(filter) > -1)) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                }
+    <script>function loadDoc(URL_address, s) {
+        const change = $("#update" + s);
+        $.ajax({
+            url: URL_address, method: "GET", success: function (data) {
+                if (data.added) change.html("<button class=\"btn btn-outline-danger btn-sm col-12\" onclick='loadDoc(\"" + URL_address + "\"," + s + ")'>Unassigned</button>");
+                else change.html("<button class=\"btn btn-outline-success btn-sm col-12\" onclick='loadDoc(\"" + URL_address + "\"," + s + ")'>Assign</button>");
+            }, error: function (data) {
+                console.log("error", data)
             }
-        }
-    </script>
-    <script>
-        function loadDoc(URL_address) {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    document.getElementById("main").innerHTML = this.responseText;
-                }
-            };
-            xhttp.open("GET", URL_address, true);
-            xhttp.send();
-        }
-    </script>
+        })
+    }</script>
 {% endblock %}

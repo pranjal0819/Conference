@@ -2,6 +2,7 @@
 
 from django.contrib import messages, auth
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
@@ -133,15 +134,19 @@ class SelectForPaper(TemplateView):
                 try:
                     instance = ReviewPaperRecord.objects.get(reviewUser=user, paper=paper)
                     instance.delete()
-                    messages.success(request, 'Removed successfully')
+                    added = False
+                    # messages.success(request, 'Removed successfully')
                 except ObjectDoesNotExist:
                     instance = ReviewPaperRecord.objects.create(reviewUser=user, paper=paper, reviewCon=con,
                                                                 overallEvaluation='', remark='', point=0)
                     instance.save()
-                    messages.success(request, 'Successfully record save')
+                    added = True
+                    # messages.success(request, 'Successfully record save')
+                if request.is_ajax():
+                    return JsonResponse({'added': added})
                 return redirect("conference:select_user", slug=kwargs['slug'], pk=kwargs['paper_pk'])
             else:
-                messages.error(request, 'Review Closed or Invalid User')
+                messages.error(request, 'Invalid User')
                 return redirect("conference:slug_welcome", slug=kwargs['slug'])
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')

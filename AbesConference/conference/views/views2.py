@@ -176,14 +176,16 @@ class DownloadPaper(TemplateView):
             paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
             if paper.user == request.user or con.owner == request.user or request.user.is_staff:
                 response = FileResponse(paper.file)
-                response["Content-Disposition"] = "attachment; filename=" + str(paper.file)
+                response['Content-Disposition'] = 'inline; filename={title}.pdf'.format(
+                    title=kwargs['slug'] + "-" + str(kwargs['pk']))
                 return response
             else:
                 pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
                 if pc_member.accepted == 5:
                     ReviewPaperRecord.objects.get(reviewCon=con, paper=paper, reviewUser=pc_member)
                     response = FileResponse(paper.file)
-                    response["Content-Disposition"] = "attachment; filename=" + str(paper.file)
+                    response['Content-Disposition'] = 'inline; filename={title}.pdf'.format(
+                        title=kwargs['slug'] + "-" + str(kwargs['pk']))
                     return response
                 raise PermissionDenied
         except ObjectDoesNotExist:
