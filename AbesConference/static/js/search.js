@@ -1,5 +1,5 @@
-function myFunction12() {
-    var input, filter, table, tr, td1, td2, i;
+function mySearch12() {
+    let input, filter, table, tr, td1, td2, i;
     input = document.getElementById("search");
     filter = input.value.toUpperCase();
     table = document.getElementById("myTable");
@@ -18,8 +18,8 @@ function myFunction12() {
     }
 }
 
-function myFunction123() {
-    var input, filter, table, tr, td1, td2, td3, i;
+function mySearch123() {
+    let input, filter, table, tr, td1, td2, td3, i;
     input = document.getElementById("search");
     filter = input.value.toUpperCase();
     table = document.getElementById("myTable");
@@ -40,8 +40,8 @@ function myFunction123() {
     }
 }
 
-function myFunction1234() {
-    var input, filter, table, tr, td1, td2, td3, td4, i;
+function mySearch1234() {
+    let input, filter, table, tr, td1, td2, td3, td4, i;
     input = document.getElementById("search");
     filter = input.value.toUpperCase();
     table = document.getElementById("myTable");
@@ -64,8 +64,8 @@ function myFunction1234() {
     }
 }
 
-function myFunction12345() {
-    var input, filter, table, tr, td1, td2, td3, td4, td5, i;
+function mySearch12345() {
+    let input, filter, table, tr, td1, td2, td3, td4, td5, i;
     input = document.getElementById("search");
     filter = input.value.toUpperCase();
     table = document.getElementById("myTable");
@@ -90,8 +90,8 @@ function myFunction12345() {
     }
 }
 
-function myFunction123456() {
-    var input, filter, table, tr, td1, td2, td3, td4, td5, td6, i;
+function mySearch123456() {
+    let input, filter, table, tr, td1, td2, td3, td4, td5, td6, i;
     input = document.getElementById("search");
     filter = input.value.toUpperCase();
     table = document.getElementById("myTable");
@@ -118,8 +118,8 @@ function myFunction123456() {
     }
 }
 
-function myFunction1245() {
-    var input, filter, table, tr, td1, td2, td4, td5, i;
+function mySearch1245() {
+    let input, filter, table, tr, td1, td2, td4, td5, i;
     input = document.getElementById("search");
     filter = input.value.toUpperCase();
     table = document.getElementById("myTable");
@@ -142,8 +142,8 @@ function myFunction1245() {
     }
 }
 
-function myFunction12456() {
-    var input, filter, table, tr, td1, td2, td4, td5, td6, i;
+function mySearch12456() {
+    let input, filter, table, tr, td1, td2, td4, td5, td6, i;
     input = document.getElementById("search");
     filter = input.value.toUpperCase();
     table = document.getElementById("myTable");

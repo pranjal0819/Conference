@@ -23,7 +23,7 @@
                 {% else %}
                     <span style="color: red">Not Accepted</span>
                 {% endif %}
-                    {% if pc_member or owner or paper_user %}
+                    {% if paper_user %}
                         <a href="{% url 'conference:download_paper' slug=slug pk=paper_record.pk %}" target="_blank"
                            class="btn btn-outline-info float-right">Download Paper</a>
                     {% endif %}<br>

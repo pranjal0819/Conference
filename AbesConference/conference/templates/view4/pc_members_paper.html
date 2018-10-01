@@ -6,8 +6,7 @@
             <div class="px-3 pt-4 d-flex justify-content-between">
                 <h2>PC Member List</h2>
                 <div style="width: 300px">
-                    <input type="text" class="form-control" id="search" onkeyup="myFunction12345()"
-                           placeholder="Search...">
+                    <input type="text" class="form-control" id="search" onkeyup="mySearch12345()" placeholder="Search">
                 </div>
             </div>
             <div class="px-3 py-3 pb-md-4 table-responsive-xl">
@@ -51,8 +50,8 @@
             </div>
             <div class="px-3 py-4 clearfix">
                 <a href="{% url 'conference:add_pc_member' slug %}" class="btn btn-outline-primary">Add PC Member</a>
-                <a href="{% url 'conference:view_all_paper' slug=slug %}" class="btn btn-outline-primary float-right">Back
-                    to paper list</a>
+                <a href="{% url 'conference:view_all_paper' slug=slug %}" class="btn btn-outline-primary float-right">
+                    Paper list</a>
             </div>
         </main>
     </div>
