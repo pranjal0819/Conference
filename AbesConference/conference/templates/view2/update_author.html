@@ -7,12 +7,12 @@
             <h2>Update Author</h2>
             <form action="" method="post" class="px-md-2">{% csrf_token %}
                 <h3>Author Information</h3>
-                <div class="col-md-4 pb-3">Name:{{ form.name }}</div>
-                <div class="col-md-4 pb-3">Email:{{ form.email }}</div>
-                <div class="col-md-4 pb-3">Mobile Number:{{ form.mobileNumber }}</div>
-                <div class="col-md-4 pb-3">Organization:{{ form.organization }}</div>
-                <div class="col-md-4 pb-3">Country:{{ form.country }}</div>
-                <div class="col-md-4 pb-3">Url:{{ form.url }}</div>
+                <div class="col-md-4 pb-3">Name: {{ author.name }}{{ form.name }}</div>
+                <div class="col-md-4 pb-3">Email: {{ author.email }}{{ form.email }}</div>
+                <div class="col-md-4 pb-3">Mobile Number: {{ author.mobileNumber }}{{ form.mobileNumber }}</div>
+                <div class="col-md-4 pb-3">Organization: {{ author.organization }}{{ form.organization }}</div>
+                <div class="col-md-4 pb-3">Country: {{ author.country }}{{ form.country }}</div>
+                <div class="col-md-4 pb-3">Url: {{ author.url }}{{ form.url }}</div>
                 <div class="px-md-3 pt-3 pb-5 clearfix">
                     <button type="submit" class="px-md-5 btn btn-outline-primary">Update</button>
                     <button type="reset" class="btn btn-outline-danger">Reset</button>

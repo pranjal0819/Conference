@@ -238,21 +238,12 @@ class UpdatePaper(TemplateView):
                 form = PaperRecordForm(request.POST, request.FILES, instance=paper, sub=True)
                 if form.is_valid():
                     form.save()
-                    # paper.title = request.POST['title']
-                    # paper.keywords = request.POST['keyword']
-                    # paper.abstract = request.POST['abstract']
-                    # try:
-                    #     paper.file = request.FILES['upload']
-                    #     paper.save(update_fields=['title', 'keywords', 'abstract', 'file'])
-                    # except Exception:
-                    #     paper.save(update_fields=['title', 'keywords', 'abstract'])
                     messages.success(request, 'Successfully Updated')
                     return redirect('conference:view_detail', slug=kwargs['slug'], pk=kwargs['pk'])
                 else:
                     messages.error(request, 'Invalid Input. Try Again. Error Code: X0AF05')
                 form = PaperRecordForm(instance=paper, sub=True)
-                return render(request, self.template,
-                              {'owner': owner, 'slug': kwargs['slug'], 'paper': paper, 'form': form})
+                return render(request, self.template, {'owner': owner, 'slug': kwargs['slug'], 'paper': paper, 'form': form})
             else:
                 raise PermissionDenied
         except ObjectDoesNotExist as msg:
@@ -306,8 +297,7 @@ class AddAuthor(TemplateView):
                 else:
                     messages.error(request, 'Invalid Input. Try Again. Error Code: X0AG05')
                 form = AuthorRecordForm(sub=conference.submission)
-                return render(request, self.template,
-                              {'slug': kwargs['slug'], 'pk': kwargs['pk'], 'form': form})
+                return render(request, self.template, {'slug': kwargs['slug'], 'pk': kwargs['pk'], 'form': form})
             else:
                 raise PermissionDenied
         except ObjectDoesNotExist as msg:
