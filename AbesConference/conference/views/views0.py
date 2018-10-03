@@ -1,6 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 
-from ..models import ConferenceRecord, PaperRecord, PcMemberRecord, ReviewPaperRecord
+from ..models import ConferenceRecord, PaperRecord, PcMemberRecord, ReviewPaperRecord, AuthorRecord
 
 
 # noinspection PyBroadException
@@ -45,3 +45,10 @@ def get_review_paper(pc_user, paper, error_code):
         return ReviewPaperRecord.objects.get(reviewUser=pc_user, paper=paper)
     except ObjectDoesNotExist:
         raise ObjectDoesNotExist("Paper Not Found. Error Code: " + error_code)
+
+
+def get_author(pk, error_code):
+    try:
+        return AuthorRecord.objects.get(pk=pk)
+    except ObjectDoesNotExist:
+        raise ObjectDoesNotExist("Author Not Found. Error Code: " + error_code)

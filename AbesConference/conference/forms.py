@@ -92,7 +92,7 @@ class PaperRecordForm(forms.ModelForm):
     keywords = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Keywords*'}),
                                required=True, max_length=200)
     file = forms.FileField(widget=forms.ClearableFileInput(
-        attrs={'class': 'custom-file-input', 'accept': '.pdf'}), required=True)
+        attrs={'class': 'custom-file-input', 'style': "opacity:1", 'accept': '.pdf'}), required=True)
 
     class Meta:
         model = PaperRecord
