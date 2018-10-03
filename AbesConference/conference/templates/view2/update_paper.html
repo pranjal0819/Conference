@@ -1,0 +1,71 @@
+{% extends 'base.html' %}{% load staticfiles %}{% block head_title %}Update Paper | {{ block.super }}{% endblock %}
+{% block css %}{% endblock %}
+{% block content %}
+    <main role="main" class="container bg-white pb-4">
+        {% for m in messages %}{{ m }}<br>{% endfor %}
+        <div class="px-3 pt-4 pb-5">
+            <h2>Paper Information</h2>
+            <form class="px-3" method="post" enctype="multipart/form-data">{% csrf_token %}
+                <h4>Title</h4>
+                <p class="lead px-3">{{ paper.title }}</p>
+                <p class="px-3">New Title:{{ form.title }}</p>
+                <hr>
+                <h4>Keywords</h4>
+                <pre style="white-space: pre-wrap" class="px-3">{{ paper.keywords }}</pre>
+                <pre style="white-space: pre-wrap" class="px-3 pb-2 col-md-4">New Keywords:{{ form.keywords }}</pre>
+                <hr>
+                <h4>Abstract</h4>
+                <pre style="white-space: pre-wrap" class="px-3">{{ paper.abstract }}</pre>
+                <pre style="white-space: pre-wrap" class="px-3 pb-2 col-md-8">New Abstract:{{ form.abstract }}</pre>
+                <hr>
+                <div class="px-3">
+                    {{ form.file }}
+                </div>
+                <hr>
+                <button type="submit" class="px-md-5 btn btn-outline-primary">Save the Changes</button>
+            </form>
+            <div class="px-4 py-4 mt-3 table-responsive-xl">
+                Author Details
+                <table class="table table-bordered table-hover" id="myTable">
+                    <thead>
+                    <tr style="font-weight: 600;">
+                        <th scope="col">#</th>
+                        <th scope="col">Author Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Mobile Number</th>
+                        <th scope="col">Organization</th>
+                        <th scope="col">Country</th>
+                        <th scope="col">Url</th>
+                        <th scope="col">Edit</th>
+                    </tr>
+                    </thead>
+                    <tbody>{% for name in paper.author.all %}
+                        <tr>
+                            <td scope="row">{{ forloop.counter }}</td>
+                            <td>{{ name.name }}</td>
+                            <td>{% if name.email %}{{ name.email }}{% else %}-{% endif %}</td>
+                            <td>{% if name.mobileNumber %}{{ name.mobileNumber }}{% else %}-{% endif %}</td>
+                            <td>{% if name.organization %}{{ name.organization }}{% else %}-{% endif %}</td>
+                            <td>{% if name.country %}{{ name.country }}{% else %}-{% endif %}</td>
+                            <td>{% if name.webPage %}
+                                <a href="{{ name.webPage }}" target="_blank">{{ name.webPage }}</a>
+                            {% else %}-{% endif %}</td>
+                            <td><a href="{% url 'conference:update_author' slug=slug pk=name.pk %}">Edit</a></td>
+                        </tr>{% endfor %}</tbody>
+                </table>
+            </div>
+            <div class="pb-2 clearfix">{% if paper.user == user %}
+                <a href="{% url 'conference:add_author' slug=slug pk=paper.pk %}" style="width:150px;"
+                   class="btn btn-sm btn-outline-info float-right">Add another author</a>{% endif %}
+                {% if owner %}
+                    <a href="{% url 'conference:delete_paper' slug=slug pk=paper.pk %}" style="width:150px;"
+                       class="btn btn-sm btn-outline-danger float-left">Delete Paper</a>
+                    <a href="{% url 'conference:show_review' slug=slug pk=paper.id %}" style="width:150px;"
+                       class="btn btn-sm btn-outline-info float-right">Show all Review</a>
+                {% endif %}
+            </div>
+            <a href="{% url 'conference:view_all_paper' slug=slug %}" class="btn btn-outline-info btn-sm"
+               style="width:150px; float: right">Back to Paper List</a></div>
+    </main>
+{% endblock %}
+{% block script %}{% endblock %}
