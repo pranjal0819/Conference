@@ -3,13 +3,14 @@
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
+from django.forms import formset_factory
 from django.http import FileResponse
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
 from .views0 import *
-from ..forms import PaperRecordForm, AuthorRecordForm
-from ..models import PaperRecord, AuthorRecord, ConferenceRecord, PcMemberRecord, ReviewPaperRecord
+from ..forms import PaperRecordForm, AuthorRecordForm, AuthorRecordForm1
+from ..models import PaperRecord, AuthorRecord, ConferenceRecord
 
 
 # noinspection PyBroadException
@@ -87,6 +88,9 @@ class ViewDetail(TemplateView):
         except ObjectDoesNotExist as msg:
             messages.error(request, msg)
             return redirect('home')
+        except PermissionDenied:
+            auth.logout(request)
+            return redirect('home')
         except Exception:
             messages.error(request, 'Error Code: X0AC10')
             # auth.logout(request)
@@ -97,26 +101,41 @@ class ViewDetail(TemplateView):
 # Error Code X0AD01, X0AD02, X0AD03, X0AD10, X0AD11
 class SubmitPaper(TemplateView):
     template = 'view2/paper_submission.html'
+    data = {'form-TOTAL_FORMS': '2',
+            'form-INITIAL_FORMS': '0',
+            'form-MAX_NUM_FORMS': '5'}
 
     def get(self, request, *args, **kwargs):
         try:
-            paper_form = PaperRecordForm()
-            conference, owner = get_conference(request, kwargs['slug'], 'X0AD01')
-            return render(request, self.template, {'owner': owner, 'slug': conference, 'paper_form': paper_form})
+            sub = False
+            con, owner = get_conference(request, kwargs['slug'], 'X0AD01')
+            if owner or con.submission:
+                sub = True
+            paper_form = PaperRecordForm(sub=sub)
+            author_form1 = AuthorRecordForm(sub=sub)
+            author_form = formset_factory(AuthorRecordForm1, extra=2)
+            formset = author_form(form_kwargs={'sub': sub})
+            attr = {'owner': owner, 'slug': con, 'open': sub,
+                    'paper_form': paper_form, 'form1': author_form1, 'formset': formset}
+            return render(request, self.template, attr)
         except ObjectDoesNotExist as msg:
             messages.error(request, msg)
             return redirect('home')
-        except Exception:
-            messages.error(request, 'Error Code: X0AD10')
-            # auth.logout(request)
-            return redirect('home')
+        # except Exception:
+        #     messages.error(request, 'Error Code: X0AD10')
+        #     # auth.logout(request)
+        #     return redirect('home')
 
     def post(self, request, **kwargs):
         try:
-            paper_form = PaperRecordForm(request.POST, request.FILES)
-            conference, owner = get_conference(request, kwargs['slug'], 'X0AD02')
-            if paper_form.is_valid():
-                if conference.submission or owner:
+            sub = False
+            paper_form = PaperRecordForm(request.POST, request.FILES, sub=True)
+            author_form1 = AuthorRecordForm(request.POST, sub=True)
+            author_form = formset_factory(AuthorRecordForm1, extra=2)
+            formset = author_form(request.POST, form_kwargs={'sub': True})
+            con, owner = get_conference(request, kwargs['slug'], 'X0AD02')
+            if paper_form.is_valid() and author_form1.is_valid() and formset.is_valid():
+                if con.submission or owner:
                     user = request.user
                     if owner:
                         try:
@@ -125,31 +144,27 @@ class SubmitPaper(TemplateView):
                             messages.error(request, 'Invalid User Name')
                     temp = paper_form.save(commit=False)
                     temp.user = user
-                    temp.conference = conference
+                    temp.conference = con
                     temp.save()
-                    try:
-                        for i in range(1, 4, 1):
-                            j = str(i)
-                            nam = request.POST['name' + j]
-                            eml = request.POST['email' + j]
-                            mob = request.POST['mobile' + j]
-                            cou = request.POST['country' + j]
-                            org = request.POST['org' + j]
-                            url = request.POST['url' + j]
-                            if nam is not "":
-                                obj = AuthorRecord.objects.create(name=nam, email=eml, mobileNumber=mob, country=cou,
-                                                                  organization=org, webPage=url)
-                                temp.author.add(obj.id)
-                    except Exception:
-                        pass
+                    temp.author.add(author_form1.save())
+                    for form in formset:
+                        if form.cleaned_data['name']:
+                            temp.author.add(form.save())
                     messages.success(request, 'Paper submitted successfully')
                     return redirect("conference:view_all_paper", slug=kwargs['slug'])
                 else:
                     messages.error(request, 'Submission closed')
             else:
                 messages.error(request, 'Invalid Input. Try Again. Error Code: X0AD03')
-            paper_form = PaperRecordForm()
-            return render(request, self.template, {'owner': owner, 'slug': conference, 'paper_form': paper_form})
+            if con.submission or owner:
+                sub = True
+            paper_form = PaperRecordForm(sub=sub)
+            author_form1 = AuthorRecordForm(sub=sub)
+            author_form = formset_factory(AuthorRecordForm1, extra=2)
+            formset = author_form(form_kwargs={'sub': sub})
+            attr = {'owner': owner, 'slug': con, 'open': sub,
+                    'paper_form': paper_form, 'form1': author_form1, 'formset': formset}
+            return render(request, self.template, attr)
         except ObjectDoesNotExist as msg:
             messages.error(request, msg)
             return redirect('home')
@@ -159,34 +174,37 @@ class SubmitPaper(TemplateView):
             return redirect('home')
 
 
+# noinspection PyBroadException
+# Error Code X0AE01, X0AE02, X0AE03, X0AE04, X0AE11
 class DownloadPaper(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
-            if paper.user == request.user or con.owner == request.user or request.user.is_staff:
+            conference, owner = get_conference(request, kwargs['slug'], 'X0AE01')
+            paper = get_paper(conference, kwargs['pk'], 'X0AE02')
+            if paper.user == request.user or owner:
                 response = FileResponse(paper.file)
                 response['Content-Disposition'] = 'inline; filename={title}.pdf'.format(
                     title=kwargs['slug'] + "-" + str(kwargs['pk']))
                 return response
             else:
-                pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
+                pc_member = get_pc_member(conference, request.user.email, 'X0AE03')
                 if pc_member.accepted == 5:
-                    ReviewPaperRecord.objects.get(reviewCon=con, paper=paper, reviewUser=pc_member)
+                    get_review_paper(pc_member, pc_member, 'X0AE04')
                     response = FileResponse(paper.file)
                     response['Content-Disposition'] = 'inline; filename={title}.pdf'.format(
                         title=kwargs['slug'] + "-" + str(kwargs['pk']))
                     return response
                 raise PermissionDenied
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
+        except ObjectDoesNotExist as msg:
+            messages.error(request, msg)
             return redirect('home')
         except PermissionDenied:
             auth.logout(request)
             return redirect('home')
-        # except Exception:
-        #     auth.logout(request)
-        #     return redirect('home')
+        except Exception:
+            messages.error(request, 'Error Code: X0AE11')
+            # auth.logout(request)
+            return redirect('home')
 
 
 # noinspection PyBroadException
@@ -205,6 +223,9 @@ class UpdatePaper(TemplateView):
                 raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
+            return redirect('home')
+        except PermissionDenied:
+            auth.logout(request)
             return redirect('home')
             # except Exception:
             # auth.logout(request)
@@ -229,6 +250,9 @@ class UpdatePaper(TemplateView):
                 raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
+            return redirect('home')
+        except PermissionDenied:
+            auth.logout(request)
             return redirect('home')
             # except Exception:
             # auth.logout(request)
@@ -286,6 +310,9 @@ class UpdateAuthor(TemplateView):
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
             return redirect('home')
+        except PermissionDenied:
+            auth.logout(request)
+            return redirect('home')
             # except Exception:
             # auth.logout(request)
             # return redirect('home')
@@ -308,6 +335,9 @@ class UpdateAuthor(TemplateView):
                 raise PermissionDenied
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
+            return redirect('home')
+        except PermissionDenied:
+            auth.logout(request)
             return redirect('home')
             # except Exception:
             # auth.logout(request)
@@ -336,6 +366,9 @@ class DeletePaper(TemplateView):
             return redirect("conference:view_all_paper", slug=kwargs['slug'])
         except ObjectDoesNotExist:
             messages.error(request, 'Conference Closed or Deleted')
+            return redirect('home')
+        except PermissionDenied:
+            auth.logout(request)
             return redirect('home')
             # except Exception:
             # auth.logout(request)

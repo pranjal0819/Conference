@@ -21,24 +21,67 @@ class ConferenceForm(forms.ModelForm):
 
 
 class AuthorRecordForm(forms.ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Name'}),
-                           max_length=50)
+    name = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Full Name*'}), max_length=50, required=True)
     email = forms.CharField(widget=forms.EmailInput(
-        attrs={'class': 'form-control', 'placeholder': 'abcd@gmail.com',
-               'pattern': '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$'}), max_length=50)
+        attrs={'class': 'form-control', 'placeholder': 'Email*', 'pattern': '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$'}),
+        max_length=50, required=True)
     mobileNumber = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'form-control', 'placeholder': 'Mobile Number', 'pattern': "[789][0-9]{9}"}), max_length=10)
-    country = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Country Name'}),
-                              max_length=50)
-    organization = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Organization'}), max_length=100)
+        attrs={'class': 'form-control', 'placeholder': 'Mobile Number*', 'pattern': "[789][0-9]{9}"}),
+        max_length=10, required=True)
+    country = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Country Name*'}), max_length=50, required=True)
+    organization = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Organization*'}), max_length=100, required=True)
     url = forms.CharField(widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'http://example.com/', 'pattern': "https?://.+"}),
-        required=False, max_length=50)
+        max_length=50, required=False)
 
     class Meta:
         model = AuthorRecord
         fields = ['name', 'email', 'mobileNumber', 'country', 'organization', 'url']
+
+    def __init__(self, *args, sub, **kwargs):
+        super(AuthorRecordForm, self).__init__(*args, **kwargs)
+        if not sub:
+            self.fields['name'].widget.attrs['disabled'] = True
+            self.fields['email'].widget.attrs['disabled'] = True
+            self.fields['mobileNumber'].widget.attrs['disabled'] = True
+            self.fields['country'].widget.attrs['disabled'] = True
+            self.fields['organization'].widget.attrs['disabled'] = True
+            self.fields['url'].widget.attrs['disabled'] = True
+
+
+class AuthorRecordForm1(forms.ModelForm):
+    name = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Full Name'}), max_length=50, required=False)
+    email = forms.CharField(widget=forms.EmailInput(
+        attrs={'class': 'form-control', 'placeholder': 'Email', 'pattern': '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$'}),
+        max_length=50, required=False)
+    mobileNumber = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Mobile Number', 'pattern': "[789][0-9]{9}"}),
+        max_length=10, required=False)
+    country = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Country Name'}), max_length=50, required=False)
+    organization = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Organization'}), max_length=100, required=False)
+    url = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'http://example.com/', 'pattern': "https?://.+"}),
+        max_length=50, required=False)
+
+    class Meta:
+        model = AuthorRecord
+        fields = ['name', 'email', 'mobileNumber', 'country', 'organization', 'url']
+
+    def __init__(self, *args, sub, **kwargs):
+        super(AuthorRecordForm1, self).__init__(*args, **kwargs)
+        if not sub:
+            self.fields['name'].widget.attrs['disabled'] = True
+            self.fields['email'].widget.attrs['disabled'] = True
+            self.fields['mobileNumber'].widget.attrs['disabled'] = True
+            self.fields['country'].widget.attrs['disabled'] = True
+            self.fields['organization'].widget.attrs['disabled'] = True
+            self.fields['url'].widget.attrs['disabled'] = True
 
 
 class PaperRecordForm(forms.ModelForm):
@@ -54,6 +97,14 @@ class PaperRecordForm(forms.ModelForm):
     class Meta:
         model = PaperRecord
         fields = ['title', 'abstract', 'keywords', 'file']
+
+    def __init__(self, *args, sub, **kwargs):
+        super(PaperRecordForm, self).__init__(*args, **kwargs)
+        if not sub:
+            self.fields['title'].widget.attrs['disabled'] = True
+            self.fields['abstract'].widget.attrs['disabled'] = True
+            self.fields['keywords'].widget.attrs['disabled'] = True
+            self.fields['file'].widget.attrs['disabled'] = True
 
 
 class ReviewPaperForm(forms.ModelForm):
