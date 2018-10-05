@@ -55,9 +55,10 @@
             </div>
             {% if owner %}
                 <div class="col-md-4 px-md-5 pt-3">
-                    <label>Enter User Name of Author*</label>
-                    <input type="text" class="form-control" name="user" placeholder="Author User Name*" required
-                           maxlength="50" value="{{ user }}" {% if not open %}disabled{% endif %}></div>{% endif %}
+                    <label>Enter User Name of Author*</label>{{ confirmation_form.confirmation }}
+{#                    <input type="text" class="form-control" name="user" placeholder="Author User Name*" required#}
+{#                           maxlength="50" value="{{ user }}" {% if not open %}disabled{% endif %}></div>#}
+                </div>{% endif %}
             <div class="px-md-5 pt-3 pb-5 clearfix">
                 <button type="submit" class="px-md-5 btn btn-outline-primary" {% if not open %}disabled{% endif %}>
                     Submit

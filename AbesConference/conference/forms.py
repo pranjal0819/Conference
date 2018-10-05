@@ -108,8 +108,13 @@ class PaperRecordForm(forms.ModelForm):
 
 
 class ConfirmationForm(forms.Form):
-    confirmation = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control mb-3'}), max_length=15,
+    confirmation = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control mb-3'}), max_length=30,
                                    required=True)
+
+    def __init__(self, *args, user=None, **kwargs):
+        super(ConfirmationForm, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['confirmation'].widget.attrs['value'] = user
 
 
 class ReviewPaperForm(forms.ModelForm):

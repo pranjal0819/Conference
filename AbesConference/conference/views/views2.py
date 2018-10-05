@@ -149,14 +149,16 @@ class SubmitPaper(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
             sub = False
+            confirmation_form = None
             con, owner = get_conference(request, kwargs['slug'], 'X0AD01')
             if owner or con.submission:
                 sub = True
+                confirmation_form = ConfirmationForm(user=request.user.username)
             paper_form = PaperRecordForm(sub=sub)
             author_form1 = AuthorRecordForm(sub=sub)
             author_form = formset_factory(AuthorRecordForm1, extra=self.MIN, max_num=self.MAX)
             formset = author_form(form_kwargs={'sub': sub})
-            attr = {'owner': owner, 'slug': con, 'open': sub,
+            attr = {'owner': owner, 'slug': con, 'open': sub, 'confirmation_form': confirmation_form,
                     'paper_form': paper_form, 'form1': author_form1, 'formset': formset}
             return render(request, self.template, attr)
         except ObjectDoesNotExist as msg:
@@ -170,6 +172,7 @@ class SubmitPaper(TemplateView):
     def post(self, request, **kwargs):
         try:
             sub = False
+            confirmation_form = None
             paper_form = PaperRecordForm(request.POST, request.FILES, sub=True)
             author_form1 = AuthorRecordForm(request.POST, sub=True)
             author_form = formset_factory(AuthorRecordForm1, extra=self.MIN, max_num=self.MAX)
@@ -180,7 +183,11 @@ class SubmitPaper(TemplateView):
                     user = request.user
                     if owner:
                         try:
-                            user = User.objects.get(username=request.POST['user'])
+                            confirmation_form = ConfirmationForm(request.POST, user=request.user.username)
+                            if confirmation_form.is_valid():
+                                user = User.objects.get(username=confirmation_form.cleaned_data['confirmation'])
+                            else:
+                                raise ObjectDoesNotExist
                         except ObjectDoesNotExist:
                             messages.error(request, 'Invalid User Name')
                     temp = paper_form.save(commit=False)
@@ -189,8 +196,11 @@ class SubmitPaper(TemplateView):
                     temp.save()
                     temp.author.add(author_form1.save())
                     for form in formset:
-                        if form.cleaned_data['name']:
-                            temp.author.add(form.save())
+                        try:
+                            if form.cleaned_data['name']:
+                                temp.author.add(form.save())
+                        except Exception:
+                            pass
                     messages.success(request, 'Paper submitted successfully')
                     return redirect('conference:view_all_paper', slug=kwargs['slug'])
                 else:
@@ -199,11 +209,12 @@ class SubmitPaper(TemplateView):
                 messages.error(request, 'Invalid Input. Try Again. Error Code: X0AD03')
             if con.submission or owner:
                 sub = True
+                confirmation_form = ConfirmationForm(user=request.user.username)
             paper_form = PaperRecordForm(sub=sub)
             author_form1 = AuthorRecordForm(sub=sub)
             author_form = formset_factory(AuthorRecordForm1, extra=self.MIN, max_num=self.MAX)
             formset = author_form(form_kwargs={'sub': sub})
-            attr = {'owner': owner, 'slug': con, 'open': sub,
+            attr = {'owner': owner, 'slug': con, 'open': sub, 'confirmation_form': confirmation_form,
                     'paper_form': paper_form, 'form1': author_form1, 'formset': formset}
             return render(request, self.template, attr)
         except ObjectDoesNotExist as msg:

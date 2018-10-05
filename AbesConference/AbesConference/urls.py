@@ -8,9 +8,6 @@ from .views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
-    path('registration/', registration, name='registration'),
-    path('call-for-paper/', call_for_paper, name='callForPaper'),
-    path('proceeding/', proceeding, name='proceeding'),
 
     path('account/', include(('account.urls', 'account'), namespace='account')),
 
