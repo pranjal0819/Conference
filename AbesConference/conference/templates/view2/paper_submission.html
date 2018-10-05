@@ -1,73 +1,81 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}Submit Paper | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
-    <main role="main" class="container bg-white pb-4">
-        {% for m in messages %}{{ m }}<br>{% endfor %}
-        <div class="px-md-3 pt-4">
-            {% if not open %}<h2 style="color: red">Submission Closed</h2>{% else %}<h2>Submit Paper</h2>{% endif %}
-            <form enctype="multipart/form-data" action="" method="post" class="px-md-2">{% csrf_token %}
-                <h3>Author Information</h3>
-                <div class="px-md-3">
-                    <h4>Author 1*</h4>
-                    <div class="form-row px-md-5">
-                        <div class="col-md-4 pb-3">{{ form1.name }}</div>
-                        <div class="col-md-4 pb-3">{{ form1.email }}</div>
-                        <div class="col-md-3 pb-3">{{ form1.mobileNumber }}</div>
-                    </div>
-                    <div class="form-row px-md-5">
-                        <div class="col-md-4 pb-3">{{ form1.organization }}</div>
-                        <div class="col-md-4 pb-3">{{ form1.country }}</div>
-                        <div class="col-md-4 pb-3">{{ form1.url }}</div>
-                    </div>
-                    {{ formset.management_form }}
-                    {% for form2 in formset %}
-                        <div class="author-form"><hr>
-                            <h4>Author {{ forloop.counter|add:1 }}</h4>
-                            <div class="form-row px-md-5">
-                                <div class="col-md-4 pb-3">{{ form2.name }}</div>
-                                <div class="col-md-4 pb-3">{{ form2.email }}</div>
-                                <div class="col-md-3 pb-3">{{ form2.mobileNumber }}</div>
-                            </div>
-                            <div class="form-row px-md-5">
-                                <div class="col-md-4 pb-3">{{ form2.organization }}</div>
-                                <div class="col-md-4 pb-3">{{ form2.country }}</div>
-                                <div class="col-md-4 pb-3">{{ form2.url }}</div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-                <hr>
-                <h3>Paper Information*</h3>
+    <div class="p-3 pt-4 bg-white">
+        {% if not open %}<h2 style="color: red; margin: 0;">Submission Closed</h2>{% else %}
+            <h2 style="margin: 0;">Submit Paper</h2>{% endif %}
+        <form enctype="multipart/form-data" action="" method="post" class="px-md-2">{% csrf_token %}
+            <h3 style="margin: 0">Author Information</h3>
+            <ul>
+                <li>The required fields are marked by (<strong>*</strong>).</li>
+                <li>Registered Email address(During the Sign-Up) will only be used for communication with the author.</li>
+                <li>User can add maximum 6 Author Detail at a Submission Time. After the submission you can other author
+                    detail.
+                </li>
+                <li>Uploaded document must be in <strong>pdf</strong> format</li>
+            </ul>
+            <div class="px-md-3">
+                <h4>Author 1*</h4>
                 <div class="form-row px-md-5">
-                    <div class="pb-4 col-md-12">{{ paper_form.title }}</div>
-                    <div class="pb-4 col-md-4">{{ paper_form.keywords }}</div>
-                    <div class="pb-4 col-md-8">{{ paper_form.abstract }}</div>
-                    <div class="pb-4">{{ paper_form.file }}</div>
+                    <div class="col-md-4 pb-3">{{ form1.name }}</div>
+                    <div class="col-md-4 pb-3">{{ form1.email }}</div>
+                    <div class="col-md-3 pb-3">{{ form1.mobileNumber }}</div>
                 </div>
-                {% if owner %}
-                    <div class="col-md-4 px-md-5 pt-3">
-                        <label>Author User Name</label>
-                        <input type="text" class="form-control" name="user" placeholder="Author User Name*" required
-                               maxlength="50" value="{{ user }}" {% if not open %}disabled{% endif %}></div>{% endif %}
-                <div class="px-md-5 pt-3 pb-5 clearfix">
-                    <button type="submit" class="px-md-5 btn btn-outline-primary" {% if not open %}disabled{% endif %}>
-                        Submit
-                    </button>
-                    <button type="reset" class="btn btn-outline-danger" {% if not open %}disabled{% endif %}>Reset
-                    </button>
-                    <a href="{% url 'conference:view_all_paper' slug=slug %}"
-                       class="btn btn-outline-primary float-right">View All Submission</a>
+                <div class="form-row px-md-5">
+                    <div class="col-md-4 pb-3">{{ form1.organization }}</div>
+                    <div class="col-md-4 pb-3">{{ form1.country }}</div>
+                    <div class="col-md-4 pb-3">{{ form1.url }}</div>
                 </div>
-            </form>
-        </div>
-    </main>
+                {{ formset.management_form }}
+                {% for form2 in formset %}
+                    <div class="author-form">
+                        <hr>
+                        <h4>Author {{ forloop.counter|add:1 }}</h4>
+                        <div class="form-row px-md-5">
+                            <div class="col-md-4 pb-3">{{ form2.name }}</div>
+                            <div class="col-md-4 pb-3">{{ form2.email }}</div>
+                            <div class="col-md-3 pb-3">{{ form2.mobileNumber }}</div>
+                        </div>
+                        <div class="form-row px-md-5">
+                            <div class="col-md-4 pb-3">{{ form2.organization }}</div>
+                            <div class="col-md-4 pb-3">{{ form2.country }}</div>
+                            <div class="col-md-4 pb-3">{{ form2.url }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <p>You can add <strong>maximum 6 Author</strong> at a submission time</p>
+            </div>
+            <hr>
+            <h3>Paper Information*</h3>
+            <div class="form-row px-md-5">
+                <div class="pb-4 col-md-12">{{ paper_form.title }}</div>
+                <div class="pb-4 col-md-4">{{ paper_form.keywords }}</div>
+                <div class="pb-4 col-md-8">{{ paper_form.abstract }}</div>
+                <div class="pb-4">{{ paper_form.file }} Pdf File Only</div>
+            </div>
+            {% if owner %}
+                <div class="col-md-4 px-md-5 pt-3">
+                    <label>Enter User Name of Author*</label>
+                    <input type="text" class="form-control" name="user" placeholder="Author User Name*" required
+                           maxlength="50" value="{{ user }}" {% if not open %}disabled{% endif %}></div>{% endif %}
+            <div class="px-md-5 pt-3 pb-5 clearfix">
+                <button type="submit" class="px-md-5 btn btn-outline-primary" {% if not open %}disabled{% endif %}>
+                    Submit
+                </button>
+                <button type="reset" class="btn btn-outline-danger" {% if not open %}disabled{% endif %}>Reset
+                </button>
+                <a href="{% url 'conference:view_all_paper' slug=slug %}"
+                   class="btn btn-outline-primary float-right">View All Submission</a>
+            </div>
+        </form>
+    </div>
 {% endblock %}
 {% block script %}
-<script src="{% static 'js/jquery.formset.js' %}"></script>
-<script>
-    $('.author-form').formset({
-        addText: 'Add Author',
-        deleteText: 'Remove'
-    });
-</script>
+    <script src="{% static 'js/jquery.formset.js' %}"></script>
+    <script>
+        $('.author-form').formset({
+            addText: 'Add Author',
+            deleteText: 'Remove'
+        });
+    </script>
 {% endblock %}

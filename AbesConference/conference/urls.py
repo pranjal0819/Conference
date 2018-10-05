@@ -25,7 +25,6 @@ urlpatterns = [
     path('<slug>/add_author/<int:pk>', login_required(AddAuthor.as_view()), name='add_author'),
     path('<slug>/update_paper/<int:pk>', login_required(UpdatePaper.as_view()), name='update_paper'),
     path('<slug>/update_author/<int:pk>', login_required(UpdateAuthor.as_view()), name='update_author'),
-    path('<slug>/view_paper/<int:pk>/delete', login_required(DeletePaper.as_view()), name='delete_paper'),
     # views3
     path('<slug>/accepted', login_required(AcceptToReview.as_view()), name='accept_to_review'),
     path('<slug>/demand_paper/<int:pk>', login_required(Demand.as_view()), name='demand_paper'),

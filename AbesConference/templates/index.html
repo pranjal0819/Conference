@@ -1,36 +1,33 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}Home | {{ block.super }}{% endblock head_title %}
 {% block css %}{% endblock %}
 {% block content %}
-    <main role="main" class="container">
-        <div class="my-5 p-3 bg-white rounded shadow-sm">
-            {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
-            <div class="border-bottom border-gray d-flex justify-content-between">
-                <h2>Conferences</h2>
-            </div>
-            {% if conference_list %}
-                {% for list in conference_list %}
-                    {% if list.active %}
-                        <div class="media text-muted pt-3">
-                            <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                                <div class="d-flex justify-content-between align-items-center w-100">
-                                    <a href="{% url 'conference:slug_welcome' slug=list.slug %}"><h3
-                                            class="text-gray-dark" style="margin: 0;">{{ list.slug }}</h3></a>
-                                </div>
-                                <span class="d-block">{{ list.name }}</span>
-                                <a href="{% url 'conference:slug_welcome' slug=list.slug %}"
-                                   class="d-block text-right mt-md-2">View...</a>
-                            </div>
-                        </div>{% endif %}
-                {% endfor %}
-            {% else %}
+    <div class="my-5 p-3 bg-white rounded shadow-sm">
+        {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
+        <div class="border-bottom border-gray d-flex justify-content-between">
+            <h2>Conferences</h2>
+        </div>
+        {% if conference_list %}
+            {% for list in conference_list %}
                 <div class="media text-muted pt-3">
                     <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
                         <div class="d-flex justify-content-between align-items-center w-100">
-                            No Conference
+                            <a href="{% url 'conference:slug_welcome' slug=list.slug %}"><h3
+                                    class="text-gray-dark" style="margin: 0;">{{ list.slug }}</h3></a>
                         </div>
+                        <span class="d-block">{{ list.name }}</span>
+                        <a href="{% url 'conference:slug_welcome' slug=list.slug %}"
+                           class="d-block text-right mt-md-2">View...</a>
                     </div>
                 </div>
-            {% endif %}</div>
-    </main>
+            {% endfor %}
+        {% else %}
+            <div class="media text-muted pt-3">
+                <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        No Conference
+                    </div>
+                </div>
+            </div>
+        {% endif %}</div>
 {% endblock %}
 {% block script %}{% endblock %}

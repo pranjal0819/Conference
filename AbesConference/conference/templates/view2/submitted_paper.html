@@ -1,15 +1,25 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}View All Paper | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}{% block content %}
-    <main role="main" class="container bg-white pb-4">
-        <div class="px-3 pt-4 pb-5 d-flex justify-content-between">
-            <h2>Paper List</h2>
+    <div class="bg-white pb-4 px-md-5 px-2">
+        <div class="pt-4 d-flex justify-content-between">
+            <h2>{{ slug }} List of Submissions</h2>
             <div style="width: 300px">
                 <input type="text" class="form-control" id="search" onkeyup="mySearch123()" placeholder="Search...">
             </div>
         </div>
-        {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
-        {% if paper_list %}
-            <div class="px-3 py-3 pb-md-4 table-responsive-xl">
+        <div class="pb-2">
+            {% if owner %}
+                <i class="material-icons" style="font-size: 24px;">&#xe7f0;</i>
+                <span>Assign Paper to Program Member Committee</span>,
+                <i class="material-icons" style="font-size: 24px;">&#xe02f;</i>
+                <span>Show the Review of the Paper</span><br>
+                <i class="material-icons table-icon" style="font-size: 24px;">&#xe5d5;</i><span>Update the Paper,</span>
+            {% endif %}
+            <i class="material-icons table-icon" style="color: #00bb00; font-size: 24px;">&#xe876;</i>Accepted, <i
+                class="material-icons table-icon" style="color: #3eb1ff; font-size: 24px;">&#xe15b;</i>Pending, <i
+                class="material-icons table-icon" style="color: #FF0000; font-size: 24px;">&#xe5cd;</i>Rejected
+        </div>
+        <div class="py-3 pb-2 table-responsive-xl">{% if paper_list %}
             <table class="table table-bordered table-hover" id="myTable">
                 <thead>
                 <tr style="font-weight: 600;">
@@ -64,11 +74,12 @@
                             {{ list.timestamp|date:'M-d-Y' }}</td>
                     </tr>
                 {% endfor %}</tbody>
-            </table></div>{% endif %}
-        <div class="px-3 py-4 clearfix">
+            </table>{% else %}<h3>No Submission yet</h3>{% endif %}
+        </div>
+        <div class="clearfix">
             <a href="{% url 'conference:slug_welcome' slug=slug %}" class="btn btn-outline-primary float-right">Back
                 to {{ slug }}</a>
         </div>
-    </main>
+    </div>
 {% endblock %}
 {% block script %}{% endblock %}

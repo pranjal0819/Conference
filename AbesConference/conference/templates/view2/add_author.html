@@ -1,28 +1,25 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}Add Author | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
-    <main role="main" class="container bg-white pb-4">
-        {% for m in messages %}{{ m }}<br>{% endfor %}
-        <div class="px-md-3 pt-4">
-            <h2>Add Author</h2>
-            <form action="" method="post" class="px-md-2">{% csrf_token %}
-                <h3>Fill Author Detail</h3>
-                <div class="col-md-4 pb-3">Name:{{ form.name }}</div>
-                <div class="col-md-4 pb-3">Email:{{ form.email }}</div>
-                <div class="col-md-4 pb-3">Mobile Number:{{ form.mobileNumber }}</div>
-                <div class="col-md-4 pb-3">Organization:{{ form.organization }}</div>
-                <div class="col-md-4 pb-3">Country:{{ form.country }}</div>
-                <div class="col-md-4 pb-3">Url:{{ form.url }}</div>
-                <div class="px-3 py-3 clearfix">
-                    <div class="px-md-3 pt-3 pb-5 clearfix">
-                        <button type="submit" class="px-md-5 btn btn-outline-primary">Submit</button>
-                        <button type="reset" class="btn btn-outline-danger">Reset</button>
-                        <a href="{% url 'conference:view_all_paper' slug=slug %}"
-                           class="btn btn-outline-primary float-right">View All Submission</a>
-                    </div>
+    <div class="px-md-3 pt-4 bg-white">
+        <h2>Add Author</h2>
+        <form action="" method="post" class="px-md-2">{% csrf_token %}
+            <h3>Fill Author Detail</h3>
+            <div class="col-md-4 pb-3">Name:{{ form.name }}</div>
+            <div class="col-md-4 pb-3">Email:{{ form.email }}</div>
+            <div class="col-md-4 pb-3">Mobile Number:{{ form.mobileNumber }}</div>
+            <div class="col-md-4 pb-3">Organization:{{ form.organization }}</div>
+            <div class="col-md-4 pb-3">Country:{{ form.country }}</div>
+            <div class="col-md-4 pb-3">Url:{{ form.url }}</div>
+            <div class="px-3 py-3 clearfix">
+                <div class="px-md-3 pt-3 pb-5 clearfix">
+                    <button type="submit" class="px-md-5 btn btn-outline-primary">Submit</button>
+                    <button type="reset" class="btn btn-outline-danger">Reset</button>
+                    <a href="{% url 'conference:view_all_paper' slug=slug %}"
+                       class="btn btn-outline-primary float-right">View All Submission</a>
                 </div>
-            </form>
-        </div>
-    </main>
+            </div>
+        </form>
+    </div>
 {% endblock %}
 {% block script %}{% endblock %}

@@ -1,86 +1,110 @@
 {% extends 'base.html' %}{% load staticfiles %}{% block head_title %}Paper Detail | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
-    <main role="main" class="container bg-white pb-4">
-        {% for m in messages %}{{ m }}<br>{% endfor %}
-        <div class="px-3 pt-4 pb-5">
-            <h2>Paper Information</h2>
-            <div class="px-3">
-                <h4>Title</h4>
-                <p class="lead px-3">{{ paper_record.title }}</p>
+    <div class="px-3 pt-4 pb-5 bg-white">
+        <h2>Paper Information</h2>
+        <div class="px-3">
+            <h4>Title</h4>
+            <p class="lead px-3">{{ paper_record.title }}</p>
+            <hr>
+            <h4>Keywords</h4>
+            <pre style="white-space: pre-wrap" class="px-3">{{ paper_record.keywords }}</pre>
+            <hr>
+            <h4>Abstract</h4>
+            <pre style="white-space: pre-wrap" class="px-3">{{ paper_record.abstract }}</pre>
+            <hr>
+            <div class="lead clearfix">
+                Status: {% if paper_record.status == 5 %}
+                <span style="color: green">Accepted</span>
+            {% elif paper_record.status == 3 %}
+                <span style="color: #3eb1ff;">Pending</span>
+            {% else %}
+                <span style="color: red">Not Accepted</span>
+            {% endif %}
+                {% if paper_user %}
+                    <a href="{% url 'conference:download_paper' slug=slug pk=paper_record.pk %}" target="_blank"
+                       class="btn btn-outline-info float-right">Download Paper</a>
+                {% endif %}<br>
+                Submission Date: {{ paper_record.timestamp }}<br>
+                Update Date:{{ paper_record.update }}
+            </div>
+            <hr>
+            {% if owner %}
+                <h4>Bidding Information</h4>
+                <div class="lead">Pc Member: {% for list in pc_users %}{{ list.name }},{% endfor %}</div>
+                <hr>{% endif %}
+            {% if paper_record.review %}
+                <h4>Chair Person Comment</h4>
+                <pre style="white-space: pre-wrap" class="lead px-3">{{ paper_record.review }}</pre>
                 <hr>
-                <h4>Keywords</h4>
-                <pre style="white-space: pre-wrap" class="px-3">{{ paper_record.keywords }}</pre>
-                <hr>
-                <h4>Abstract</h4>
-                <pre style="white-space: pre-wrap" class="px-3">{{ paper_record.abstract }}</pre>
-                <hr>
-                <div class="lead clearfix">
-                    Status: {% if paper_record.status == 5 %}
-                    <span style="color: green">Accepted</span>
-                {% elif paper_record.status == 3 %}
-                    <span style="color: #3eb1ff;">Pending</span>
-                {% else %}
-                    <span style="color: red">Not Accepted</span>
-                {% endif %}
-                    {% if paper_user %}
-                        <a href="{% url 'conference:download_paper' slug=slug pk=paper_record.pk %}" target="_blank"
-                           class="btn btn-outline-info float-right">Download Paper</a>
-                    {% endif %}<br>
-                    Submission Date: {{ paper_record.timestamp }}<br>
-                    Update Date:{{ paper_record.update }}
+            {% endif %}
+        </div>
+        <div class="px-4 py-4 mt-3 table-responsive-xl">
+            Author Details
+            <table class="table table-bordered table-hover" id="myTable">
+                <thead>
+                <tr style="font-weight: 600;">
+                    <th scope="col">#</th>
+                    <th scope="col">Author Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Mobile Number</th>
+                    <th scope="col">Organization</th>
+                    <th scope="col">Country</th>
+                    <th scope="col">Url</th>
+                </tr>
+                </thead>
+                <tbody>{% for name in paper_record.author.all %}
+                    <tr>
+                        <td scope="row">{{ forloop.counter }}</td>
+                        <td>{{ name.name }}</td>
+                        <td>{% if name.email %}{{ name.email }}{% else %}-{% endif %}</td>
+                        <td>{% if name.mobileNumber %}{{ name.mobileNumber }}{% else %}-{% endif %}</td>
+                        <td>{% if name.organization %}{{ name.organization }}{% else %}-{% endif %}</td>
+                        <td>{% if name.country %}{{ name.country }}{% else %}-{% endif %}</td>
+                        <td>{% if name.webPage %}
+                            <a href="{{ name.webPage }}" target="_blank">{{ name.webPage }}</a>
+                        {% else %}-{% endif %}</td>
+                    </tr>{% endfor %}</tbody>
+            </table>
+        </div>
+        <div class="pb-2 clearfix">{% if paper_record.user == user %}
+            <a href="{% url 'conference:add_author' slug=slug pk=paper_record.pk %}" style="width:150px;"
+               class="btn btn-sm btn-outline-info float-right">Add another author</a>{% endif %}
+            {% if owner %}
+                <button class="btn btn-sm btn-outline-danger" style="width:150px;" data-toggle="modal"
+                        data-target="#myModal">Delete Paper
+                </button>
+                <a href="{% url 'conference:show_review' slug=slug pk=paper_record.id %}" style="width:150px;"
+                   class="btn btn-sm btn-outline-info float-right">Show all Review</a>
+            {% endif %}
+        </div>
+        <a href="{% url 'conference:view_all_paper' slug=slug %}" class="btn btn-outline-info btn-sm"
+           style="width:150px; float: right">Back to Paper List</a>
+    </div>
+    {% if owner %}
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Are you absolutely sure?</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Unexpected bad things will happen if you don’t read this!</p>
+                        <p>This action cannot be undone. This will permanently delete this
+                            <strong>{{ paper_record.title }}</strong> Submission, Author, Review and Comments.</p>
+                        <p>Please type <strong>delete</strong> to confirm.</p>
+                        <form action="" method="post">{% csrf_token %}
+                            {{ form.confirmation }}
+                            <button type="submit" class="btn btn-outline-danger btn-block mb-2">I understand the
+                                consequences, delete this Submission
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                <hr>
-                {% if owner %}
-                    <h4>Bidding Information</h4>
-                    <div class="lead">Pc Member: {% for list in pc_users %}{{ list.name }},{% endfor %}</div>
-                    <hr>{% endif %}
-                {% if paper_record.review %}
-                    <h4>Chair Person Comment</h4>
-                    <pre style="white-space: pre-wrap" class="lead px-3">{{ paper_record.review }}</pre>
-                    <hr>
-                {% endif %}
             </div>
-            <div class="px-4 py-4 mt-3 table-responsive-xl">
-                Author Details
-                <table class="table table-bordered table-hover" id="myTable">
-                    <thead>
-                    <tr style="font-weight: 600;">
-                        <th scope="col">#</th>
-                        <th scope="col">Author Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Mobile Number</th>
-                        <th scope="col">Organization</th>
-                        <th scope="col">Country</th>
-                        <th scope="col">Url</th>
-                    </tr>
-                    </thead>
-                    <tbody>{% for name in paper_record.author.all %}
-                        <tr>
-                            <td scope="row">{{ forloop.counter }}</td>
-                            <td>{{ name.name }}</td>
-                            <td>{% if name.email %}{{ name.email }}{% else %}-{% endif %}</td>
-                            <td>{% if name.mobileNumber %}{{ name.mobileNumber }}{% else %}-{% endif %}</td>
-                            <td>{% if name.organization %}{{ name.organization }}{% else %}-{% endif %}</td>
-                            <td>{% if name.country %}{{ name.country }}{% else %}-{% endif %}</td>
-                            <td>{% if name.webPage %}
-                                <a href="{{ name.webPage }}" target="_blank">{{ name.webPage }}</a>
-                            {% else %}-{% endif %}</td>
-                        </tr>{% endfor %}</tbody>
-                </table>
-            </div>
-            <div class="pb-2 clearfix">{% if paper_record.user == user %}
-                <a href="{% url 'conference:add_author' slug=slug pk=paper_record.pk %}" style="width:150px;"
-                   class="btn btn-sm btn-outline-info float-right">Add another author</a>{% endif %}
-                {% if owner %}
-                    <a href="{% url 'conference:delete_paper' slug=slug pk=paper_record.pk %}" style="width:150px;"
-                       class="btn btn-sm btn-outline-danger float-left">Delete Paper</a>
-                    <a href="{% url 'conference:show_review' slug=slug pk=paper_record.id %}" style="width:150px;"
-                       class="btn btn-sm btn-outline-info float-right">Show all Review</a>
-                {% endif %}
-            </div>
-            <a href="{% url 'conference:view_all_paper' slug=slug %}" class="btn btn-outline-info btn-sm"
-               style="width:150px; float: right">Back to Paper List</a></div>
-    </main>
+        </div>{% endif %}
 {% endblock %}
 {% block script %}{% endblock %}

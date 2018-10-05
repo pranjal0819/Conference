@@ -5,7 +5,7 @@ from django.shortcuts import render
 
 # Create your views here.
 def home(request):
-    conference_list = ConferenceRecord.objects.all().order_by('-id')
+    conference_list = ConferenceRecord.objects.filter(active=True).order_by('-id')
     return render(request, "index.html", {'conference_list': conference_list})
 
 

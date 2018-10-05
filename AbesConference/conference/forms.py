@@ -107,6 +107,11 @@ class PaperRecordForm(forms.ModelForm):
             self.fields['file'].widget.attrs['disabled'] = True
 
 
+class ConfirmationForm(forms.Form):
+    confirmation = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control mb-3'}), max_length=15,
+                                   required=True)
+
+
 class ReviewPaperForm(forms.ModelForm):
     overallEvaluation = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Your comment'}), max_length=500)
     point = forms.CharField(widget=forms.NumberInput(), max_length=5)
