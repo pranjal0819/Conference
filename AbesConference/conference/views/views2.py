@@ -376,8 +376,8 @@ class UpdateAuthor(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
             conference, owner = get_conference(request, kwargs['slug'], 'X0AH01')
-            get_paper(conference, kwargs['pk'], 'X0AH02')
-            if owner:
+            paper = get_paper(conference, kwargs['paper'], 'X0AH02')
+            if paper.user == request.user or owner:
                 author = get_author(kwargs['pk'], 'X0AH03')
                 form = AuthorRecordForm(instance=author, sub=conference.submission)
                 return render(request, self.template,
@@ -398,14 +398,14 @@ class UpdateAuthor(TemplateView):
     def post(self, request, **kwargs):
         try:
             conference, owner = get_conference(request, kwargs['slug'], 'X0AH04')
-            get_paper(conference, kwargs['pk'], 'X0AH05')
-            if owner:
+            paper = get_paper(conference, kwargs['paper'], 'X0AH05')
+            if paper.user == request.user or owner:
                 author = get_author(kwargs['pk'], 'X0AH06')
                 form = AuthorRecordForm(request.POST, instance=author, sub=conference.submission)
                 if form.is_valid():
                     form.save()
                     messages.success(request, 'Successfully Updated')
-                    return redirect('conference:view_all_paper', kwargs['slug'])
+                    return redirect('conference:view_detail', slug=kwargs['slug'], pk=kwargs['paper'])
                 else:
                     messages.error(request, 'Invalid Input. Try Again. Error Code: X0AG05')
                 form = AuthorRecordForm(sub=conference.submission)

@@ -13,7 +13,7 @@ class ConferenceForm(forms.ModelForm):
         attrs={'class': 'form-control', 'placeholder': 'Conference Detail'}), required=True, max_length=1000)
     end_date = forms.DateField(widget=forms.widgets.DateInput(
         attrs={'class': 'form-control', 'placeholder': 'yyyy-mm-dd', 'style': "width: 150px"}, format="%Y/%m/%d"),
-        required=True, )
+        required=True)
 
     class Meta:
         model = ConferenceRecord
@@ -33,13 +33,13 @@ class AuthorRecordForm(forms.ModelForm):
         attrs={'class': 'form-control', 'placeholder': 'Country Name*'}), max_length=50, required=True)
     organization = forms.CharField(widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Organization*'}), max_length=100, required=True)
-    url = forms.CharField(widget=forms.TextInput(
+    webPage = forms.CharField(widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'http://example.com/', 'pattern': "https?://.+"}),
         max_length=50, required=False)
 
     class Meta:
         model = AuthorRecord
-        fields = ['name', 'email', 'mobileNumber', 'country', 'organization', 'url']
+        fields = ['name', 'email', 'mobileNumber', 'country', 'organization', 'webPage']
 
     def __init__(self, *args, sub, **kwargs):
         super(AuthorRecordForm, self).__init__(*args, **kwargs)
@@ -49,7 +49,7 @@ class AuthorRecordForm(forms.ModelForm):
             self.fields['mobileNumber'].widget.attrs['disabled'] = True
             self.fields['country'].widget.attrs['disabled'] = True
             self.fields['organization'].widget.attrs['disabled'] = True
-            self.fields['url'].widget.attrs['disabled'] = True
+            self.fields['webPage'].widget.attrs['disabled'] = True
 
 
 class AuthorRecordForm1(forms.ModelForm):
@@ -65,13 +65,13 @@ class AuthorRecordForm1(forms.ModelForm):
         attrs={'class': 'form-control', 'placeholder': 'Country Name'}), max_length=50, required=False)
     organization = forms.CharField(widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Organization'}), max_length=100, required=False)
-    url = forms.CharField(widget=forms.TextInput(
+    webPage = forms.CharField(widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'http://example.com/', 'pattern': "https?://.+"}),
         max_length=50, required=False)
 
     class Meta:
         model = AuthorRecord
-        fields = ['name', 'email', 'mobileNumber', 'country', 'organization', 'url']
+        fields = ['name', 'email', 'mobileNumber', 'country', 'organization', 'webPage']
 
     def __init__(self, *args, sub, **kwargs):
         super(AuthorRecordForm1, self).__init__(*args, **kwargs)
@@ -81,7 +81,7 @@ class AuthorRecordForm1(forms.ModelForm):
             self.fields['mobileNumber'].widget.attrs['disabled'] = True
             self.fields['country'].widget.attrs['disabled'] = True
             self.fields['organization'].widget.attrs['disabled'] = True
-            self.fields['url'].widget.attrs['disabled'] = True
+            self.fields['webPage'].widget.attrs['disabled'] = True
 
 
 class PaperRecordForm(forms.ModelForm):

@@ -39,8 +39,8 @@
                 <hr>
             {% endif %}
         </div>
-        <div class="px-4 py-4 mt-3 table-responsive-xl">
-            Author Details
+        <div class="px-4 table-responsive-xl">
+            <h4>Author Details</h4>
             <table class="table table-bordered table-hover" id="myTable">
                 <thead>
                 <tr style="font-weight: 600;">
@@ -50,8 +50,8 @@
                     <th scope="col">Mobile Number</th>
                     <th scope="col">Organization</th>
                     <th scope="col">Country</th>
-                    <th scope="col">Url</th>
-                </tr>
+                    <th scope="col">Url</th>{% if paper_record.user == user %}
+                    <th scope="col">Edit</th>{% endif %}</tr>
                 </thead>
                 <tbody>{% for name in paper_record.author.all %}
                     <tr>
@@ -62,9 +62,10 @@
                         <td>{% if name.organization %}{{ name.organization }}{% else %}-{% endif %}</td>
                         <td>{% if name.country %}{{ name.country }}{% else %}-{% endif %}</td>
                         <td>{% if name.webPage %}
-                            <a href="{{ name.webPage }}" target="_blank">{{ name.webPage }}</a>
-                        {% else %}-{% endif %}</td>
-                    </tr>{% endfor %}</tbody>
+                            <a href="{{ name.webPage }}" target="_blank">{{ name.webPage }}</a>{% else %}-{% endif %}
+                        </td>{% if paper_record.user == user %}
+                        <td><a href="{% url 'conference:update_author' slug=slug paper=paper_record.pk pk=name.pk %}">Edit</a>
+                        </td>{% endif %}</tr>{% endfor %}</tbody>
             </table>
         </div>
         <div class="pb-2 clearfix">{% if paper_record.user == user %}

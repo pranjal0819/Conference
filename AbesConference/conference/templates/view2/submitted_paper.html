@@ -1,23 +1,18 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}View All Paper | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}{% block content %}
     <div class="bg-white pb-4 px-md-5 px-2">
-        <div class="pt-4 d-flex justify-content-between">
-            <h2>{{ slug }} List of Submissions</h2>
+        <div class="pt-4 d-flex justify-content-between"><h2>{{ slug }} List of Submissions</h2>
             <div style="width: 300px">
                 <input type="text" class="form-control" id="search" onkeyup="mySearch123()" placeholder="Search...">
             </div>
         </div>
-        <div class="pb-2">
-            {% if owner %}
-                <i class="material-icons" style="font-size: 24px;">&#xe7f0;</i>
-                <span>Assign Paper to Program Member Committee</span>,
-                <i class="material-icons" style="font-size: 24px;">&#xe02f;</i>
-                <span>Show the Review of the Paper</span><br>
-                <i class="material-icons table-icon" style="font-size: 24px;">&#xe5d5;</i><span>Update the Paper,</span>
-            {% endif %}
-            <i class="material-icons table-icon" style="color: #00bb00; font-size: 24px;">&#xe876;</i>Accepted, <i
-                class="material-icons table-icon" style="color: #3eb1ff; font-size: 24px;">&#xe15b;</i>Pending, <i
-                class="material-icons table-icon" style="color: #FF0000; font-size: 24px;">&#xe5cd;</i>Rejected
+        <div class="pb-2">{% if owner %}
+            <img src="{% static 'images/icons8-user.png' %}"><span>Assign Paper to Program Member Committee</span>,
+            <img src="{% static 'images/icons8-versions.png' %}"><span>Show the Review of the Paper</span><br>
+            <img src="{% static 'images/icons8-edit.png' %}"><span>Update the Paper,</span>{% endif %}
+            <img src="{% static 'images/icons8-check.png' %}">Accepted,
+            <img src="{% static 'images/icons8-horizontal-line.png' %}">Pending,
+            <img src="{% static 'images/icons8-delete.png' %}">Rejected
         </div>
         <div class="py-3 pb-2 table-responsive-xl">{% if paper_list %}
             <table class="table table-bordered table-hover" id="myTable">
@@ -28,17 +23,15 @@
                     <th scope="col" width="30%">Title</th>
                     <th scope="col" width="15%">Keywords</th>
                     <th scope="col" style="font-size: 11px;">Detail</th>
-                    <th scope="col" style="font-size: 11px;">Download</th>
-                    {% if owner %}
-                        <th scope="col" style="font-size: 11px;">Assign</th>
-                        <th scope="col" style="font-size: 11px;">Reviews</th>
-                        <th scope="col" style="font-size: 11px;">Update</th>{% endif %}
+                    <th scope="col" style="font-size: 11px;">Download</th>{% if owner %}
+                    <th scope="col" style="font-size: 11px;">Assign</th>
+                    <th scope="col" style="font-size: 11px;">Reviews</th>
+                    <th scope="col" style="font-size: 11px;">Update</th>{% endif %}
                     <th scope="col" style="font-size: 11px;">Status</th>
                     <th scope="col" style="font-size: 11px; text-align: center">Submission Date</th>
                 </tr>
                 </thead>
-                <tbody>
-                {% for list in paper_list %}
+                <tbody>{% for list in paper_list %}
                     <tr>
                         <td scope="row">{{ forloop.counter }}</td>
                         <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
@@ -46,40 +39,32 @@
                         <td>{{ list.keywords }}</td>
                         <td style="text-align: center; vertical-align: middle;">
                             <a href="{% url 'conference:view_detail' slug=slug pk=list.pk %}">
-                                <i class="material-icons table-icon">&#xe88f;</i></a></td>
+                                <img src="{% static 'images/icons8-document.png' %}"></a>
+                        </td>
                         <td style="text-align: center; vertical-align: middle; ">
                             <a href="{% url 'conference:download_paper' slug=slug pk=list.pk %}" target="_blank">
-                                <i class="material-icons table-icon">&#xe2c0;</i></a></td>
-                        {% if owner %}
-                            <td style="text-align: center; vertical-align: middle;">
-                                <a href="{% url 'conference:select_user' slug=slug pk=list.pk %}">
-                                    <i class="material-icons table-icon">&#xe7f0;</i></a></td>
-                            <td style="text-align: center; vertical-align: middle;">
-                                <a href="{% url 'conference:show_review' slug=slug pk=list.pk %}">
-                                    <i class="material-icons table-icon">&#xe02f;</i></a></td>
-                            <td style="text-align: center; vertical-align: middle;">
-                                <a href="{% url 'conference:update_paper' slug=slug pk=list.pk %}"><i
-                                        class="material-icons table-icon">&#xe5d5;</i></a></td>
-                        {% endif %}
+                                <img src="{% static 'images/icons8-download.png' %}"></a>{% if owner %}
                         <td style="text-align: center; vertical-align: middle;">
-                            {% if list.status == 5 %}
-                                <i class="material-icons table-icon" style="color: #00bb00">&#xe876;</i>
-                            {% elif list.status == 3 %}
-                                <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
-                            {% else %}
-                                <i class="material-icons table-icon" style="color: red">&#xe5cd;</i>
-                            {% endif %}
+                            <a href="{% url 'conference:select_user' slug=slug pk=list.pk %}">
+                                <img src="{% static 'images/icons8-user.png' %}"></a>
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
-                            {{ list.timestamp|date:'M-d-Y' }}</td>
-                    </tr>
-                {% endfor %}</tbody>
-            </table>{% else %}<h3>No Submission yet</h3>{% endif %}
-        </div>
+                            <a href="{% url 'conference:show_review' slug=slug pk=list.pk %}">
+                                <img src="{% static 'images/icons8-versions.png' %}"></a>
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            <a href="{% url 'conference:update_paper' slug=slug pk=list.pk %}">
+                                <img src="{% static 'images/icons8-edit.png' %}"></a></td>{% endif %}
+                        <td style="text-align: center; vertical-align: middle;">{% if list.status == 5 %}
+                            <img src="{% static 'images/icons8-check.png' %}">{% elif list.status == 3 %}
+                            <img src="{% static 'images/icons8-horizontal-line.png' %}">{% else %}
+                            <img src="{% static 'images/icons8-delete.png' %}">{% endif %}</td>
+                        <td style="text-align: center; vertical-align: middle;">{{ list.timestamp|date:'M-d-Y' }}</td>
+                    </tr>{% endfor %}</tbody>
+            </table>{% else %}<h3>No Submission yet</h3>{% endif %}</div>
         <div class="clearfix">
             <a href="{% url 'conference:slug_welcome' slug=slug %}" class="btn btn-outline-primary float-right">Back
-                to {{ slug }}</a>
-        </div>
+                to {{ slug }}</a></div>
     </div>
 {% endblock %}
 {% block script %}{% endblock %}

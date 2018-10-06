@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <a href="{% url 'conference:view_all_paper' slug %}" class="text-dark"
                        style="text-decoration: none">
-                        <i class="icons1 fa-list-ul"></i>
+                        <img src="{% static 'images/icons8-cloud.png' %}">
                         <h3>List of Submitted Paper</h3>
                         <p></p>
                         <button type="button" class="btn btn-lg btn-block btn-outline-primary">View all Paper
@@ -24,7 +24,7 @@
                 <div class="card-body">
                     <a href="{% url 'conference:submit_paper' slug %}" class="text-dark"
                        style="text-decoration: none">
-                        <i class="icons1 fa-file-pdf-o"></i>
+                        <img src="{% static 'images/icons8-pdf.png' %}">
                         <h3>Submit Paper</h3>
                         <p></p>
                         <button type="button" class="btn btn-lg btn-block btn-outline-primary">Submit Paper</button>
@@ -34,7 +34,7 @@
                 <div class="card-body">
                     <a href="{% url 'conference:review_list' slug %}" class="text-dark"
                        style="text-decoration: none">
-                        <i class="icons1 fa-download"></i>
+                        <img src="{% static 'images/icons8-reading.png' %}">
                         <h3>Review Paper</h3>
                         <p></p>
                         <button type="button" class="btn btn-lg btn-block btn-outline-primary">Review Paper</button>
@@ -45,7 +45,7 @@
                     <div class="card-body">
                         <a href="{% url 'conference:manage_pc_member' slug %}" class="text-dark"
                            style="text-decoration: none">
-                            <i class="icons1 fa-download"></i>
+                            <img src="{% static 'images/icons8-user-group.png' %}">
                             <h3>Manage PC Member</h3>
                             <p></p>
                             <button type="button" class="btn btn-lg btn-block btn-outline-primary">Manage PC Member

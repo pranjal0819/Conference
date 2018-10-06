@@ -48,7 +48,8 @@
                         <td>{% if name.webPage %}
                             <a href="{{ name.webPage }}" target="_blank">{{ name.webPage }}</a>
                         {% else %}-{% endif %}</td>
-                        <td><a href="{% url 'conference:update_author' slug=slug pk=name.pk %}">Edit</a></td>
+                        <td><a href="{% url 'conference:update_author' slug=slug paper=paper.pk pk=name.pk %}">Edit</a>
+                        </td>
                     </tr>{% endfor %}</tbody>
             </table>
         </div>
