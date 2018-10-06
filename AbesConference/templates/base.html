@@ -9,13 +9,12 @@
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     {#<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">#}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/icon.css' %}">
     {% block css %}{% endblock css %}
 </head>
 <body>
 <div class="d-flex flex-column flex-md-row align-items-center px-md-4 bg-light border-bottom shadow-sm">
-    <a class="mr-md-auto" href="{% url 'home' %}"><img src="{% static 'images/logo.png' %}" alt="ABES EC"
-                                                       style="width: 195px;"></a>
+    <a class="mr-md-auto" href="{% url 'home' %}">
+        <img src="{% static 'images/logo.png' %}" alt="ABES EC" style="width: 195px;"></a>
     <nav class="my-2 my-md-0 mr-md-3 align-items-md-center">
         {% if user.is_authenticated %}Welcome {{ user.first_name }}{% if owner %} (Chair Person){% endif %}{% endif %}
         <a class="p-2 text-dark" href="{% url 'home' %}">Home</a>
