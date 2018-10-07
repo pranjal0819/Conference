@@ -130,7 +130,7 @@ class PcMembersForPaper(TemplateView):
 
 
 # noinspection PyBroadException
-# Error Code X3DE01, X3DE03, X3DE04, X3DE10
+# Error Code X3DE01, X3DE03, X3DE04, X3DE05, X3DE10
 class SelectForPaper(TemplateView):
 
     def get(self, request, *args, **kwargs):
@@ -140,15 +140,15 @@ class SelectForPaper(TemplateView):
                 user = get_pc_member(conference, kwargs['user_email'], 'X3DE02')
                 paper = get_paper(conference, kwargs['paper_pk'], 'X3DE03')
                 try:
-                    instance = ReviewPaperRecord.objects.get(reviewUser=user, paper=paper)
+                    instance = get_review_paper(user, paper, 'X3DE04')
                     instance.delete()
                     added = False
-                    messages.success(request, 'Removed Successfully')
+                    # messages.success(request, 'Removed Successfully')
                 except ObjectDoesNotExist:
                     instance = ReviewPaperRecord.objects.create(reviewUser=user, paper=paper, reviewCon=conference)
                     instance.save()
                     added = True
-                    messages.success(request, 'Add Successfully')
+                    # messages.success(request, 'Add Successfully')
                 if request.is_ajax():
                     return JsonResponse({'added': added})
                 return redirect("conference:select_user", slug=kwargs['slug'], pk=kwargs['paper_pk'])
@@ -159,7 +159,7 @@ class SelectForPaper(TemplateView):
             return redirect('home')
         except PermissionDenied:
             auth.logout(request)
-            messages.warning(request, 'Permission Denied. Error Code: X3DE04')
+            messages.warning(request, 'Permission Denied. Error Code: X3DE05')
             return redirect('home')
         except Exception:
             auth.logout(request)
