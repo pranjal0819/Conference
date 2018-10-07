@@ -1,7 +1,7 @@
 {% extends 'base.html' %}{% load staticfiles %}{% block head_title %}Update Paper | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
-    <div class="px-3 pt-4 pb-5 bg-white">
+    <div class="px-3 pt-4 pb-5 bg-white rounded shadow-sm">
         <h2>Paper Information</h2>
         <form class="px-3" method="post" enctype="multipart/form-data">{% csrf_token %}
             <h4>Title</h4>

@@ -117,6 +117,27 @@ function mySearch123456() {
         }
     }
 }
+function mySearch125() {
+    let input, filter, table, tr, td1, td2, td5, i;
+    input = document.getElementById("search");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+        td1 = tr[i].getElementsByTagName("td")[1];
+        td2 = tr[i].getElementsByTagName("td")[2];
+        td5 = tr[i].getElementsByTagName("td")[5];
+        if (td1 || td2 || td5) {
+            if ((td1.innerHTML.toUpperCase().indexOf(filter) > -1) ||
+                (td2.innerHTML.toUpperCase().indexOf(filter) > -1) ||
+                (td5.innerHTML.toUpperCase().indexOf(filter) > -1)) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
 
 function mySearch1245() {
     let input, filter, table, tr, td1, td2, td4, td5, i;

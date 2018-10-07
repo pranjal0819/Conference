@@ -1,7 +1,7 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}Welcome |{{ block.super }}{% endblock head_title %}
 {% block css %}{% endblock %}
 {% block content %}
-    <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center bg-white">
+    <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center bg-white rounded shadow-sm">
         <h1>Welcome to</h1>
         <h2>{{ slug }}</h2>
         <p class="lead ">{{ slug.name }}</p>
@@ -16,28 +16,26 @@
                         <img src="{% static 'images/icons8-cloud.png' %}">
                         <h3>List of Submitted Paper</h3>
                         <p></p>
-                        <button type="button" class="btn btn-lg btn-block btn-outline-primary">View all Paper
+                        <button class="btn btn-lg btn-block btn-outline-primary">View all Paper
                         </button>
                     </a></div>
             </div>
             <div class="card mb-4 shadow-sm">
                 <div class="card-body">
-                    <a href="{% url 'conference:submit_paper' slug %}" class="text-dark"
-                       style="text-decoration: none">
+                    <a href="{% url 'conference:submit_paper' slug %}" class="text-dark" style="text-decoration: none">
                         <img src="{% static 'images/icons8-pdf.png' %}">
                         <h3>Submit Paper</h3>
                         <p></p>
-                        <button type="button" class="btn btn-lg btn-block btn-outline-primary">Submit Paper</button>
+                        <button class="btn btn-lg btn-block btn-outline-primary">Submit Paper</button>
                     </a></div>
             </div>
             <div class="card mb-4 shadow-sm">
                 <div class="card-body">
-                    <a href="{% url 'conference:review_list' slug %}" class="text-dark"
-                       style="text-decoration: none">
+                    <a href="{% url 'conference:review_list' slug %}" class="text-dark" style="text-decoration: none">
                         <img src="{% static 'images/icons8-reading.png' %}">
                         <h3>Review Paper</h3>
                         <p></p>
-                        <button type="button" class="btn btn-lg btn-block btn-outline-primary">Review Paper</button>
+                        <button class="btn btn-lg btn-block btn-outline-primary">Review Paper</button>
                     </a></div>
             </div>
             {% if owner %}
@@ -48,8 +46,7 @@
                             <img src="{% static 'images/icons8-user-group.png' %}">
                             <h3>Manage PC Member</h3>
                             <p></p>
-                            <button type="button" class="btn btn-lg btn-block btn-outline-primary">Manage PC Member
-                            </button>
+                            <button class="btn btn-lg btn-block btn-outline-primary">Manage PC Member</button>
                         </a></div>
                 </div>
             {% endif %}

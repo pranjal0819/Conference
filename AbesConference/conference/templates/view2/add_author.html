@@ -1,7 +1,7 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}Add Author | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
-    <div class="px-md-3 pt-4 bg-white">
+    <div class="px-md-3 pt-4 bg-white rounded shadow-sm">
         <h2>Add Author</h2>
         <form action="" method="post" class="px-md-2">{% csrf_token %}
             <h3>Fill Author Detail</h3>

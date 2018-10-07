@@ -99,21 +99,18 @@ class Login(TemplateView):
             if result['success']:
                 username = request.POST['user']
                 password = request.POST['pass']
-                if username is not "":
-                    try:
-                        User.objects.get(username=username.lower())
-                        user = auth.authenticate(username=username.lower(), password=password)
-                        if user is not None:
-                            auth.login(request, user)
-                            if 'next' in request.POST:
-                                return redirect(request.POST.get('next'))
-                            return redirect("home")
-                        else:
-                            messages.error(request, "Username and password did not match")
-                    except ObjectDoesNotExist:
-                        messages.error(request, "User does not exit")
-                else:
-                    messages.error(request, 'Enter Username and Password')
+                try:
+                    User.objects.get(username=username.lower())
+                    user = auth.authenticate(username=username.lower(), password=password)
+                    if user is not None:
+                        auth.login(request, user)
+                        if 'next' in request.POST:
+                            return redirect(request.POST.get('next'))
+                        return redirect("home")
+                    else:
+                        messages.error(request, "Username and password did not match")
+                except ObjectDoesNotExist:
+                    messages.error(request, "User does not exit")
             else:
                 messages.error(request, 'Invalid reCAPTCHA. Please try again.')
         except ObjectDoesNotExist:
@@ -174,7 +171,7 @@ class Signup(TemplateView):
                 messages.error(request, 'Problem to Sending Email. Please Contact Us.')
                 return redirect("account:signup")
         else:
-            messages.error(request, "Please try again")
+            messages.error(request, "Invalid Input. Please try again")
         return render(request, self.template_name, {'form': form})
 
 

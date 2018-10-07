@@ -1,6 +1,6 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}View All Paper | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}{% block content %}
-    <div class="bg-white pb-4 px-md-5 px-2">
+    <div class="bg-white pb-4 px-md-5 px-2 rounded shadow-sm">
         <div class="pt-4 d-flex justify-content-between"><h2>{{ slug }} List of Submissions</h2>
             <div style="width: 300px">
                 <input type="text" class="form-control" id="search" onkeyup="mySearch123()" placeholder="Search...">

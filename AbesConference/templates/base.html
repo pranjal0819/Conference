@@ -84,7 +84,7 @@
 <div class="mt-4">
     <main role="main" class="container {% if owner %}col-md-11{% endif %} pb-4">
         {% for m in messages %}
-            <div class="alert {% if m.tags == 'success' %}alert-success{% else %}alert-danger{% endif %} alert-dismissible fade show col-md-4 offset-md-4"
+            <div class="alert {% if m.tags == 'success' %}alert-success{% elif m.tags == 'warning' %}alert-warning{% else %}alert-danger{% endif %} alert-dismissible fade show col-md-4 offset-md-4"
                  role="alert">
                 {{ m }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">

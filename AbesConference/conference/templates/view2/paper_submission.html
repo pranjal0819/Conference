@@ -1,14 +1,15 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}Submit Paper | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
-    <div class="p-3 pt-4 bg-white">
+    <div class="p-3 pt-4 bg-white rounded shadow-sm">
         {% if not open %}<h2 style="color: red; margin: 0;">Submission Closed</h2>{% else %}
             <h2 style="margin: 0;">Submit Paper</h2>{% endif %}
         <form enctype="multipart/form-data" action="" method="post" class="px-md-2">{% csrf_token %}
             <h3 style="margin: 0">Author Information</h3>
             <ul>
                 <li>The required fields are marked by (<strong>*</strong>).</li>
-                <li>Registered Email address(During the Sign-Up) will only be used for communication with the author.</li>
+                <li>Registered Email address(During the Sign-Up) will only be used for communication with the author.
+                </li>
                 <li>User can add maximum 6 Author Detail at a Submission Time. After the submission you can other author
                     detail.
                 </li>
@@ -24,7 +25,7 @@
                 <div class="form-row px-md-5">
                     <div class="col-md-4 pb-3">{{ form1.organization }}</div>
                     <div class="col-md-4 pb-3">{{ form1.country }}</div>
-                    <div class="col-md-4 pb-3">{{ form1.url }}</div>
+                    <div class="col-md-4 pb-3">{{ form1.webPage }}</div>
                 </div>
                 {{ formset.management_form }}
                 {% for form2 in formset %}
@@ -52,21 +53,17 @@
                 <div class="pb-4 col-md-4">{{ paper_form.keywords }}</div>
                 <div class="pb-4 col-md-8">{{ paper_form.abstract }}</div>
                 <div class="pb-4">{{ paper_form.file }} Pdf File Only</div>
-            </div>
-            {% if owner %}
-                <div class="col-md-4 px-md-5 pt-3">
-                    <label>Enter User Name of Author*</label>{{ confirmation_form.confirmation }}
-{#                    <input type="text" class="form-control" name="user" placeholder="Author User Name*" required#}
-{#                           maxlength="50" value="{{ user }}" {% if not open %}disabled{% endif %}></div>#}
-                </div>{% endif %}
+            </div>{% if owner %}
+                <div class="col-md-4 px-md-5 pt-3"><label>Enter User Name of Author*</label>
+                    {{ confirmation_form.confirmation }}</div>{% endif %}
             <div class="px-md-5 pt-3 pb-5 clearfix">
                 <button type="submit" class="px-md-5 btn btn-outline-primary" {% if not open %}disabled{% endif %}>
                     Submit
                 </button>
                 <button type="reset" class="btn btn-outline-danger" {% if not open %}disabled{% endif %}>Reset
                 </button>
-                <a href="{% url 'conference:view_all_paper' slug=slug %}"
-                   class="btn btn-outline-primary float-right">View All Submission</a>
+                <a href="{% url 'conference:view_all_paper' slug=slug %}" class="btn btn-outline-info float-right">View
+                    All Submission</a>
             </div>
         </form>
     </div>

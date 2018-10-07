@@ -1,8 +1,8 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}Login | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
-    <main role="main" class="container bg-white" style="width: 360px;">
-        <div class="px-3 pt-4 pb-5">
+    <main role="main" class="container col-md-4 bg-white">
+        <div class="px-md-3 px-2 pt-4 pb-5">
             <div style="text-align: center">
                 <h3>Login To Your Account</h3>{% if request.GET.next %}<h3>Required</h3>{% endif %}
                 {% for m in messages %}{{ m }}<br>{% endfor %}</div>
@@ -17,20 +17,20 @@
                 </div>
                 {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
                 <script src='https://www.google.com/recaptcha/api.js'></script>
-                <div class="mb-3 g-recaptcha" data-callback="capcha_filled" data-expired-callback="capcha_expired"
-                     data-sitekey="6Ld5a2gUAAAAAA7LIc7ugPczbREEnZ3FVB2o2Cvu"></div>
-                <button type="submit" class="btn btn-outline-info btn-block mb-3">Login</button>
+                <div class="mb-3 g-recaptcha float-right" data-expired-callback="capcha_expired"
+                     data-callback="capcha_filled" data-sitekey="6Ld5a2gUAAAAAA7LIc7ugPczbREEnZ3FVB2o2Cvu"></div>
+                <button type="submit" class="btn btn-outline-success btn-block mb-3">Login</button>
                 <a href="{% url 'account:signup' %}" class="btn btn-outline-danger btn-block">Signup</a>
             </form>
         </div>
     </main>
 {% endblock %}
 {% block script %}
-<script>
-  grecaptcha.ready(function() {
-      grecaptcha.execute('reCAPTCHA_site_key', {action: 'homepage'}).then(function(token) {
-         alert("error");
-      });
-  });
-  </script>
+    <script>
+        grecaptcha.ready(function () {
+            grecaptcha.execute('reCAPTCHA_site_key', {action: 'homepage'}).then(function (token) {
+                alert("error");
+            });
+        });
+    </script>
 {% endblock %}
