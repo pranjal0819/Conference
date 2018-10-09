@@ -74,7 +74,7 @@ class ViewDetail(TemplateView):
                 try:
                     pc_user = get_pc_member(conference, request.user.email, 'X2CC03')
                     try:
-                        get_review_paper(pc_user, paper, 'X2CC04')
+                        get_review_paper(conference, pc_user, paper, 'X2CC04')
                         paper_user = True
                     except Exception:
                         pass
@@ -243,7 +243,7 @@ class DownloadPaper(TemplateView):
             else:
                 pc_member = get_pc_member(conference, request.user.email, 'X2CE03')
                 if pc_member.accepted == 5:
-                    get_review_paper(pc_member, pc_member, 'X2CE04')
+                    get_review_paper(conference, pc_member, pc_member, 'X2CE04')
                     response = FileResponse(paper.file)
                     response['Content-Disposition'] = 'inline; filename={title}.pdf'.format(
                         title=kwargs['slug'] + "-" + str(kwargs['pk']))

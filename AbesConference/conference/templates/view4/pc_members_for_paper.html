@@ -15,6 +15,7 @@
                     <th scope="col" width="30%">Pc member Name</th>
                     <th scope="col" width="30%">Pc member Email</th>
                     <th scope="col" style="text-align: center">Bid</th>
+                    <th scope="col" width="20px" style="text-align: center; font-size: 12px;">Total Bid</th>
                     <th scope="col" style="text-align: center">Assign</th>
                     <th scope="col" style="text-align: center">Review</th>
                     <th scope="col" width="10px" style="text-align: center; font-size: 12px;">Total Assigned</th>
@@ -27,6 +28,7 @@
                         <td>{{ list.0.name }}</td>
                         <td>{{ list.0.pcEmail }}</td>
                         <td style="text-align: center">{% if list.1 %}Yes{% else %}No{% endif %}</td>
+                        <td style="text-align: center">{{ list.0.demand.all.count }}</td>
                         <td id="update{{ list.0.id }}">{% if list.2 %}
                             <button class="btn btn-outline-danger btn-sm col-12"
                                     onclick='loadDoc("{% url 'conference:selected_user' slug=slug paper_pk=paper.pk user_email=list.0.pcEmail %}", {{ list.0.id }})'>

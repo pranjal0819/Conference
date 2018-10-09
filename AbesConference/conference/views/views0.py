@@ -1,4 +1,4 @@
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 
 from ..models import ConferenceRecord, PaperRecord, PcMemberRecord, ReviewPaperRecord, AuthorRecord
 
@@ -33,7 +33,7 @@ def get_pc_member(conference, email, error_code):
     try:
         return PcMemberRecord.objects.get(pcCon=conference, pcEmail=email)
     except ObjectDoesNotExist:
-        raise ObjectDoesNotExist("PC Member Not Found. Error Code: " + error_code)
+        raise PermissionDenied("PC Member Not Found. Error Code: " + error_code)
 
 
 def get_all_pc_member(conference):
@@ -48,9 +48,9 @@ def get_all_pc_member_for_paper(conference, paper):
     return PcMemberRecord.objects.filter(pcCon=conference, demand=paper)
 
 
-def get_review_paper(pc_user, paper, error_code):
+def get_review_paper(conference, pc_user, paper, error_code):
     try:
-        return ReviewPaperRecord.objects.get(reviewUser=pc_user, paper=paper)
+        return ReviewPaperRecord.objects.get(reviewCon=conference, reviewUser=pc_user, paper=paper)
     except ObjectDoesNotExist:
         raise ObjectDoesNotExist("Review Not Found. Error Code: " + error_code)
 

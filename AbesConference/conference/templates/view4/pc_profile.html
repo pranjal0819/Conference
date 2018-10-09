@@ -20,13 +20,13 @@
                 <p class="lead px-3">{{ member.totalPaper }}</p>
                 <hr>
                 <h4>Assigned</h4>
-                <p class="lead px-3">
+                <p class="lead px-3">{% if not paper_list %}None{% endif %}
                     {% for paper in paper_list %}{{ forloop.counter }}.
                         <a href="{% url 'conference:view_detail' slug=slug pk=paper.paper.pk %}" class="text-dark">
                             {{ paper.paper.title }}</a><br>{% endfor %}</p>
                 <hr>
                 <h4>Bid</h4>
-                <p class="lead px-3">
+                <p class="lead px-3">{% if not member.demand.all %}None{% endif %}
                     {% for bid in member.demand.all %}{{ forloop.counter }}.
                         <a href="{% url 'conference:view_detail' slug=slug pk=bid.pk %}" class="text-dark">
                             {{ bid.title }}</a><br>{% endfor %}</p>

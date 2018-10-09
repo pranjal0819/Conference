@@ -103,7 +103,7 @@ class PcMembersForPaper(TemplateView):
                 list1 = []
                 for user in user_list:
                     try:
-                        instance = get_review_paper(user, paper, 'X3DD03')
+                        instance = get_review_paper(conference, user, paper, 'X3DD03')
                         li = [user, False, True, False]
                         if instance.complete:
                             li[3] = True
@@ -140,13 +140,17 @@ class SelectForPaper(TemplateView):
                 user = get_pc_member(conference, kwargs['user_email'], 'X3DE02')
                 paper = get_paper(conference, kwargs['paper_pk'], 'X3DE03')
                 try:
-                    instance = get_review_paper(user, paper, 'X3DE04')
+                    instance = get_review_paper(conference, user, paper, 'X3DE04')
                     instance.delete()
+                    user.totalPaper = user.totalPaper - 1
+                    user.save(update_fields=['totalPaper'])
                     added = False
                     # messages.success(request, 'Removed Successfully')
                 except ObjectDoesNotExist:
                     instance = ReviewPaperRecord.objects.create(reviewUser=user, paper=paper, reviewCon=conference)
                     instance.save()
+                    user.totalPaper = user.totalPaper + 1
+                    user.save(update_fields=['totalPaper'])
                     added = True
                     # messages.success(request, 'Add Successfully')
                 if request.is_ajax():

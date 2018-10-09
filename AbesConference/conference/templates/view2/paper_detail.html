@@ -8,10 +8,10 @@
             <p class="lead px-3">{{ paper_record.title }}</p>
             <hr>
             <h4>Keywords</h4>
-            <pre style="white-space: pre-wrap" class="px-3">{{ paper_record.keywords }}</pre>
+            <p class="px-3">{{ paper_record.keywords }}</p>
             <hr>
             <h4>Abstract</h4>
-            <pre style="white-space: pre-wrap" class="px-3">{{ paper_record.abstract }}</pre>
+            <p class="px-3">{{ paper_record.abstract }}</p>
             <hr>
             <div class="lead clearfix">
                 Status: {% if paper_record.status == 5 %}
