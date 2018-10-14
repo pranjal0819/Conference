@@ -70,14 +70,12 @@
         </div>
         <div class="pb-2 clearfix">{% if paper_record.user == user %}
             <a href="{% url 'conference:add_author' slug=slug pk=paper_record.pk %}" style="width:150px;"
-               class="btn btn-sm btn-outline-info float-right">Add another author</a>{% endif %}
-            {% if owner %}
-                <button class="btn btn-sm btn-outline-danger" style="width:150px;" data-toggle="modal"
-                        data-target="#myModal">Delete Paper
-                </button>
-                <a href="{% url 'conference:show_review' slug=slug pk=paper_record.id %}" style="width:150px;"
-                   class="btn btn-sm btn-outline-info float-right">Show all Review</a>
-            {% endif %}
+               class="btn btn-sm btn-outline-info float-right">Add another author</a>{% endif %}{% if owner %}
+            <button class="btn btn-sm btn-outline-danger" data-toggle="modal" data-target="#myModal"
+                    style="width:150px;">Delete Paper
+            </button>
+            <a href="{% url 'conference:show_review' slug=slug pk=paper_record.id %}" style="width:150px;"
+               class="btn btn-sm btn-outline-info float-right">Show all Review</a>{% endif %}
         </div>
         <a href="{% url 'conference:view_all_paper' slug=slug %}" class="btn btn-outline-info btn-sm"
            style="width:150px; float: right">Back to Paper List</a>

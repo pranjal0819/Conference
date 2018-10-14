@@ -29,6 +29,7 @@
                         <button class="btn btn-lg btn-block btn-outline-primary">Submit Paper</button>
                     </a></div>
             </div>
+            {% if pc_member %}
             <div class="card mb-4 shadow-sm">
                 <div class="card-body">
                     <a href="{% url 'conference:review_list' slug %}" class="text-dark" style="text-decoration: none">
@@ -37,7 +38,7 @@
                         <p></p>
                         <button class="btn btn-lg btn-block btn-outline-primary">Review Paper</button>
                     </a></div>
-            </div>
+            </div>{% endif %}
             {% if owner %}
                 <div class="card mb-4 shadow-sm">
                     <div class="card-body">

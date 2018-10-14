@@ -2,7 +2,6 @@
 
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
-from django.core.exceptions import PermissionDenied
 from django.forms import formset_factory
 from django.http import FileResponse
 from django.shortcuts import render, redirect
@@ -20,7 +19,12 @@ class Welcome(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
             conference, owner = get_conference(request, kwargs['slug'], 'X2CA01')
-            return render(request, self.template_name, {'owner': owner, 'slug': conference})
+            try:
+                get_pc_member(conference, request.user.email, '')
+                pc_member = True
+            except PermissionDenied:
+                pc_member = False
+            return render(request, self.template_name, {'owner': owner, 'slug': conference, 'pc_member': pc_member})
         except ObjectDoesNotExist as msg:
             messages.error(request, msg)
             return redirect('home')
@@ -110,7 +114,7 @@ class ViewDetail(TemplateView):
                 if form.is_valid():
                     confirmation = form.cleaned_data['confirmation']
                     if confirmation == 'delete':
-                        # paper.delete()
+                        paper.delete()
                         # paper.author.all().delete()
                         messages.success(request, 'Delete Successfully')
                         return redirect('conference:view_all_paper', slug=kwargs['slug'])
