@@ -87,7 +87,7 @@ class Login(TemplateView):
         return render(request, self.template_name, {'form': form, 'form1': form1, 'form2': form2})
 
     def post(self, request):
-        if True:
+        try:
             form = LoginForm(request.POST)
             form1 = EmailForm1(request.POST)
             form2 = EmailForm2(request.POST)
@@ -116,7 +116,7 @@ class Login(TemplateView):
                                 return redirect(request.POST.get('next'))
                             return redirect("home")
                         elif not u.is_active:
-                            messages.warning(request, 'Please Confirm your Email')
+                            messages.warning(request, 'Please confirm the activation link from your Email')
                         else:
                             messages.error(request, "Email or password did not match")
                     except ObjectDoesNotExist:
@@ -165,14 +165,15 @@ class Login(TemplateView):
                     messages.error(request, 'Invalid Email. Try Again')
             else:
                 messages.warning(request, "Invalid Input. Please try again")
-        # except Exception:
-        #     messages.error(request, 'Please Try again after some time')
+        except Exception:
+            messages.error(request, 'Please Try again after some time')
         form = LoginForm()
         form1 = EmailForm1()
         form2 = EmailForm2()
         return render(request, self.template_name, {'form': form, 'form1': form1, 'form2': form2})
 
 
+# noinspection PyBroadException
 class Signup(TemplateView):
     template_name = 'signup.html'
 
@@ -253,14 +254,14 @@ class ResetPassword(TemplateView):
     template_name = 'reset-password.html'
 
     def get(self, request, *args, **kwargs):
-        if True:
+        try:
             uid = force_text(urlsafe_base64_decode(kwargs['uidb64']))
             user = User.objects.get(email=uid)
             if user.is_active and password_reset_token.check_token(user, kwargs['token']):
                 form = ResetPasswordForm()
                 return render(request, self.template_name, {'form': form})
-        # except Exception:
-        #     messages.error(request, 'Invalid Link')
+        except Exception:
+            messages.error(request, 'Invalid Link')
         return redirect('home')
 
     def post(self, request, **kwargs):
