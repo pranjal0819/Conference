@@ -81,9 +81,9 @@
     </nav>
 {% endif %}
 <div class="mt-4">
-    <main role="main" class="container {% if owner %}col-md-11{% endif %} pb-4">
+    <main role="main" class="container {% if owner %}col-lg-11{% endif %} pb-4">
         {% for m in messages %}
-            <div class="alert {% if m.tags == 'success' %}alert-success{% elif m.tags == 'warning' %}alert-warning{% else %}alert-danger{% endif %} alert-dismissible fade show col-md-6 offset-md-3"
+            <div class="alert alert-dismissible fade show container fit-text {% if m.tags == 'success' %}alert-success{% elif m.tags == 'warning' %}alert-warning{% elif m.tags == 'info' %}alert-info{% else %}alert-danger{% endif %}"
                  role="alert">
                 {{ m }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
