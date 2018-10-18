@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
 from .views0 import *
+from ..forms import ReviewPaperForm
 
 
 # noinspection PyBroadException
@@ -30,7 +31,7 @@ class AcceptToReview(TemplateView):
 
 
 # noinspection PyBroadException
-# Error X3CB01, X3CB02, X3CB03, X3CB04, X3CB10
+# Error X3CB01, X3CB02, X3CB10
 class ReviewPaperList(TemplateView):
     template = 'view3/review_paper_list.html'
 
@@ -62,13 +63,13 @@ class ReviewPaperList(TemplateView):
         except ObjectDoesNotExist as msg:
             messages.error(request, msg)
             return redirect('home')
-        except PermissionDenied:
-            messages.warning(request, 'You are not PC Member. Error Code: X3CB03')
+        except PermissionDenied as msg:
+            messages.warning(request, msg)
             return redirect('conference:slug_welcome', slug=kwargs['slug'])
-        # except Exception:
-        #     auth.logout(request)
-        #     messages.error(request, 'Error Code: X3CB10')
-        #     return redirect('home')
+        except Exception:
+            auth.logout(request)
+            messages.error(request, 'Error Code: X3CB10')
+            return redirect('home')
 
 
 # noinspection PyBroadException
@@ -81,7 +82,7 @@ class Demand(TemplateView):
             paper = get_paper(conference, kwargs['pk'], 'XCC03')
             try:
                 get_review_paper(conference, pc_member, paper, '')
-                raise PermissionDenied
+                raise PermissionDenied('Error Code: X3CC04')
             except ObjectDoesNotExist:
                 if paper in pc_member.demand.all():
                     pc_member.demand.remove(paper)
@@ -93,8 +94,8 @@ class Demand(TemplateView):
         except ObjectDoesNotExist as msg:
             messages.error(request, msg)
             return redirect('home')
-        except PermissionDenied:
-            messages.warning(request, 'You are not PC Member. Error Code: X3CC04')
+        except PermissionDenied as msg:
+            messages.warning(request, msg)
             return redirect('conference:slug_welcome', slug=kwargs['slug'])
         except Exception:
             auth.logout(request)
@@ -103,51 +104,61 @@ class Demand(TemplateView):
 
 
 # noinspection PyBroadException
-# Error X3CD01, X3CD02, X3CD03, X3CD04, X3CD10
+# Error X3CD01, X3CD02, X3CD03, X3CD10, X3CD11, X3CD12, X3CD13, X3CD14, X3CD20
 class ReviewPaper(TemplateView):
     template_name = 'view3/review_paper.html'
 
     def get(self, request, *args, **kwargs):
         try:
-            owner = False
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
-            record = ReviewPaperRecord.objects.get(reviewCon=con, reviewUser=pc_member, pk=kwargs['pk'])
-            if con.owner == request.user or request.user.is_staff:
-                owner = True
-            return render(request, self.template_name,
-                          {'slug': kwargs['slug'], 'owner': owner, 'con': con, 'record': record})
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
-            return redirect("home")
-            # except Exception:
-            # auth.logout(request)
-            # return redirect('home')
+            conference, owner = get_conference(request, kwargs['slug'], 'X3CD01')
+            pc_member = get_pc_member(conference, request.user.email, 'X3CD02')
+            record = get_review_paper_by_id(conference, pc_member, kwargs['pk'], 'X3CD03')
+            review = False
+            if conference.review or owner:
+                review = True
+            form = ReviewPaperForm(instance=record, review=review)
+            attr = {'slug': kwargs['slug'], 'owner': owner, 'form': form, 'review': review, 'record': record}
+            return render(request, self.template_name, attr)
+        except ObjectDoesNotExist as msg:
+            messages.error(request, msg)
+            return redirect('home')
+        except PermissionDenied as msg:
+            messages.warning(request, msg)
+            return redirect('conference:slug_welcome', slug=kwargs['slug'])
+        # except Exception:
+        #     auth.logout(request)
+        #     messages.error(request, 'Error Code: X3CD10')
+        #     return redirect('home')
 
     def post(self, request, **kwargs):
         try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            if con.review:
-                pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
-                record = ReviewPaperRecord.objects.get(reviewCon=con, reviewUser=pc_member, pk=kwargs['pk'])
-                record.overallEvaluation = request.POST['evaluation']
-                record.point = int(request.POST['point'])
-                record.remark = request.POST['remark']
-                record.complete = True
-                record.save(update_fields=['overallEvaluation', 'point', 'remark', 'complete'])
-                messages.success(request, 'Successfully save')
-                return redirect("conference:review_list", slug=kwargs['slug'])
+            conference, owner = get_conference(request, kwargs['slug'], 'X3CD11')
+            pc_member = get_pc_member(conference, request.user.email, 'X3CD12')
+            record = get_review_paper_by_id(conference, pc_member, kwargs['pk'], 'X3CD13')
+            review = False
+            if conference.review or owner:
+                review = True
+                form = ReviewPaperForm(request.POST, instance=record, review=True)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Successfully save')
+                else:
+                    messages.error(request, 'Invalid Input. X3CD14')
             else:
-                raise PermissionDenied
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
-            return redirect("home")
-        except PermissionDenied:
-            messages.error(request, 'Review Closed')
+                messages.error(request, 'Review Submission closed')
+            form = ReviewPaperForm(instance=record, review=review)
+            attr = {'slug': kwargs['slug'], 'owner': owner, 'form': form, 'review': review, 'record': record}
+            return render(request, self.template_name, attr)
+        except ObjectDoesNotExist as msg:
+            messages.error(request, msg)
+            return redirect('home')
+        except PermissionDenied as msg:
+            messages.warning(request, msg)
             return redirect('conference:slug_welcome', slug=kwargs['slug'])
-            # except Exception:
-            # auth.logout(request)
-            # return redirect('home')
+        except Exception:
+            auth.logout(request)
+            messages.error(request, 'Error Code: X3CD20')
+            return redirect('home')
 
 
 # noinspection PyBroadException

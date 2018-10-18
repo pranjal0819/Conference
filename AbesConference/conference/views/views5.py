@@ -158,6 +158,7 @@ class AddPcMember(TemplateView):
                     for l in li:
                         info = l.split(',')
                         try:
+                            info[2] = info[2].lower()
                             validate_email(info[2])
                             name = info[0] + ' ' + info[1]
                             try:

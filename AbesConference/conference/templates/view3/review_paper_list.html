@@ -9,51 +9,28 @@
         <h3 class="p-3">You are not Accept Request of PC Member
             <a href="{% url 'conference:accept_to_review' slug %}">Accept to Review</a></h3>
     {% else %}
-        <div class="px-md-3 py-3 pb-4 table-responsive-xl">
-            <table class="table table-bordered table-hover" id="myTable">
-                <thead>
-                <tr style="font-weight: 500;">
-                    <th scope="col" width="5px">#</th>
-                    <th scope="col" width="20%">Author Name</th>
-                    <th scope="col">Title</th>
-                    <th scope="col" width="20%">Keyword</th>
-                    <th scope="col" width="5px" style="font-size: 14px">Detail</th>
-                    <th scope="col" width="5px" style="font-size: 14px">Download</th>
-                    <th scope="col" width="5px" style="font-size: 14px">Bid</th>
-                    <th scope="col" width="5px" style="font-size: 14px">Review</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% if list1 %}
-                    <tr>
-                        <td colspan="8" style="text-align: center">Submissions assigned to me but missing my
-                            review
-                        </td>
-                    </tr>{% for list in list1 %}
-                    <tr>
-                        <td scope="row">{{ forloop.counter }}</td>
-                        <td>{% for name in list.paper.author.all %}{{ name }}<br>{% endfor %}</td>
-                        <td>{{ list.paper.title }}</td>
-                        <td>{{ list.paper.keywords }}</td>
-                        <td style="text-align: center; vertical-align: middle;">
-                            <a href="{% url 'conference:view_detail' slug=slug pk=list.paper.pk %}">
-                                <img src="{% static 'images/icons8-document.png' %}"></a></td>
-                        <td style="text-align: center; vertical-align: middle;">
-                            <a href="{% url 'conference:download_paper' slug=slug pk=list.paper.pk %}"
-                               target="_blank"><img src="{% static 'images/icons8-download.png' %}"></a></td>
-                        <td style="text-align: center; vertical-align: middle;">
-                            <img src="{% static 'images/icons8-horizontal-line.png' %}">
-                        </td>
-                        <td style="text-align: center; vertical-align: middle;">
-                            <a href="{% url 'conference:review_paper' slug=slug pk=list.pk %}">Review</a>
-                        </td>
-                    </tr>{% endfor %}
-                    <tr>
-                        <td colspan="8"></td>
-                    </tr>{% endif %}{% if list2 %}
-                    <tr>
-                        <td colspan="8" style="text-align: center">Submissions reviewed by me</td>
-                    </tr>{% for list in list2 %}
+        {% if list1 or list2 or list3 %}
+            <div class="py-3 pb-4 table-responsive-xl">
+                <table class="table table-bordered table-hover" id="myTable">
+                    <thead>
+                    <tr style="font-weight: 500;">
+                        <th scope="col" width="5px">#</th>
+                        <th scope="col" width="20%">Author Name</th>
+                        <th scope="col">Title</th>
+                        <th scope="col" width="20%">Keyword</th>
+                        <th scope="col" width="5px" style="font-size: 14px">Detail</th>
+                        <th scope="col" width="5px" style="font-size: 14px">Download</th>
+                        <th scope="col" width="5px" style="font-size: 14px">Bid</th>
+                        <th scope="col" width="5px" style="font-size: 14px">Review</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if list1 %}
+                        <tr>
+                            <td colspan="8" style="text-align: center">Submissions assigned to me but missing my
+                                review
+                            </td>
+                        </tr>{% for list in list1 %}
                         <tr>
                             <td scope="row">{{ forloop.counter }}</td>
                             <td>{% for name in list.paper.author.all %}{{ name }}<br>{% endfor %}</td>
@@ -69,36 +46,60 @@
                                 <img src="{% static 'images/icons8-horizontal-line.png' %}">
                             </td>
                             <td style="text-align: center; vertical-align: middle;">
-                                <a href="{% url 'conference:review_paper' slug=slug pk=list.pk %}">Edit Review</a>
+                                <a href="{% url 'conference:review_paper' slug=slug pk=list.pk %}">Review</a>
                             </td>
                         </tr>{% endfor %}
-                    <tr>
-                        <td colspan="8"></td>
-                    </tr>{% endif %}{% if list3 %}
-                    <tr>
-                        <td colspan="8" style="text-align: center">Other submissions</td>
-                    </tr>{% for list in list3 %}
                         <tr>
-                            <td scope="row">{{ forloop.counter }}</td>
-                            <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
-                            <td>{{ list.title }}</td>
-                            <td>{{ list.keywords }}</td>
-                            <td style="text-align: center; vertical-align: middle;">
-                                <a href="{% url 'conference:view_detail' slug=slug pk=list.pk %}">
-                                    <img src="{% static 'images/icons8-document.png' %}"></a></td>
-                            <td style="text-align: center; vertical-align: middle;">
-                                <img src="{% static 'images/icons8-horizontal-line.png' %}">
-                            </td>
-                            <td style="text-align: center; vertical-align: middle;">
-                                <a href="{% url 'conference:demand_paper' slug=slug pk=list.pk %}">
-                                    {% if list in pc_member.demand.all %}Unbid
-                                    {% else %}Bid{% endif %}</a></td>
-                            <td style="text-align: center; vertical-align: middle;">
-                                <img src="{% static 'images/icons8-horizontal-line.png' %}">
-                            </td>
-                        </tr>{% endfor %}{% endif %}
-                </tbody>
-            </table>
-        </div>{% endif %}</div>
+                            <td colspan="8"></td>
+                        </tr>{% endif %}{% if list2 %}
+                        <tr>
+                            <td colspan="8" style="text-align: center">Submissions reviewed by me</td>
+                        </tr>{% for list in list2 %}
+                            <tr>
+                                <td scope="row">{{ forloop.counter }}</td>
+                                <td>{% for name in list.paper.author.all %}{{ name }}<br>{% endfor %}</td>
+                                <td>{{ list.paper.title }}</td>
+                                <td>{{ list.paper.keywords }}</td>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <a href="{% url 'conference:view_detail' slug=slug pk=list.paper.pk %}">
+                                        <img src="{% static 'images/icons8-document.png' %}"></a></td>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <a href="{% url 'conference:download_paper' slug=slug pk=list.paper.pk %}"
+                                       target="_blank"><img src="{% static 'images/icons8-download.png' %}"></a></td>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <img src="{% static 'images/icons8-horizontal-line.png' %}">
+                                </td>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <a href="{% url 'conference:review_paper' slug=slug pk=list.pk %}">Edit Review</a>
+                                </td>
+                            </tr>{% endfor %}
+                        <tr>
+                            <td colspan="8"></td>
+                        </tr>{% endif %}{% if list3 %}
+                        <tr>
+                            <td colspan="8" style="text-align: center">Other submissions</td>
+                        </tr>{% for list in list3 %}
+                            <tr>
+                                <td scope="row">{{ forloop.counter }}</td>
+                                <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
+                                <td>{{ list.title }}</td>
+                                <td>{{ list.keywords }}</td>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <a href="{% url 'conference:view_detail' slug=slug pk=list.pk %}">
+                                        <img src="{% static 'images/icons8-document.png' %}"></a></td>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <img src="{% static 'images/icons8-horizontal-line.png' %}">
+                                </td>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <a href="{% url 'conference:demand_paper' slug=slug pk=list.pk %}">
+                                        {% if list in pc_member.demand.all %}Unbid
+                                        {% else %}Bid{% endif %}</a></td>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <img src="{% static 'images/icons8-horizontal-line.png' %}">
+                                </td>
+                            </tr>{% endfor %}{% endif %}
+                    </tbody>
+                </table>
+            </div>{% else %}<h3 class="p-3">Paper not submitted yet!</h3>{% endif %}{% endif %}</div>
 {% endblock %}
 {% block script %}{% endblock %}

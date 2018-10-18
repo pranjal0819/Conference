@@ -1,76 +1,37 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}Review Paper | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
-    <main role="main" class="container bg-white pb-4">
-        {% for m in messages %}{{ m }}<br>{% endfor %}
-        <div class="px-md-3 pt-4">
-            {% if not con.review %}<h3 style="color: red">Review Submission Closed</h3>{% endif %}
-            <h2>Detail of Paper</h2>
-            <div class="px-3">
-                <h4>Title</h4>
-                <p class="lead px-3">{{ record.paper.title }}</p>
-                <hr>
-                <h4>Keywords</h4>
-                <pre style="white-space: pre-wrap" class="px-3">{{ record.paper.keywords }}</pre>
-                <hr>
-                <h4>Abstract</h4>
-                <pre style="white-space: pre-wrap" class="px-3">{{ record.paper.abstract }}</pre>
-                <hr>
-                <a href="{% url 'conference:download_paper' slug=slug pk=record.paper.pk %}" target="_blank"
-                   class="btn btn-outline-info">Download Paper</a>
-                <hr>
-            </div>
-            <h3>Give your Review</h3>
-            <form action="" method="post" class="px-md-2">{% csrf_token %}
-                <h4>Evaluation:</h4>
-                <textarea name="evaluation" class="form-control" placeholder="Evaluation" required maxlength="500"
-                          rows="8" {% if slug.review %}disabled{% endif %}>{{ record.overallEvaluation }}</textarea><br>
-                <h4>Point:</h4>
-                <div class="custom-control custom-radio">
-                    <input type="radio" class="custom-control-input" {% if record.point == 3 %}checked{% endif %}
-                           id="three" name="point" value="3" {% if slug.review %}disabled{% endif %}>
-                    <label class="custom-control-label" for="three">3</label>
-                </div>
-                <div class="custom-control custom-radio">
-                    <input type="radio" class="custom-control-input" {% if record.point == 2 %}checked{% endif %}
-                           id="two" name="point" value="2" {% if slug.review %}disabled{% endif %}>
-                    <label class="custom-control-label" for="two">2</label>
-                </div>
-                <div class="custom-control custom-radio">
-                    <input type="radio" class="custom-control-input" {% if record.point == 1 %}checked{% endif %}
-                           id="one" name="point" value="1" {% if slug.review %}disabled{% endif %}>
-                    <label class="custom-control-label" for="one">1</label>
-                </div>
-                <div class="custom-control custom-radio">
-                    <input type="radio" class="custom-control-input" {% if record.point == 0 %}checked{% endif %}
-                           id="zero" name="point" value="0" {% if slug.review %}disabled{% endif %}>
-                    <label class="custom-control-label" for="zero">0</label>
-                </div>
-                <div class="custom-control custom-radio">
-                    <input type="radio" class="custom-control-input" {% if record.point == -1 %}checked{% endif %}
-                           id="negative_one" name="point" value="-1" {% if slug.review %}disabled{% endif %}>
-                    <label class="custom-control-label" for="negative_one">-1</label>
-                </div>
-                <div class="custom-control custom-radio">
-                    <input type="radio" class="custom-control-input" {% if record.point == -2 %}checked{% endif %}
-                           id="negative_two" name="point" value="-2" {% if slug.review %}disabled{% endif %}>
-                    <label class="custom-control-label" for="negative_two">-2</label>
-                </div>
-                <div class="custom-control custom-radio">
-                    <input type="radio" class="custom-control-input" {% if record.point == -3 %}checked{% endif %}
-                           id="negative_three" name="point" value="-3" {% if slug.review %}disabled{% endif %}>
-                    <label class="custom-control-label" for="negative_three">-3</label>
-                </div>
-                <br>
-                <h4>Remark:</h4>
-                <textarea name="remark" cols="40" rows="5" placeholder="Remark" maxlength="100" class="form-control"
-                          required {% if slug.review %}disabled{% endif %}>{{ record.remark }}</textarea><br>
-                {% if con.review %}
-                    <button type="submit" title="Save" class="btn btn-outline-primary">Save Review</button>
-                {% else %}
-                    <h3>Review Submission Closed</h3>
-                {% endif %}
-            </form>
+    <div class="px-2 py-4 px-sm-5 bg-white rounded shadow-sm">
+        {% if not review %}<h2 style="color: red;margin-bottom: 2px">Review Submission Closed</h2>{% else %}
+            <h2 style="margin-bottom: 2px">Submit Review</h2>{% endif %}
+        <h3 class="px-2" style="margin-bottom: 2px">Detail of Paper</h3>
+        <div class="px-3">
+            <h4>Title</h4>
+            <p class="lead px-3">{{ record.paper.title }}</p>
+            <hr>
+            <h4>Keywords</h4>
+            <p class="px-3">{{ record.paper.keywords }}</p>
+            <hr>
+            <h4>Abstract</h4>
+            <p class="px-3">{{ record.paper.abstract }}</p>
+            <hr>
+            <a href="{% url 'conference:download_paper' slug=slug pk=record.paper.pk %}" target="_blank"
+               class="btn btn-outline-info">Download Paper</a>
+            <hr>
         </div>
-    </main>
+        <h3 class="px-2" style="margin-bottom: 0">Give your Review</h3>
+        <form action="" method="post" class="px-3">{% csrf_token %}
+            <h4 class="pt-2">Point:</h4>{% for radio in form.point %}
+                <div class="custom-control custom-radio">{{ radio.tag }}
+                    <label class="custom-control-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+                </div>{% endfor %}
+            <h4 class="pt-2">Evaluation:</h4>{{ form.overallEvaluation }}
+            <h4 class="pt-2">Remark:</h4>
+            <p>If you wish to add any remarks please write them below. These remarks will only not be sent to the
+                authors.<br>This field is optional.</p>{{ form.remark }}
+            <button type="submit" class="btn btn-outline-primary mt-4" {% if not review %}disabled{% endif %}>
+                Save Review
+            </button>
+        </form>
+    </div>
 {% endblock %}

@@ -1,6 +1,8 @@
 from django import forms
 
-from .models import PaperRecord, AuthorRecord, ReviewPaperRecord, ConferenceRecord
+from .models import PaperRecord, AuthorRecord, ConferenceRecord, ReviewPaperRecord
+
+choices = [(2, '2 Accept'), (1, '1 Week Accept'), (0, '0 Can not Say'), (-1, '-1 Week Reject'), (-2, '-2 Reject')]
 
 
 class ConferenceForm(forms.ModelForm):
@@ -118,13 +120,23 @@ class ConfirmationForm(forms.Form):
 
 
 class ReviewPaperForm(forms.ModelForm):
-    overallEvaluation = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Your comment'}), max_length=500)
-    point = forms.CharField(widget=forms.NumberInput(), max_length=5)
-    remark = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Remark'}), max_length=100)
+    overallEvaluation = forms.CharField(widget=forms.Textarea(
+        attrs={'class': 'form-control', 'placeholder': 'Your Evaluation'}), max_length=1000, required=True)
+    point = forms.IntegerField(widget=forms.RadioSelect(
+        choices=choices, attrs={'class': 'custom-control-input'}), required=True)
+    remark = forms.CharField(widget=forms.Textarea(
+        attrs={'class': 'form-control', 'placeholder': 'Remark', 'rows': '5'}), max_length=500, required=False)
 
     class Meta:
         model = ReviewPaperRecord
         fields = ['overallEvaluation', 'point', 'remark']
+
+    def __init__(self, *args, review, **kwargs):
+        super(ReviewPaperForm, self).__init__(*args, **kwargs)
+        if not review:
+            self.fields['overallEvaluation'].widget.attrs['disabled'] = True
+            self.fields['point'].widget.attrs['disabled'] = True
+            self.fields['remark'].widget.attrs['disabled'] = True
 
 
 class EmailForm(forms.Form):

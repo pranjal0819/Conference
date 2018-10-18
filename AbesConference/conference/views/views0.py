@@ -3,7 +3,6 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from ..models import ConferenceRecord, PaperRecord, PcMemberRecord, ReviewPaperRecord, AuthorRecord
 
 
-# noinspection PyBroadException
 def get_conference(request, slug, error_code):
     try:
         conference = ConferenceRecord.objects.get(slug=slug)
@@ -51,6 +50,13 @@ def get_all_pc_member_for_paper(conference, paper):
 def get_review_paper(conference, pc_user, paper, error_code):
     try:
         return ReviewPaperRecord.objects.get(reviewCon=conference, reviewUser=pc_user, paper=paper)
+    except ObjectDoesNotExist:
+        raise ObjectDoesNotExist("Review Not Found. Error Code: " + error_code)
+
+
+def get_review_paper_by_id(conference, pc_user, pk, error_code):
+    try:
+        return ReviewPaperRecord.objects.get(reviewCon=conference, reviewUser=pc_user, pk=pk)
     except ObjectDoesNotExist:
         raise ObjectDoesNotExist("Review Not Found. Error Code: " + error_code)
 
