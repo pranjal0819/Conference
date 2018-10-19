@@ -31,7 +31,7 @@ class AcceptToReview(TemplateView):
 
 
 # noinspection PyBroadException
-# Error X3CB01, X3CB02, X3CB10
+# Error X3CB01, X3CB02, X3CB03, X3CB10
 class ReviewPaperList(TemplateView):
     template = 'view3/review_paper_list.html'
 
@@ -63,8 +63,8 @@ class ReviewPaperList(TemplateView):
         except ObjectDoesNotExist as msg:
             messages.error(request, msg)
             return redirect('home')
-        except PermissionDenied as msg:
-            messages.warning(request, msg)
+        except PermissionDenied:
+            messages.warning(request, 'You are not a PC Member. Error Code: X3CB03')
             return redirect('conference:slug_welcome', slug=kwargs['slug'])
         except Exception:
             auth.logout(request)

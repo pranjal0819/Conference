@@ -25,6 +25,7 @@ class ConferenceRecord(models.Model):
     review = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
+    other_owner = models.ManyToManyField(User, related_name='other_owner')
 
     def __str__(self):
         return self.slug

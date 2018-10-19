@@ -120,7 +120,7 @@ class Login(TemplateView):
                         else:
                             messages.error(request, "Email or password did not match")
                     except ObjectDoesNotExist:
-                        messages.error(request, "Email does not match Please a Account")
+                        messages.error(request, "Email or password did not match.")
                 else:
                     messages.error(request, 'Invalid reCAPTCHA. Please try again.')
             elif form1.is_valid():

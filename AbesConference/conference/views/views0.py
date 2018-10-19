@@ -8,6 +8,8 @@ def get_conference(request, slug, error_code):
         conference = ConferenceRecord.objects.get(slug=slug)
         if conference.owner == request.user or request.user.is_staff or request.user.is_superuser:
             return conference, True
+        if request.user in conference.other_owner.all():
+            return conference, True
         return conference, False
     except ObjectDoesNotExist:
         raise ObjectDoesNotExist("Conference Not Found. Error Code: " + error_code)
