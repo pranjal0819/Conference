@@ -25,8 +25,7 @@
             <a class="p-2" href="{% url 'account:signup' %}">Signup</a>
         {% endif %}
     </nav>
-</div>
-{% if slug %}
+</div>{% if slug %}
     <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top border-bottom shadow-sm">
         <button class="navbar-toggler" data-toggle="collapse" data-target="#collapse_target">
             <span class="navbar-toggler-icon"></span>
@@ -48,49 +47,39 @@
                             <a class="dropdown-item" href="#">Download Submissions</a>
                         {% endif %}
                     </div>
-                </li>
-                {% if owner %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" data-target="dropdown_target"
-                           href="#">Review<span class="caret"></span></a>
-                        <div class="dropdown-menu" aria-labelledby="dropdown_target">
-                            <a class="dropdown-item" href="{% url 'conference:review_list' slug %}">Review</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{% url 'conference:all_review' slug %}">All Reviews</a>
-                            <a class="dropdown-item" href="{% url 'conference:all_pending_review' slug %}">All Pending
-                                Reviews</a>
-                        </div>
-                    </li>
-                {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'conference:review_list' slug %}">Review</a>
-                    </li>
-                {% endif %}
-                {% if owner %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" data-target="dropdown_target"
-                           href="#">PC<span class="caret"></span></a>
-                        <div class="dropdown-menu" aria-labelledby="dropdown_target">
-                            <a class="dropdown-item" href="{% url 'conference:manage_pc_member' slug %}">PC Member</a>
-                            <a class="dropdown-item" href="{% url 'conference:add_pc_member' slug %}">Add PC Member</a>
-                        </div>
-                    </li>{% endif %}
+                </li>{% if owner %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" data-target="dropdown_target"
+                       href="#">Review<span class="caret"></span></a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown_target">
+                        <a class="dropdown-item" href="{% url 'conference:review_list' slug %}">Review</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'conference:all_review' slug %}">All Reviews</a>
+                    </div>
+                </li>{% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'conference:review_list' slug %}">Review</a>
+                </li>{% endif %}{% if owner %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" data-target="dropdown_target"
+                       href="#">PC<span class="caret"></span></a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown_target">
+                        <a class="dropdown-item" href="{% url 'conference:manage_pc_member' slug %}">PC Member</a>
+                        <a class="dropdown-item" href="{% url 'conference:add_pc_member' slug %}">Add PC Member</a>
+                    </div>
+                </li>{% endif %}
                 <li class="nav-item">{% if owner %}<a class="nav-link" href="#">Email</a>
                 {% else %}<a class="nav-link" href="#">Email Chair Person</a>{% endif %}</li>
             </ul>
         </div>
-    </nav>
-{% endif %}
+    </nav>{% endif %}
 <div class="mt-4">
-    <main role="main" class="container {% if owner %}col-lg-11{% endif %} pb-4">
-        {% for m in messages %}
-            <div class="alert alert-dismissible fade show container fit-text {% if m.tags == 'success' %}alert-success{% elif m.tags == 'warning' %}alert-warning{% elif m.tags == 'info' %}alert-info{% else %}alert-danger{% endif %}"
-                 role="alert">
-                {{ m }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        {% endfor %}
+    <main role="main" class="container {% if owner %}col-lg-11{% endif %} pb-4">{% for m in messages %}
+        <div class="alert alert-dismissible fade show container fit-text {% if m.tags == 'success' %}alert-success{% elif m.tags == 'warning' %}alert-warning{% elif m.tags == 'info' %}alert-info{% else %}alert-danger{% endif %}"
+             role="alert">{{ m }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>{% endfor %}
         <!-- - - - - - - - - - START - - - - - - - - - - - -->
         {% block content %}{% endblock content %}
         <!-- - - - - - - - - - END - - - - - - - - - - - - -->
@@ -102,7 +91,7 @@
         <div class="row pt-md-5 pb-md-4 mx-lg-5">
             <div class="col-12 col-md">
                 <img class="mb-2" src="" alt="ABES EC" width="24" height="24">
-                <small class="d-block mb-3 text-muted">&copy; Pranjal</small>
+                <small class="d-block mb-3 text-muted">&copy; Pranjal (pranjal.16bcs1112@abes.ac.in)</small>
             </div>
             <div class="col-6 col-md">
                 <h4 style="color: white">Other Links</h4>

@@ -33,7 +33,7 @@
                 </thead>
                 <tbody>{% for list in paper_list %}
                     <tr>
-                        <td scope="row">{{ forloop.counter }}</td>
+                        <td scope="row" style="text-align: center; vertical-align: middle;">{{ forloop.counter }}</td>
                         <td>{% for name in list.author.all %}{{ name }}<br>{% endfor %}</td>
                         <td>{{ list.title }}</td>
                         <td>{{ list.keywords }}</td>
@@ -63,8 +63,8 @@
                     </tr>{% endfor %}</tbody>
             </table>{% else %}<h3>No Submission yet</h3>{% endif %}</div>
         <div class="clearfix">
-            <a href="{% url 'conference:slug_welcome' slug=slug %}" class="btn btn-outline-primary float-right">Back
-                to {{ slug }}</a></div>
+            <a href="{% url 'conference:slug_welcome' slug=slug %}" class="btn btn-outline-primary float-right">
+                Back to {{ slug }}</a></div>
     </div>
 {% endblock %}
 {% block script %}{% endblock %}

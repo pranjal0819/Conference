@@ -1,57 +1,78 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}All Review | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}{% block content %}
-    <div id="main">
-        <main class="container bg-white">
-            {% if messages %}{% for m in messages %}{{ m }}<br>{% endfor %}{% endif %}
-            <div class="px-md-3 pt-4 d-flex justify-content-between">
-                <h2>All Review</h2>
-                <input type="text" class="form-control col-sm-3" id="search" onkeyup="mySearch12456()"
-                       placeholder="Search...">
+    <div class="bg-white pb-4 px-md-4 px-2 rounded shadow-sm">
+        <div class="pt-4 d-flex justify-content-between"><h2>{{ slug }} List of Submissions</h2>
+            <div style="width: 300px">
+                <input type="text" class="form-control" id="search" onkeyup="mySearch12456()" placeholder="Search...">
             </div>
-            <div class="px-md-3 py-3 pb-4 table-responsive-xl">
-                <table class="table table-sm table-bordered table-hover" id="myTable">
-                    <thead>
-                    <tr style="font-weight: 500;">
-                        <th scope="col">#</th>
-                        <th scope="col" style="font-size: 14px">Author Name</th>
-                        <th scope="col">Title</th>
-                        <th scope="col" style="font-size: 14px">Detail</th>
-                        <th scope="col" style="font-size: 12px">PC Member Name</th>
-                        <th scope="col">PC Member Email</th>
-                        <th scope="col" style="font-size: 14px">Complete</th>
-                        <th scope="col" style="font-size: 14px">Delete</th>
+        </div>
+        <div class="py-3 pb-2 table-responsive-xl">{% if complete or incomplete %}
+            <table class="table table-sm table-bordered table-hover" id="myTable">
+                <thead>
+                <tr style="font-weight: 500;">
+                    <th scope="col" width="3%">#</th>
+                    <th scope="col" width="12%">Author Name</th>
+                    <th scope="col">Title</th>
+                    <th scope="col" style="font-size: 14px">Detail</th>
+                    <th scope="col" style="font-size: 12px">PC Member Name</th>
+                    <th scope="col">PC Member Email</th>
+                    <th scope="col" style="font-size: 14px">Complete</th>
+                    <th scope="col" style="font-size: 14px">Delete</th>
+                </tr>
+                </thead>
+                <tbody>{% for list in complete %}
+                    <tr>
+                        <td scope="row">{{ forloop.counter }}</td>
+                        <td>{% for name in list.paper.author.all %}{{ name }}<br>{% endfor %}</td>
+                        <td>{{ list.paper.title }}</td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            <a href="{% url 'conference:view_detail' slug=slug pk=list.paper.pk %}">
+                                <img src="{% static 'images/icons8-document.png' %}"></a></td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            <a href="{% url 'conference:profile_pc_member' slug=slug email=list.reviewUser.pcEmail %}">{{ list.reviewUser.name }}</a>
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            <a href="{% url 'conference:profile_pc_member' slug=slug email=list.reviewUser.pcEmail %}">{{ list.reviewUser.pcEmail }}</a>
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">{% if list.complete %}Done{% else %}
+                            Pending{% endif %}</td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            <img src="{% static 'images/icons8-cancel.png' %}" style="cursor: pointer"
+                                 onclick="confirmation('{% url 'conference:selected_user' slug=slug paper_pk=list.paper.pk user_email=list.reviewUser.pcEmail %}','{{ list.reviewUser.name }}','{{ list.paper.title }}')">
+                        </td>
+                    </tr>{% endfor %}{% for list in incomplete %}
+                    <tr>
+                        <td scope="row" style="text-align: center; vertical-align: middle;">{{ forloop.counter }}</td>
+                        <td>{% for name in list.paper.author.all %}{{ name }}<br>{% endfor %}</td>
+                        <td>{{ list.paper.title }}</td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            <a href="{% url 'conference:view_detail' slug=slug pk=list.paper.pk %}">
+                                <img src="{% static 'images/icons8-document.png' %}"></a></td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            <a href="{% url 'conference:profile_pc_member' slug=slug email=list.reviewUser.pcEmail %}">{{ list.reviewUser.name }}</a>
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            <a href="{% url 'conference:profile_pc_member' slug=slug email=list.reviewUser.pcEmail %}">{{ list.reviewUser.pcEmail }}</a>
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">{% if list.complete %}Done{% else %}
+                            Pending{% endif %}</td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            <img src="{% static 'images/icons8-cancel.png' %}" style="cursor: pointer"
+                                 onclick="confirmation('{% url 'conference:selected_user' slug=slug paper_pk=list.paper.pk user_email=list.reviewUser.pcEmail %}','{{ list.reviewUser.name }}','{{ list.paper.title }}')">
+                        </td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    {% for list in reviews %}
-                        <tr>
-                            <td scope="row">{{ forloop.counter }}</td>
-                            <td>{% for name in list.paper.author.all %}{{ name }}<br>{% endfor %}</td>
-                            <td>{{ list.paper.title }}</td>
-                            <td style="text-align: center; vertical-align: middle;">
-                                <a href="{% url 'conference:view_detail' slug=slug pk=list.paper.pk %}">
-                                    <img src="{% static 'images/icons8-document.png' %}"></a></td>
-                            <td style="text-align: center; vertical-align: middle;">
-                                <a href="{% url 'conference:profile_pc_member' slug=slug email=list.reviewUser.pcEmail %}">{{ list.reviewUser.name }}</a>
-                            </td>
-                            <td style="text-align: center; vertical-align: middle;">
-                                <a href="{% url 'conference:profile_pc_member' slug=slug email=list.reviewUser.pcEmail %}">{{ list.reviewUser.pcEmail }}</a>
-                            </td>
-                            <td style="text-align: center; vertical-align: middle;">{% if list.complete %}Done{% else %}
-                                Pending{% endif %}</td>
-                            <td style="text-align: center; vertical-align: middle;">
-                                <a href="{% url 'conference:selected_user' slug=slug paper_pk=list.paper.pk user_email=list.reviewUser.pcEmail %}">
-                                    Delete</a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="pb-5 py-2 clearfix">
-                <a href="{% url 'conference:slug_welcome' slug=slug %}" class="btn btn-outline-primary float-right">Back
-                    to Conference</a></div>
-        </main>
+                {% endfor %}
+                </tbody>
+            </table>{% else %}<h3>No Review yet</h3>{% endif %}</div>
+        <div class="clearfix">
+            <a href="{% url 'conference:slug_welcome' slug=slug %}" class="btn btn-outline-primary float-right">
+                Back to {{ slug }}</a></div>
     </div>
 {% endblock %}
-{% block script %}{% endblock %}
+{% block script %}
+    <script>function confirmation(url, name, title) {
+        var con = confirm('Confirm that you are going to delete ' + name + '\'s Review and Comments for Paper' + title + '.\nThis action cannot be undone.');
+        if (con == true) {
+            open(url, "_self")
+        }
+    }</script>{% endblock %}

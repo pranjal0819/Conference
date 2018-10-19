@@ -20,7 +20,7 @@
             <hr>
         </div>
         <h3 class="px-2" style="margin-bottom: 0">Give your Review</h3>
-        <form action="" method="post" class="px-3">{% csrf_token %}
+        <form action="" method="post" class="px-3 pb-3">{% csrf_token %}
             <h4 class="pt-2">Point:</h4>{% for radio in form.point %}
                 <div class="custom-control custom-radio">{{ radio.tag }}
                     <label class="custom-control-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
@@ -29,8 +29,8 @@
             <h4 class="pt-2">Remark:</h4>
             <p>If you wish to add any remarks please write them below. These remarks will only not be sent to the
                 authors.<br>This field is optional.</p>{{ form.remark }}
-            <button type="submit" class="btn btn-outline-primary mt-4" {% if not review %}disabled{% endif %}>
-                Save Review
+            <button type="submit" class="btn btn-outline-primary mt-4" {% if not review %}disabled{% endif %}>Save
+                Review
             </button>
         </form>
     </div>

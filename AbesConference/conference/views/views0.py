@@ -61,8 +61,16 @@ def get_review_paper_by_id(conference, pc_user, pk, error_code):
         raise ObjectDoesNotExist("Review Not Found. Error Code: " + error_code)
 
 
-def get_all_review_paper(conference, pc_user):
+def get_all_review_paper(conference, paper):
+    return ReviewPaperRecord.objects.filter(reviewCon=conference, paper=paper)
+
+
+def get_all_review_pc_user(conference, pc_user):
     return ReviewPaperRecord.objects.filter(reviewCon=conference, reviewUser=pc_user)
+
+
+def get_all_review_complete(conference, complete):
+    return ReviewPaperRecord.objects.filter(reviewCon=conference, complete=complete)
 
 
 def get_author(pk, error_code):

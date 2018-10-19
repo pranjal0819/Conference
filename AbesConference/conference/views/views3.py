@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
 from .views0 import *
-from ..forms import ReviewPaperForm
+from ..forms import ReviewPaperForm, ReviewConfirmationForm
 
 
 # noinspection PyBroadException
@@ -125,10 +125,10 @@ class ReviewPaper(TemplateView):
         except PermissionDenied as msg:
             messages.warning(request, msg)
             return redirect('conference:slug_welcome', slug=kwargs['slug'])
-        # except Exception:
-        #     auth.logout(request)
-        #     messages.error(request, 'Error Code: X3CD10')
-        #     return redirect('home')
+        except Exception:
+            auth.logout(request)
+            messages.error(request, 'Error Code: X3CD10')
+            return redirect('home')
 
     def post(self, request, **kwargs):
         try:
@@ -137,13 +137,16 @@ class ReviewPaper(TemplateView):
             record = get_review_paper_by_id(conference, pc_member, kwargs['pk'], 'X3CD13')
             review = False
             if conference.review or owner:
-                review = True
                 form = ReviewPaperForm(request.POST, instance=record, review=True)
                 if form.is_valid():
                     form.save()
+                    record.complete = True
+                    record.save(update_fields=['complete'])
                     messages.success(request, 'Successfully save')
+                    return redirect('conference:review_list', slug=kwargs['slug'])
                 else:
                     messages.error(request, 'Invalid Input. X3CD14')
+                review = True
             else:
                 messages.error(request, 'Review Submission closed')
             form = ReviewPaperForm(instance=record, review=review)
@@ -162,126 +165,84 @@ class ReviewPaper(TemplateView):
 
 
 # noinspection PyBroadException
+# Error X3CE01, X3CE02, X3CE03, X3CE10, X3CE11, X3CE12, X3CE13, X3CE20
 class ShowReviews(TemplateView):
     template_name = 'view3/show_review.html'
 
     def get(self, request, *args, **kwargs):
         try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            if con.owner == request.user or request.user.is_staff:
-                paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
-                reviews = ReviewPaperRecord.objects.filter(paper=paper)
-                return render(request, self.template_name,
-                              {'owner': True, 'slug': kwargs['slug'], 'paper': paper, 'reviews': reviews})
+            conference, owner = get_conference(request, kwargs['slug'], 'X3CE01')
+            if owner:
+                paper = get_paper(conference, kwargs['pk'], 'X3CE02')
+                reviews = get_all_review_paper(conference, paper)
+                form = ReviewConfirmationForm(instance=paper)
+                attr = {'owner': owner, 'slug': kwargs['slug'], 'form': form, 'paper': paper, 'reviews': reviews}
+                return render(request, self.template_name, attr)
             else:
-                raise PermissionDenied
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
+                raise PermissionDenied('Permission Denied. Error Code: X3CE03')
+        except ObjectDoesNotExist as msg:
+            messages.error(request, msg)
             return redirect('home')
-        except PermissionDenied:
+        except PermissionDenied as msg:
+            messages.warning(request, msg)
+            return redirect('conference:slug_welcome', slug=kwargs['slug'])
+        except Exception:
             auth.logout(request)
+            messages.error(request, 'Error Code: X3CE10')
             return redirect('home')
-            # except Exception:
-            # auth.logout(request)
-            # return redirect('home')
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, **kwargs):
         try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            if con.owner == request.user or request.user.is_staff:
-                paper = PaperRecord.objects.get(conference=con, pk=kwargs['pk'])
-                paper.status = int(request.POST['point'])
-                paper.review = request.POST['review']
-                paper.save(update_fields=['status', 'review'])
-                messages.success(request, 'Successfully update remarks')
-                return redirect('conference:view_detail', slug=kwargs['slug'], pk=kwargs['pk'])
+            conference, owner = get_conference(request, kwargs['slug'], 'X3CE11')
+            if owner:
+                paper = get_paper(conference, kwargs['pk'], 'X3CE12')
+                form = ReviewConfirmationForm(request.POST, instance=paper)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Successfully Updated')
+                    return redirect('conference:view_all_paper', slug=kwargs['slug'])
+                else:
+                    messages.error(request, 'Invalid Input')
+                reviews = get_all_review_paper(conference, paper)
+                form = ReviewConfirmationForm(instance=paper)
+                attr = {'owner': owner, 'slug': kwargs['slug'], 'form': form, 'paper': paper, 'reviews': reviews}
+                return render(request, self.template_name, attr)
             else:
-                raise PermissionDenied
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
+                raise PermissionDenied('Permission Denied. Error Code: X3CE13')
+        except ObjectDoesNotExist as msg:
+            messages.error(request, msg)
             return redirect('home')
-        except PermissionDenied:
+        except PermissionDenied as msg:
+            messages.warning(request, msg)
+            return redirect('conference:slug_welcome', slug=kwargs['slug'])
+        except Exception:
             auth.logout(request)
+            messages.error(request, 'Error Code: X3CE20')
             return redirect('home')
-            # except Exception:
-            # auth.logout(request)
-            # return redirect('home')
 
 
+# noinspection PyBroadException
+# Error X3CF01, X3CF02, X3CF10
 class ShowAllReview(TemplateView):
     template_name = 'view3/all_review.html'
 
     def get(self, request, *args, **kwargs):
         try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            if con.owner == request.user or request.user.is_staff:
-                obj = ReviewPaperRecord.objects.filter(reviewCon=con)
-                return render(request, self.template_name, {'owner': True, 'slug': kwargs['slug'], 'reviews': obj})
+            conference, owner = get_conference(request, kwargs['slug'], 'X3CF01')
+            if owner:
+                complete = get_all_review_complete(conference, True)
+                incomplete = get_all_review_complete(conference, False)
+                attr = {'owner': owner, 'slug': kwargs['slug'], 'complete': complete, 'incomplete': incomplete}
+                return render(request, self.template_name, attr)
             else:
-                raise PermissionDenied
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
+                raise PermissionDenied('Permission Denied. Error Code: X3CF02')
+        except ObjectDoesNotExist as msg:
+            messages.error(request, msg)
             return redirect('home')
-        except PermissionDenied:
+        except PermissionDenied as msg:
+            messages.warning(request, msg)
+            return redirect('conference:slug_welcome', slug=kwargs['slug'])
+        except Exception:
             auth.logout(request)
+            messages.error(request, 'Error Code: X3CF20')
             return redirect('home')
-            # except Exception:
-            # auth.logout(request)
-            # return redirect('home')
-
-
-class ShowAllPendingReview(TemplateView):
-    template_name = 'view3/all_pending_review.html'
-
-    def get(self, request, *args, **kwargs):
-        try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            if con.owner == request.user or request.user.is_staff:
-                obj = ReviewPaperRecord.objects.filter(reviewCon=con, complete=False)
-                return render(request, self.template_name, {'owner': True, 'slug': kwargs['slug'], 'reviews': obj})
-            else:
-                raise PermissionDenied
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
-            return redirect('home')
-        except PermissionDenied:
-            auth.logout(request)
-            return redirect('home')
-            # except Exception:
-            # auth.logout(request)
-            # return redirect('home')
-
-
-class AcceptPaper(TemplateView):
-    def get(self, request, *args, **kwargs):
-        try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
-            record = ReviewPaperRecord.objects.get(reviewCon=con, reviewUser=pc_member, pk=kwargs['pk'])
-            record.accepted = 5
-            record.save(update_fields=['accepted'])
-            return redirect('conference:review_paper', slug=kwargs['slug'], pk=kwargs['pk'])
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
-            return redirect("home")
-            # except Exception:
-            # auth.logout(request)
-            # return redirect('home')
-
-
-class RejectPaper(TemplateView):
-    def get(self, request, *args, **kwargs):
-        try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            pc_member = PcMemberRecord.objects.get(pcCon=con, pcEmail=request.user.email)
-            record = ReviewPaperRecord.objects.get(reviewCon=con, reviewUser=pc_member, pk=kwargs['pk'])
-            if record.accepted == 3:
-                record.accepted = 0
-                record.save(update_fields=['accepted'])
-            return redirect('conference:review_paper', slug=kwargs['slug'], pk=kwargs['pk'])
-        except ObjectDoesNotExist:
-            messages.error(request, 'Conference Closed or Deleted')
-            return redirect("home")
-            # except Exception:
-            # auth.logout(request)
-            # return redirect('home')

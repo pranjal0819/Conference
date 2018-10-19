@@ -2,7 +2,8 @@ from django import forms
 
 from .models import PaperRecord, AuthorRecord, ConferenceRecord, ReviewPaperRecord
 
-choices = [(2, '2 Accept'), (1, '1 Week Accept'), (0, '0 Can not Say'), (-1, '-1 Week Reject'), (-2, '-2 Reject')]
+choice1 = [(2, '2 Accept'), (1, '1 Week Accept'), (0, '0 Can not Say'), (-1, '-1 Week Reject'), (-2, '-2 Reject')]
+choice2 = [(5, 'Accept'), (3, 'Pending'), (0, 'Reject')]
 
 
 class ConferenceForm(forms.ModelForm):
@@ -87,12 +88,12 @@ class AuthorRecordForm1(forms.ModelForm):
 
 
 class PaperRecordForm(forms.ModelForm):
-    title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title*'}),
-                            required=True, max_length=200)
-    abstract = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Abstract*'}),
-                               required=True, max_length=2000)
-    keywords = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Keywords*'}),
-                               required=True, max_length=200)
+    title = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Title*'}), required=True, max_length=200)
+    abstract = forms.CharField(widget=forms.Textarea(
+        attrs={'class': 'form-control', 'placeholder': 'Abstract*'}), required=True, max_length=2000)
+    keywords = forms.CharField(widget=forms.Textarea(
+        attrs={'class': 'form-control', 'placeholder': 'Keywords*'}), required=True, max_length=200)
     file = forms.FileField(widget=forms.ClearableFileInput(
         attrs={'class': 'custom-file-input', 'style': "opacity:1", 'accept': '.pdf'}), required=True)
 
@@ -123,7 +124,7 @@ class ReviewPaperForm(forms.ModelForm):
     overallEvaluation = forms.CharField(widget=forms.Textarea(
         attrs={'class': 'form-control', 'placeholder': 'Your Evaluation'}), max_length=1000, required=True)
     point = forms.IntegerField(widget=forms.RadioSelect(
-        choices=choices, attrs={'class': 'custom-control-input'}), required=True)
+        choices=choice1, attrs={'class': 'custom-control-input'}), required=True)
     remark = forms.CharField(widget=forms.Textarea(
         attrs={'class': 'form-control', 'placeholder': 'Remark', 'rows': '5'}), max_length=500, required=False)
 
@@ -137,6 +138,17 @@ class ReviewPaperForm(forms.ModelForm):
             self.fields['overallEvaluation'].widget.attrs['disabled'] = True
             self.fields['point'].widget.attrs['disabled'] = True
             self.fields['remark'].widget.attrs['disabled'] = True
+
+
+class ReviewConfirmationForm(forms.ModelForm):
+    status = forms.IntegerField(widget=forms.RadioSelect(
+        choices=choice2, attrs={'class': 'custom-control-input'}), required=True)
+    remark = forms.CharField(widget=forms.Textarea(
+        attrs={'class': 'form-control', 'placeholder': 'Remark', 'rows': '5'}), max_length=500, required=True)
+
+    class Meta:
+        model = PaperRecord
+        fields = ['status', 'remark']
 
 
 class EmailForm(forms.Form):

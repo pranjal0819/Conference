@@ -12,7 +12,8 @@ urlpatterns = [
     path('account/', include(('account.urls', 'account'), namespace='account')),
 
     path('conference/', include(('conference.urls', 'conference'), namespace='conference')),
-    path('media/<slug>/<pk>', media),
+    path('media/<slug>/<pk>', MediaBlock.as_view()),
+    path('media/<slug>', MediaBlock.as_view()),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

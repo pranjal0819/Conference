@@ -12,13 +12,13 @@ from ..forms import PaperRecordForm, AuthorRecordForm, AuthorRecordForm1, Confir
 
 
 # noinspection PyBroadException
-# Error Code X2CA01, X2CA10
+# Error Code X2BA01, X2BA10
 class Welcome(TemplateView):
     template_name = 'view2/welcome.html'
 
     def get(self, request, *args, **kwargs):
         try:
-            conference, owner = get_conference(request, kwargs['slug'], 'X2CA01')
+            conference, owner = get_conference(request, kwargs['slug'], 'X2BA01')
             try:
                 get_pc_member(conference, request.user.email, '')
                 pc_member = True
@@ -30,18 +30,18 @@ class Welcome(TemplateView):
             return redirect('home')
         except Exception:
             auth.logout(request)
-            messages.error(request, 'Error Code: X2CA10')
+            messages.error(request, 'Error Code: X2BA10')
             return redirect('home')
 
 
 # noinspection PyBroadException
-# Error Code X2CB01, X2CB10
+# Error Code X2BB01, X2BB10
 class ViewAllPaper(TemplateView):
     template_name = 'view2/submitted_paper.html'
 
     def get(self, request, *args, **kwargs):
         try:
-            conference, owner = get_conference(request, kwargs['slug'], 'X2CB01')
+            conference, owner = get_conference(request, kwargs['slug'], 'X2BB01')
             if owner:
                 li = get_all_paper(conference)
             else:
@@ -52,12 +52,12 @@ class ViewAllPaper(TemplateView):
             return redirect('home')
         except Exception:
             auth.logout(request)
-            messages.error(request, 'Error Code: X2CB10')
+            messages.error(request, 'Error Code: X2BB10')
             return redirect('home')
 
 
 # noinspection PyBroadException
-# Error Code X2CC01, X2CC02, X2CC03, X2CC04, X2CC05, X2CC10, X2CC11, X2CC12, X2CC13, X2CC14, X2CC20
+# Error Code X2BC01, X2BC02, X2BC03, X2BC04, X2BC05, X2BC10, X2BC11, X2BC12, X2BC13, X2BC14, X2BC20
 class ViewDetail(TemplateView):
     template_name = 'view2/paper_detail.html'
 
@@ -66,8 +66,8 @@ class ViewDetail(TemplateView):
             pc_user_list = None
             paper_user = False
             form = None
-            conference, owner = get_conference(request, kwargs['slug'], 'X2CC01')
-            paper = get_paper(conference, kwargs['pk'], 'X2CC02')
+            conference, owner = get_conference(request, kwargs['slug'], 'X2BC01')
+            paper = get_paper(conference, kwargs['pk'], 'X2BC02')
             if owner:
                 paper_user = True
                 form = ConfirmationForm()
@@ -76,9 +76,9 @@ class ViewDetail(TemplateView):
                 paper_user = True
             else:
                 try:
-                    pc_user = get_pc_member(conference, request.user.email, 'X2CC03')
+                    pc_user = get_pc_member(conference, request.user.email, 'X2BC03')
                     try:
-                        get_review_paper(conference, pc_user, paper, 'X2CC04')
+                        get_review_paper(conference, pc_user, paper, 'X2BC04')
                         paper_user = True
                     except Exception:
                         pass
@@ -96,17 +96,17 @@ class ViewDetail(TemplateView):
             return redirect('home')
         except PermissionDenied:
             auth.logout(request)
-            messages.warning(request, 'Permission Denied. Error Code: X2CC05')
+            messages.warning(request, 'Permission Denied. Error Code: X2BC05')
             return redirect('home')
         except Exception:
             auth.logout(request)
-            messages.error(request, 'Error Code: X2CC10')
+            messages.error(request, 'Error Code: X2BC10')
             return redirect('home')
 
     def post(self, request, **kwargs):
         try:
-            conference, owner = get_conference(request, kwargs['slug'], 'X2CC11')
-            paper = get_paper(conference, kwargs['pk'], 'X2CC12')
+            conference, owner = get_conference(request, kwargs['slug'], 'X2BC11')
+            paper = get_paper(conference, kwargs['pk'], 'X2BC12')
             if owner:
                 paper_user = True
                 form = ConfirmationForm(request.POST)
@@ -121,7 +121,7 @@ class ViewDetail(TemplateView):
                     else:
                         messages.error(request, 'Typing Error, Type "delete" for deleting the paper')
                 else:
-                    messages.error(request, 'Invalid Input. Error Code X2CC13')
+                    messages.error(request, 'Invalid Input. Error Code X2BC13')
                 form = ConfirmationForm()
                 attr = {'owner': owner,
                         'slug': kwargs['slug'],
@@ -137,16 +137,16 @@ class ViewDetail(TemplateView):
             return redirect('home')
         except PermissionDenied:
             auth.logout(request)
-            messages.warning(request, 'Permission Denied. Error Code: X2CC14')
+            messages.warning(request, 'Permission Denied. Error Code: X2BC14')
             return redirect('home')
         except Exception:
             auth.logout(request)
-            messages.error(request, 'Error Code: X2CC20')
+            messages.error(request, 'Error Code: X2BC20')
             return redirect('home')
 
 
 # noinspection PyBroadException
-# Error Code X2CD01, X2CD10, X2CD11, X2CD12, X2CD20
+# Error Code X2BD01, X2BD10, X2BD11, X2BD12, X2BD20
 class SubmitPaper(TemplateView):
     template = 'view2/paper_submission.html'
     MAX = 5
@@ -156,7 +156,7 @@ class SubmitPaper(TemplateView):
         try:
             sub = False
             confirmation_form = None
-            con, owner = get_conference(request, kwargs['slug'], 'X2CD01')
+            con, owner = get_conference(request, kwargs['slug'], 'X2BD01')
             if owner or con.submission:
                 sub = True
                 confirmation_form = ConfirmationForm(user=request.user.username)
@@ -172,7 +172,7 @@ class SubmitPaper(TemplateView):
             return redirect('home')
         except Exception:
             auth.logout(request)
-            messages.error(request, 'Error Code: X2CD10')
+            messages.error(request, 'Error Code: X2BD10')
             return redirect('home')
 
     def post(self, request, **kwargs):
@@ -183,7 +183,7 @@ class SubmitPaper(TemplateView):
             author_form1 = AuthorRecordForm(request.POST, sub=True)
             author_form = formset_factory(AuthorRecordForm1, extra=self.MIN, max_num=self.MAX)
             formset = author_form(request.POST, form_kwargs={'sub': True})
-            con, owner = get_conference(request, kwargs['slug'], 'X2CD11')
+            con, owner = get_conference(request, kwargs['slug'], 'X2BD11')
             if paper_form.is_valid() and author_form1.is_valid() and formset.is_valid():
                 if con.submission or owner:
                     user = request.user
@@ -212,7 +212,7 @@ class SubmitPaper(TemplateView):
                 else:
                     messages.error(request, 'Submission closed')
             else:
-                messages.error(request, 'Invalid Input. Try Again. Error Code: X2CD12')
+                messages.error(request, 'Invalid Input. Try Again. Error Code: X2BD12')
             if con.submission or owner:
                 sub = True
                 confirmation_form = ConfirmationForm(user=request.user.username)
@@ -228,26 +228,26 @@ class SubmitPaper(TemplateView):
             return redirect('home')
         except Exception:
             auth.logout(request)
-            messages.error(request, 'Error Code: X2CD20')
+            messages.error(request, 'Error Code: X2BD20')
             return redirect('home')
 
 
 # noinspection PyBroadException
-# Error Code X2CE01, X2CE02, X2CE03, X2CE04, X2CE05, X2CE10
+# Error Code X2BE01, X2BE02, X2BE03, X2BE04, X2BE05, X2BE10
 class DownloadPaper(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
-            conference, owner = get_conference(request, kwargs['slug'], 'X2CE01')
-            paper = get_paper(conference, kwargs['pk'], 'X2CE02')
+            conference, owner = get_conference(request, kwargs['slug'], 'X2BE01')
+            paper = get_paper(conference, kwargs['pk'], 'X2BE02')
             if paper.user == request.user or owner:
                 response = FileResponse(paper.file)
                 response['Content-Disposition'] = 'inline; filename={title}.pdf'.format(
                     title=kwargs['slug'] + "-" + str(kwargs['pk']))
                 return response
             else:
-                pc_member = get_pc_member(conference, request.user.email, 'X2CE03')
+                pc_member = get_pc_member(conference, request.user.email, 'X2BE03')
                 if pc_member.accepted == 5:
-                    get_review_paper(conference, pc_member, pc_member, 'X2CE04')
+                    get_review_paper(conference, pc_member, pc_member, 'X2BE04')
                     response = FileResponse(paper.file)
                     response['Content-Disposition'] = 'inline; filename={title}.pdf'.format(
                         title=kwargs['slug'] + "-" + str(kwargs['pk']))
@@ -258,24 +258,24 @@ class DownloadPaper(TemplateView):
             return redirect('home')
         except PermissionDenied:
             auth.logout(request)
-            messages.warning(request, 'Permission Denied. Error Code: X2CE05')
+            messages.warning(request, 'Permission Denied. Error Code: X2BE05')
             return redirect('home')
         except Exception:
             auth.logout(request)
-            messages.error(request, 'Error Code: X2CE10')
+            messages.error(request, 'Error Code: X2BE10')
             return redirect('home')
 
 
 # noinspection PyBroadException
-# Error Code X2CF01, X2CF02, X2CF03, X2CF10, X2CF11, X2CF12, X2CF13, X2CF20
+# Error Code X2BF01, X2BF02, X2BF03, X2BF10, X2BF11, X2BF12, X2BF13, X2BF20
 class UpdatePaper(TemplateView):
     template = 'view2/update_paper.html'
 
     def get(self, request, *args, **kwargs):
         try:
-            conference, owner = get_conference(request, kwargs['slug'], 'X2CF01')
+            conference, owner = get_conference(request, kwargs['slug'], 'X2BF01')
             if owner:
-                paper = get_paper(conference, kwargs['pk'], 'X2CF02')
+                paper = get_paper(conference, kwargs['pk'], 'X2BF02')
                 form = PaperRecordForm(instance=paper, sub=True)
                 return render(request, self.template,
                               {'owner': owner, 'slug': kwargs['slug'], 'paper': paper, 'form': form})
@@ -286,25 +286,25 @@ class UpdatePaper(TemplateView):
             return redirect('home')
         except PermissionDenied:
             auth.logout(request)
-            messages.warning(request, 'Permission Denied. Error Code: X2CF03')
+            messages.warning(request, 'Permission Denied. Error Code: X2BF03')
             return redirect('home')
         except Exception:
             auth.logout(request)
-            messages.error(request, 'Error Code: X2CF10')
+            messages.error(request, 'Error Code: X2BF10')
             return redirect('home')
 
     def post(self, request, **kwargs):
         try:
-            conference, owner = get_conference(request, kwargs['slug'], 'X2CF11')
+            conference, owner = get_conference(request, kwargs['slug'], 'X2BF11')
             if owner:
-                paper = get_paper(conference, kwargs['pk'], 'X2CF12')
+                paper = get_paper(conference, kwargs['pk'], 'X2BF12')
                 form = PaperRecordForm(request.POST, request.FILES, instance=paper, sub=True)
                 if form.is_valid():
                     form.save()
                     messages.success(request, 'Successfully Updated')
                     return redirect('conference:view_detail', slug=kwargs['slug'], pk=kwargs['pk'])
                 else:
-                    messages.error(request, 'Invalid Input. Try Again. Error Code: X2CF05')
+                    messages.error(request, 'Invalid Input. Try Again. Error Code: X2BF05')
                 form = PaperRecordForm(instance=paper, sub=True)
                 return render(request, self.template,
                               {'owner': owner, 'slug': kwargs['slug'], 'paper': paper, 'form': form})
@@ -315,23 +315,23 @@ class UpdatePaper(TemplateView):
             return redirect('home')
         except PermissionDenied:
             auth.logout(request)
-            messages.warning(request, 'Permission Denied. Error Code: X2CF13')
+            messages.warning(request, 'Permission Denied. Error Code: X2BF13')
             return redirect('home')
         except Exception:
             auth.logout(request)
-            messages.error(request, 'Error Code: X2CF20')
+            messages.error(request, 'Error Code: X2BF20')
             return redirect('home')
 
 
 # noinspection PyBroadException
-# Error Code X2CG01, X2CG02, X2CG03, X2CG10, X2CG11, X2CG12, X2CG13, X2CG20
+# Error Code X2BG01, X2BG02, X2BG03, X2BG10, X2BG11, X2BG12, X2BG13, X2BG20
 class AddAuthor(TemplateView):
     template = 'view2/add_author.html'
 
     def get(self, request, *args, **kwargs):
         try:
-            conference, owner = get_conference(request, kwargs['slug'], 'X2CG01')
-            paper = get_paper(conference, kwargs['pk'], 'X2CG02')
+            conference, owner = get_conference(request, kwargs['slug'], 'X2BG01')
+            paper = get_paper(conference, kwargs['pk'], 'X2BG02')
             if paper.user == request.user:
                 form = AuthorRecordForm(sub=conference.submission)
                 return render(request, self.template, {'slug': kwargs['slug'], 'pk': kwargs['pk'], 'form': form})
@@ -342,17 +342,17 @@ class AddAuthor(TemplateView):
             return redirect('home')
         except PermissionDenied:
             auth.logout(request)
-            messages.warning(request, 'Permission Denied. Error Code: X2CG03')
+            messages.warning(request, 'Permission Denied. Error Code: X2BG03')
             return redirect('home')
         except Exception:
             auth.logout(request)
-            messages.error(request, 'Error Code: X2CG10')
+            messages.error(request, 'Error Code: X2BG10')
             return redirect('home')
 
     def post(self, request, **kwargs):
         try:
-            conference, owner = get_conference(request, kwargs['slug'], 'X2CG11')
-            paper = get_paper(conference, kwargs['pk'], 'X2CG04')
+            conference, owner = get_conference(request, kwargs['slug'], 'X2BG11')
+            paper = get_paper(conference, kwargs['pk'], 'X2BG04')
             if paper.user == request.user:
                 form = AuthorRecordForm(request.POST, sub=conference.submission)
                 if form.is_valid():
@@ -361,7 +361,7 @@ class AddAuthor(TemplateView):
                     messages.success(request, 'Successfully add Author')
                     return redirect('conference:view_detail', **kwargs)
                 else:
-                    messages.error(request, 'Invalid Input. Try Again. Error Code: X2CG12')
+                    messages.error(request, 'Invalid Input. Try Again. Error Code: X2BG12')
                 form = AuthorRecordForm(sub=conference.submission)
                 return render(request, self.template, {'slug': kwargs['slug'], 'pk': kwargs['pk'], 'form': form})
             else:
@@ -371,25 +371,25 @@ class AddAuthor(TemplateView):
             return redirect('home')
         except PermissionDenied:
             auth.logout(request)
-            messages.warning(request, 'Permission Denied. Error Code: X2CG13')
+            messages.warning(request, 'Permission Denied. Error Code: X2BG13')
             return redirect('home')
         except Exception:
             auth.logout(request)
-            messages.error(request, 'Error Code: X2CG20')
+            messages.error(request, 'Error Code: X2BG20')
             return redirect('home')
 
 
 # noinspection PyBroadException
-# Error Code X2CH01, X2CH02, X2CH03, X2CH04, X2CH10, X2CH11, X2CH12, X2CH13, X2CH14, X2CH15, X2CH20
+# Error Code X2BH01, X2BH02, X2BH03, X2BH04, X2BH10, X2BH11, X2BH12, X2BH13, X2BH14, X2BH15, X2BH20
 class UpdateAuthor(TemplateView):
     template = 'view2/update_author.html'
 
     def get(self, request, *args, **kwargs):
         try:
-            conference, owner = get_conference(request, kwargs['slug'], 'X2CH01')
-            paper = get_paper(conference, kwargs['paper'], 'X2CH02')
+            conference, owner = get_conference(request, kwargs['slug'], 'X2BH01')
+            paper = get_paper(conference, kwargs['paper'], 'X2BH02')
             if paper.user == request.user or owner:
-                author = get_author(kwargs['pk'], 'X2CH03')
+                author = get_author(kwargs['pk'], 'X2BH03')
                 form = AuthorRecordForm(instance=author, sub=conference.submission)
                 return render(request, self.template,
                               {'owner': True, 'slug': kwargs['slug'], 'author': author, 'form': form})
@@ -400,26 +400,26 @@ class UpdateAuthor(TemplateView):
             return redirect('home')
         except PermissionDenied:
             auth.logout(request)
-            messages.warning(request, 'Permission Denied. Error Code: X2CH04')
+            messages.warning(request, 'Permission Denied. Error Code: X2BH04')
             return redirect('home')
         except Exception:
             auth.logout(request)
-            messages.error(request, 'Error Code: X2CH10')
+            messages.error(request, 'Error Code: X2BH10')
             return redirect('home')
 
     def post(self, request, **kwargs):
         try:
-            conference, owner = get_conference(request, kwargs['slug'], 'X2CH11')
-            paper = get_paper(conference, kwargs['paper'], 'X2CH12')
+            conference, owner = get_conference(request, kwargs['slug'], 'X2BH11')
+            paper = get_paper(conference, kwargs['paper'], 'X2BH12')
             if paper.user == request.user or owner:
-                author = get_author(kwargs['pk'], 'X2CH13')
+                author = get_author(kwargs['pk'], 'X2BH13')
                 form = AuthorRecordForm(request.POST, instance=author, sub=conference.submission)
                 if form.is_valid():
                     form.save()
                     messages.success(request, 'Successfully Updated')
                     return redirect('conference:view_detail', slug=kwargs['slug'], pk=kwargs['paper'])
                 else:
-                    messages.error(request, 'Invalid Input. Try Again. Error Code: X2CH14')
+                    messages.error(request, 'Invalid Input. Try Again. Error Code: X2BH14')
                 form = AuthorRecordForm(sub=conference.submission)
                 return render(request, self.template,
                               {'owner': True, 'slug': kwargs['slug'], 'author': author, 'form': form})
@@ -430,9 +430,9 @@ class UpdateAuthor(TemplateView):
             return redirect('home')
         except PermissionDenied:
             auth.logout(request)
-            messages.warning(request, 'Permission Denied. Error Code: X2CH15')
+            messages.warning(request, 'Permission Denied. Error Code: X2BH15')
             return redirect('home')
         except Exception:
             auth.logout(request)
-            messages.error(request, 'Error Code: X2CH20')
+            messages.error(request, 'Error Code: X2BH20')
             return redirect('home')

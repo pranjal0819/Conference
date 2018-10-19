@@ -30,11 +30,8 @@ urlpatterns = [
     path('<slug>/demand_paper/<int:pk>', login_required(Demand.as_view()), name='demand_paper'),
     path('<slug>/review_paper_list', login_required(ReviewPaperList.as_view()), name='review_list'),
     path('<slug>/review_paper/<int:pk>', login_required(ReviewPaper.as_view()), name='review_paper'),
-    path('<slug>/accept_paper/<int:pk>', login_required(AcceptPaper.as_view()), name='accept_paper'),
-    path('<slug>/reject_paper/<int:pk>', login_required(RejectPaper.as_view()), name='reject_paper'),
     path('<slug>/<int:pk>/show_reviews', login_required(ShowReviews.as_view()), name='show_review'),
     path('<slug>/all_review', login_required(ShowAllReview.as_view()), name='all_review'),
-    path('<slug>/all_pending_review', login_required(ShowAllPendingReview.as_view()), name='all_pending_review'),
     # views4
     path('<slug>/manage_pc_member', login_required(ManagePCMember.as_view()), name='manage_pc_member'),
     path('<slug>/profile/<email>', login_required(ProfilePcMember.as_view()), name='profile_pc_member'),

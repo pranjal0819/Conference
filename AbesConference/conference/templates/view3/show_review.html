@@ -1,65 +1,45 @@
 {% extends 'base.html' %}{% load staticfiles %}{% block head_title %}Review Detail | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
-    <main role="main" class="container bg-white pb-4">
-        {% for m in messages %}{{ m }}<br>{% endfor %}
-        <div class="px-md-3 pt-4 pb-5">
-            <h2>Paper Information</h2>
-            <div class="px-md-3">
-                <h4>Title</h4>
-                <p class="lead px-3">{{ paper.title }}</p>
-                <hr>
-                <h4>Keywords</h4>
-                <pre style="white-space: pre-wrap" class="px-3">{{ paper.keywords }}</pre>
-                <hr>
-                <div class="lead clearfix">
-                    Status: {% if paper.status == 5 %}
-                    <span style="color: green">Accepted</span>
-                {% elif paper.status == 3 %}
-                    <span style="color: #3eb1ff;">Pending</span>
-                {% else %}
-                    <span style="color: red">Not Accepted</span>
-                {% endif %}
-                    <a href="{% url 'conference:view_detail' slug=slug pk=paper.pk %}"
-                       class="btn btn-outline-info col-sm-2 float-right">Detail</a><br>
-                    Submission Date: {{ paper.timestamp }}<br>
-                    Update Date:{{ paper.update }}
-                </div>
-                <hr>
+    <div class="p-4 pb-5 bg-white rounded shadow-sm">
+        <h2>Paper Information</h2>
+        <div class="px-3">
+            <h4>Title</h4>
+            <p class="lead px-3">{{ paper.title }}</p>
+            <hr>
+            <h4>Keywords</h4>
+            <p class="px-3">{{ paper.keywords }}</p>
+            <hr>
+            <div class="lead clearfix">
+                Status: {% if paper.status == 5 %}<span style="color: green">Accepted</span>{% elif paper.status == 3 %}
+                <span style="color: #3eb1ff;">Pending</span>{% else %}
+                <span style="color: red">Not Accepted</span>{% endif %}
+                <a href="{% url 'conference:view_detail' slug=slug pk=paper.pk %}"
+                   class="btn btn-outline-info col-sm-2 float-right">Detail</a><br>
+                Submission Date: {{ paper.timestamp }}<br>
+                Update Date:{{ paper.update }}
             </div>
-            <h3>Reviews</h3>
-            <div class="px-3">
-                {% for review in reviews %}
-                    {{ review.reviewUser.pcEmail }}<br>
-                    {% if review.complete %}
-                        Overall Evaluation: {{ review.overallEvaluation }}<br>
-                        Point: {{ review.point }}<br>
-                        Remarks: {{ review.remark }}<br>
-                    {% else %}
-                        Review Pending
-                    {% endif %}
-                    <hr>
-                {% endfor %}
-            </div>
-            <h3>Add Your Comment</h3>
-            <form method="post" class="px-3">{% csrf_token %}
-                <div class="custom-control custom-radio">
-                    <input type="radio" class="custom-control-input" id="accept" name="point" value="5">
-                    <label class="custom-control-label" for="accept">Accept</label>
-                </div>
-                <div class="custom-control custom-radio">
-                    <input type="radio" class="custom-control-input" id="reject" name="point" value="0" checked>
-                    <label class="custom-control-label" for="reject">Reject</label>
-                </div>
-                <h4>Remark:</h4>
-                <textarea name="review" class="col-md-6 form-control" rows="5" placeholder="Remark" maxlength="100"
-                          required>{{ record.review }}</textarea>
-                <div class="pt-2 clearfix">
-                    <button type="submit" class="btn btn-outline-info btn-sm col-sm-3 mb-2">Save Review</button>
-                    <a href="{% url 'conference:view_all_paper' slug=slug %}"
-                       class="btn btn-outline-info btn-sm col-sm-3 float-right">Back to Paper List</a></div>
-            </form>
+            <hr>
         </div>
-    </main>
+        <h3 style="margin-bottom: 5px">Reviews</h3>
+        <div class="px-3">{% if not reviews %}No Review yet
+            <hr>{% endif %}{% for review in reviews %}{{ review.reviewUser.pcEmail }}<br>
+            {% if review.complete %}Overall Evaluation: {{ review.overallEvaluation }}<br>
+                Point: {{ review.point }}<br>Remarks: {{ review.remark }}<br>{% else %}Review Pending{% endif %}
+            <hr>{% endfor %}
+        </div>
+        <h3>Add Your Comment</h3>
+        <form method="post" class="px-3">{% csrf_token %}
+            <h4>Status:</h4>{% for radio in form.status %}
+                <div class="custom-control custom-radio">{{ radio.tag }}
+                    <label class="custom-control-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+                </div>{% endfor %}
+            <h4 class="pt-2">Remark:</h4><div class="col-md-6">{{ form.remark }}</div>
+            <div class="pt-4 clearfix">
+                <button type="submit" class="btn btn-outline-info btn-sm col-sm-3 mb-2">Save Review</button>
+                <a href="{% url 'conference:view_all_paper' slug=slug %}"
+                   class="btn btn-outline-info btn-sm col-sm-3 float-right">Back to Paper List</a></div>
+        </form>
+    </div>
 {% endblock %}
 {% block script %}{% endblock %}
