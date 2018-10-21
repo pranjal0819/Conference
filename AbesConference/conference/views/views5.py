@@ -3,7 +3,6 @@
 from django.conf import settings
 from django.contrib import messages, auth
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ValidationError
 from django.core.mail import send_mail, BadHeaderError, EmailMessage, send_mass_mail
 from django.core.validators import validate_email
 from django.shortcuts import render, redirect
@@ -13,7 +12,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.generic import TemplateView
 
 from .views0 import *
-from ..forms import EmailForm, AddPcMemberForm, EmailToAuthorsForm
+from ..forms import *
 from ..tokens import account_activation_token
 
 
@@ -21,6 +20,7 @@ from ..tokens import account_activation_token
 # Error Code X5EA01, X5EA02, X5EA10, X5EA11, X5EA12, X5EA13, X5EA20
 class AddPcMember(TemplateView):
     template_name = 'view5/add_pc_member.html'
+    max_email = 10
 
     def get(self, request, *args, **kwargs):
         try:
@@ -61,9 +61,13 @@ class AddPcMember(TemplateView):
                         pass
                     current_site = get_current_site(request)
                     mail_subject = 'Invitation to ' + conference.slug + ' program committee'
+                    i = 0
                     for l in li:
                         info = l.split(',')
                         try:
+                            i = i + 1
+                            if i >= self.max_email:
+                                raise ValidationError("Only 10 email")
                             info[2] = info[2].lower()
                             validate_email(info[2])
                             name = info[0] + ' ' + info[1]
@@ -87,6 +91,7 @@ class AddPcMember(TemplateView):
                             })
                             email = EmailMessage(mail_subject, message, to=[user.pcEmail])
                             if file and content:
+                                i = i + 1
                                 email.attach(file.name, content, 'application/pdf')
                             email.send()
                         except IndexError:
@@ -98,11 +103,7 @@ class AddPcMember(TemplateView):
                 else:
                     messages.error(request, 'Try Again')
                 form = AddPcMemberForm()
-                attr = {'owner': True,
-                        'slug': kwargs['slug'],
-                        'list1': list1,
-                        'list2': list2,
-                        'form': form}
+                attr = {'owner': True, 'slug': kwargs['slug'], 'list1': list1, 'list2': list2, 'form': form}
                 return render(request, self.template_name, attr)
             else:
                 raise PermissionDenied('Permission Denied. Error Code: X5EA13')
@@ -119,47 +120,70 @@ class AddPcMember(TemplateView):
 
 
 # noinspection PyBroadException
-# Error Code X5EB01
-def confirm(request, slug, uidb64, token):
-    try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
-        con = ConferenceRecord.objects.get(slug=slug)
-        user = PcMemberRecord.objects.get(pcCon=con, pcEmail=uid)
-    except Exception:
-        user = None
-        con = None
-    if user is not None and account_activation_token.check_token(user, token):
-        if request.method == 'POST':
-            if request.POST['accept'] == "True":
-                user.accepted = 5
-                messages.success(request, 'Thank You for Accepting')
+# Error Code X5EB01, X5EB02, X5EB03, X5EB10, X5EB11, X5EB12, X5EB13, X5EB20
+class PcConfirmation(TemplateView):
+    template_name = 'view5/confirmation.html'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            email = force_text(urlsafe_base64_decode(kwargs['uidb64']))
+            conference, owner = get_conference(request, kwargs['slug'], 'X5EB01')
+            user = get_pc_member(conference, email, 'X5EB02')
+            if account_activation_token.check_token(user, kwargs['token']):
+                form = PcConfirmationForm()
+                return render(request, self.template_name, {'conference': conference, 'form': form})
             else:
-                user.accepted = 3
-                messages.error(request, 'You rejected')
-            user.save()
-            return redirect("home")
-        else:
-            return render(request, "confirmation.html", {'conference': con})
-    else:
-        messages.error(request, 'Activation link is invalid! Contact to Us. X5EB01')
-        return redirect("home")
+                raise ObjectDoesNotExist
+        except ObjectDoesNotExist:
+            messages.info(request, 'Activation link is invalid! Contact to Us. X5EB03')
+            return redirect('home')
+        except Exception:
+            messages.error(request, 'Error Code: X5EB10')
+            return redirect('home')
+
+    @staticmethod
+    def post(request, **kwargs):
+        try:
+            email = force_text(urlsafe_base64_decode(kwargs['uidb64']))
+            conference, owner = get_conference(request, kwargs['slug'], 'X5EB11')
+            user = get_pc_member(conference, email, 'X5EB12')
+            if account_activation_token.check_token(user, kwargs['token']):
+                form = PcConfirmationForm(request.POST)
+                if form.is_valid():
+                    user.accepted = form.cleaned_data['accept']
+                    user.save(update_fields=['accepted'])
+                    if user.accepted == 5:
+                        messages.success(request, 'Thank You for Accepting Invitation')
+                    else:
+                        messages.warning(request, 'You rejected Pc Member Invitation')
+                else:
+                    messages.error(request, 'Invalid Response')
+                return redirect("home")
+            else:
+                raise ObjectDoesNotExist
+        except ObjectDoesNotExist:
+            messages.info(request, 'Activation link is invalid! Contact to Us. X5EB13')
+            return redirect('home')
+        except Exception:
+            messages.error(request, 'Error Code: X5EB20')
+            return redirect('home')
 
 
 # noinspection PyBroadException
-# Error Code X5EA01, X5EA02, X5EA10
+# Error Code X5EC01, X5EC02, X5EC10, X5EC11, X5EC12, X5EC20
 class EmailToAuthors(TemplateView):
     template_name = 'view5/email_to_author.html'
 
     def get(self, request, *args, **kwargs):
         try:
-            conference, owner = get_conference(request, kwargs['slug'], 'X5EA01')
+            conference, owner = get_conference(request, kwargs['slug'], 'X5EC01')
             if owner:
                 paper = get_all_paper(conference)
                 form = EmailToAuthorsForm()
-                attr = {'slug': kwargs['slug'], 'owner': True, 'form': form, 'paper_list': paper}
+                attr = {'slug': kwargs['slug'], 'owner': owner, 'form': form, 'paper_list': paper}
                 return render(request, self.template_name, attr)
             else:
-                raise PermissionDenied('Permission Denied. Error Code: X5EA02')
+                raise PermissionDenied('Permission Denied. Error Code: X5EC02')
         except ObjectDoesNotExist as msg:
             messages.error(request, msg)
             return redirect('home')
@@ -168,16 +192,15 @@ class EmailToAuthors(TemplateView):
             return redirect('conference:slug_welcome', slug=kwargs['slug'])
         except Exception:
             auth.logout(request)
-            messages.error(request, 'Error Code: X5EA10')
+            messages.error(request, 'Error Code: X5EC10')
             return redirect('home')
 
     def post(self, request, **kwargs):
         try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            if con.owner == request.user or request.user.is_staff:
+            conference, owner = get_conference(request, kwargs['slug'], 'X5EC11')
+            if owner:
                 form = EmailToAuthorsForm(request.POST)
                 if form.is_valid():
-                    review = None
                     email_list = []
                     review_list = None
                     current_site = get_current_site(request)
@@ -185,23 +208,23 @@ class EmailToAuthors(TemplateView):
                     try:
                         review = form.cleaned_data['review']
                     except Exception:
-                        pass
+                        review = None
                     sub = form.cleaned_data['subject']
                     msg = form.cleaned_data['message']
                     num = int(request.POST['total'])
                     for i in range(1, num + 1, 1):
                         try:
                             pk = request.POST['check' + str(i)]
-                            paper = PaperRecord.objects.get(conference=con, pk=pk)
+                            paper = get_paper(conference, pk, '')
                             if review:
-                                review_list = ReviewPaperRecord.objects.filter(paper=paper, complete=True)
+                                review_list = get_all_review_paper_complete(conference, paper, True)
                             message = render_to_string('email_to_author.txt', {
                                 'name': paper.user.username,
                                 'mess': msg,
                                 'review_list': review_list,
                                 'chair_name': request.user.first_name + ' ' + request.user.last_name,
                                 'chair_email': request.user.email,
-                                'conference_name': con.slug,
+                                'conference_name': conference.name,
                                 'domain': current_site.domain,
                                 'slug': kwargs['slug'],
                             })
@@ -217,12 +240,12 @@ class EmailToAuthors(TemplateView):
                         messages.error(request, 'Email Sending Failed')
                 else:
                     messages.error(request, 'Invalid Inputs')
-                paper = PaperRecord.objects.filter(conference=con).order_by('-status')
+                paper = get_all_paper(conference)
                 form = EmailToAuthorsForm()
-                attr = {'slug': kwargs['slug'], 'owner': True, 'form': form, 'paper_list': paper}
+                attr = {'slug': kwargs['slug'], 'owner': owner, 'form': form, 'paper_list': paper}
                 return render(request, self.template_name, attr)
             else:
-                raise PermissionDenied('Permission Denied. Error Code: X5EA12')
+                raise PermissionDenied('Permission Denied. Error Code: X5EC12')
         except ObjectDoesNotExist as msg:
             messages.error(request, msg)
             return redirect('home')
@@ -231,23 +254,25 @@ class EmailToAuthors(TemplateView):
             return redirect('conference:slug_welcome', slug=kwargs['slug'])
         except Exception:
             auth.logout(request)
-            messages.error(request, 'Error Code: X5EA20')
+            messages.error(request, 'Error Code: X5EC20')
             return redirect('home')
 
 
 # noinspection PyBroadException
+# Error Code X5ED01, X5ED02, X5ED03, X5ED10, X5ED11, X5ED12, X5ED13, X5ED20
 class SendEmail(TemplateView):
     template = 'send_email.html'
 
     def get(self, request, *args, **kwargs):
         try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            if con.owner == request.user or request.user.is_staff:
-                pc = PcMemberRecord.objects.get(pcCon=con, pk=kwargs['pk'])
+            conference, owner = get_conference(request, kwargs['slug'], 'X5ED11')
+            if owner:
+                pc = PcMemberRecord.objects.get(pcCon=conference, pk=kwargs['pk'])
                 form = EmailForm()
-                return render(request, self.template, {'owner': True, 'con': con, 'pc_user': pc, 'form': form})
+                return render(request, self.template,
+                              {'slug': kwargs['slug'], 'owner': owner, 'pc_user': pc, 'form': form})
             else:
-                raise PermissionDenied('Permission Denied. Error Code: X5EA02')
+                raise PermissionDenied('Permission Denied. Error Code: X5EAD03')
         except ObjectDoesNotExist as msg:
             messages.error(request, msg)
             return redirect('home')
@@ -256,14 +281,14 @@ class SendEmail(TemplateView):
             return redirect('conference:slug_welcome', slug=kwargs['slug'])
         except Exception:
             auth.logout(request)
-            messages.error(request, 'Error Code: X5EA10')
+            messages.error(request, 'Error Code: X5ED10')
             return redirect('home')
 
     def post(self, request, **kwargs):
         try:
-            con = ConferenceRecord.objects.get(slug=kwargs['slug'])
-            if con.owner == request.user or request.user.is_staff:
-                pc = PcMemberRecord.objects.get(pcCon=con, pk=kwargs['pk'])
+            conference, owner = get_conference(request, kwargs['slug'], 'X5ED11')
+            if owner:
+                pc = PcMemberRecord.objects.get(pcCon=conference, pk=kwargs['pk'])
                 form = EmailForm(request.POST)
                 if form.is_valid():
                     subject = form.cleaned_data['subject']
@@ -273,9 +298,10 @@ class SendEmail(TemplateView):
                 else:
                     messages.error(request, 'Invalid Form')
                 form = EmailForm()
-                return render(request, self.template, {'owner': True, 'con': con, 'pc_user': pc, 'form': form})
+                return render(request, self.template,
+                              {'slug': kwargs['slug'], 'owner': owner, 'pc_user': pc, 'form': form})
             else:
-                raise PermissionDenied('Permission Denied. Error Code: X5EA02')
+                raise PermissionDenied('Permission Denied. Error Code: X5ED13')
         except BadHeaderError:
             return redirect('conference:slug_welcome', slug=kwargs['slug'])
         except ObjectDoesNotExist as msg:
@@ -286,5 +312,5 @@ class SendEmail(TemplateView):
             return redirect('conference:slug_welcome', slug=kwargs['slug'])
         except Exception:
             auth.logout(request)
-            messages.error(request, 'Error Code: X5EA10')
+            messages.error(request, 'Error Code: X5ED20')
             return redirect('home')

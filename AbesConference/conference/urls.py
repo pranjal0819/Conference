@@ -40,7 +40,7 @@ urlpatterns = [
     path('<slug>/<int:paper_pk>/select/<user_email>', login_required(SelectForPaper.as_view()), name='selected_user'),
     # view5
     path('<slug>/add_pc_member', login_required(AddPcMember.as_view()), name='add_pc_member'),
-    path('<slug>/confirm/<uidb64>/<token>/', confirm, name='confirm'),
+    path('<slug>/<uidb64>/<token>/', PcConfirmation.as_view(), name='confirm'),
     path('<slug>/<int:pk>/email', login_required(SendEmail.as_view()), name='send_email'),
     path('<slug>/email_to_author', login_required(EmailToAuthors.as_view()), name='email_to_author'),
 ]

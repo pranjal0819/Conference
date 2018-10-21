@@ -1,9 +1,11 @@
 from django import forms
+from django.core.exceptions import ValidationError
 
 from .models import PaperRecord, AuthorRecord, ConferenceRecord, ReviewPaperRecord
 
 choice1 = [(2, '2 Accept'), (1, '1 Week Accept'), (0, '0 Can not Say'), (-1, '-1 Week Reject'), (-2, '-2 Reject')]
 choice2 = [(5, 'Accept'), (3, 'Pending'), (0, 'Reject')]
+choice3 = [(5, 'Accept'), (3, 'Reject')]
 
 
 class ConferenceForm(forms.ModelForm):
@@ -151,6 +153,34 @@ class ReviewConfirmationForm(forms.ModelForm):
         fields = ['status', 'remark']
 
 
+# noinspection PyBroadException
+class AddPcMemberForm(forms.Form):
+    emails = forms.CharField(widget=forms.Textarea(
+        attrs={'placeholder': 'FirstName,LastName,example@abc.com', 'class': 'form-control col-md-7'}), required=True)
+    message = forms.CharField(widget=forms.Textarea(
+        attrs={'placeholder': 'Message', 'class': 'form-control col-md-7'}), required=False)
+    file = forms.FileField(widget=forms.ClearableFileInput(
+        attrs={'class': 'custom-file-input', 'style': "opacity:1", 'accept': '.pdf'}), required=False)
+
+    def clean_file(self):
+        try:
+            file = self.cleaned_data['file']
+            f = file.name.split('.')
+            if f[-1] == 'pdf':
+                return file
+            else:
+                raise ValidationError('Invalid file')
+        except Exception:
+            return None
+
+
+class PcConfirmationForm(forms.Form):
+    accept = forms.IntegerField(widget=forms.RadioSelect(
+        choices=choice3, attrs={'class': 'custom-control-input'}), required=True)
+    comment = forms.CharField(widget=forms.Textarea(
+        attrs={'class': 'form-control', 'placeholder': 'Comment'}), max_length=500, required=False)
+
+
 class EmailForm(forms.Form):
     subject = forms.CharField(required=True)
     message = forms.CharField(widget=forms.Textarea, required=True)
@@ -161,12 +191,3 @@ class EmailToAuthorsForm(forms.Form):
         attrs={'placeholder': 'Subject', 'class': 'form-control col-md-7'}), required=True)
     message = forms.CharField(widget=forms.Textarea(
         attrs={'placeholder': 'Message', 'class': 'form-control col-md-7'}), required=True)
-
-
-class AddPcMemberForm(forms.Form):
-    emails = forms.CharField(widget=forms.Textarea(
-        attrs={'placeholder': 'FirstName,LastName,example@abc.com', 'class': 'form-control col-md-7'}), required=True)
-    message = forms.CharField(widget=forms.Textarea(
-        attrs={'placeholder': 'Message', 'class': 'form-control col-md-7'}), required=False)
-    file = forms.FileField(widget=forms.ClearableFileInput(
-        attrs={'class': 'custom-file-input', 'accept': '.pdf'}), required=False)

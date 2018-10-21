@@ -67,6 +67,10 @@ def get_all_review_paper(conference, paper):
     return ReviewPaperRecord.objects.filter(reviewCon=conference, paper=paper)
 
 
+def get_all_review_paper_complete(conference, paper, complete):
+    return ReviewPaperRecord.objects.filter(reviewCon=conference, paper=paper, complete=complete)
+
+
 def get_all_review_pc_user(conference, pc_user):
     return ReviewPaperRecord.objects.filter(reviewCon=conference, reviewUser=pc_user)
 

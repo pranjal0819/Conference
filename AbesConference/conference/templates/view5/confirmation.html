@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% load staticfiles %}{% block head_title %}Confirmation | {{ block.super }}{% endblock %}
+{% block css %}{% endblock %}
+{% block content %}
+    <div class="p-4 bg-white rounded shadow-sm">
+        <h2>Invitation for Program Committee Member</h2>
+        <form enctype="multipart/form-data" action="" method="post" class="px-md-2">{% csrf_token %}
+            <h4 class="pt-2">Accept:</h4>{% for radio in form.accept %}
+                <div class="custom-control custom-radio">{{ radio.tag }}
+                    <label class="custom-control-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+                </div>{% endfor %}
+            <h4 class="pt-2">Remark:</h4>{{ form.comment }}
+            <button type="submit" class="btn btn-outline-primary my-4">Save Review</button>
+        </form>
+    </div>
+{% endblock %}

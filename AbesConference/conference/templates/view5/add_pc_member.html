@@ -1,33 +1,28 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}Add PC Member | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
-    <main role="main" class="container bg-white pb-4">
-        {% for m in messages %}{{ m }}<br>{% endfor %}
-        <div class="px-md-3 pt-4">
-            <h2>Add Pc Member</h2>
-            <form enctype="multipart/form-data" action="" method="post" class="px-md-2">{% csrf_token %}
-                <h3>Author Information</h3>
-                <p class="px-2">Using this page you can invite PC members on your program committee.<br>
-                    Write down PC members, one per line, using the following format:</p>
-                <h5>FirstName,LastName,EmailAddress</h5>
-                Pc Members Name & Emails:{{ form.emails }}<br>
-                Add Message (optional){{ form.message }}<br>
-                <div class="custom-file col-md-3">{{ form.file }}
-                    <label class="custom-file-label" for="id_file">Choose pdf file</label>
-                </div>
-                <div class="py-md-5 pt-3 clearfix">
-                    <button type="submit" class="px-md-5 btn btn-outline-primary">Send Email</button>
-                    <button type="reset" class="btn btn-outline-danger">Reset</button>
-                    <a href="{% url 'conference:manage_pc_member' slug=slug %}"
-                       class="btn btn-outline-primary float-right">Pc Member List</a>
-                </div>
-            </form>
-            <div class="p-2">{% if list1 %}Successfully Email send to:<br>
-                {% for li in list1 %}{{ li }}, {% endfor %}{% endif %}
-            </div>
-            <div class="p-2">{% if list2 %}Does not send Email to:<br>
-                {% for li in list2 %}{{ li }}, {% endfor %} It may be already exit or incorrect email{% endif %}
-            </div>
+<div class="p-4 bg-white rounded shadow-sm">
+    <h2 style="margin: 0;">Add Pc Member</h2>
+    <form enctype="multipart/form-data" action="" method="post" class="px-md-2">{% csrf_token %}
+        <h3 style="margin: 0">Author Information</h3>
+        <p class="px-2">Using this page you can invite PC members on your program committee.<br>
+            Write down PC members, one per line (max 10 line), using the following format:</p>
+        <h5>FirstName,LastName,EmailAddress</h5>
+        Pc Members Name & Emails:{{ form.emails }}<br>
+        Add Message (optional){{ form.message }}<br>
+        <div class="pb-4">{{ form.file }} Pdf File Only</div>
+        <div class="clearfix">
+            <button type="submit" class="px-md-5 btn btn-outline-primary">Send Email</button>
+            <button type="reset" class="btn btn-outline-danger">Reset</button>
+            <a href="{% url 'conference:manage_pc_member' slug=slug %}"
+               class="btn btn-outline-primary float-right">Pc Member List</a>
         </div>
-    </main>
+    </form>
+    <div class="p-2">{% if list1 %}Successfully Email send to:<br>
+        {% for li in list1 %}{{ li }}, {% endfor %}{% endif %}
+    </div>
+    <div class="p-2">{% if list2 %}Does not send Email to:<br>
+        {% for li in list2 %}{{ li }}, {% endfor %} It may be already exit or incorrect email{% endif %}
+    </div>
+</div>
 {% endblock %}
