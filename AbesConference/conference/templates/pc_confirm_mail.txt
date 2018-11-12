@@ -12,10 +12,10 @@ Best regards,
 -----------------------------------
 
 Best regards,
-ABES EC messenger.
+Submission System.
 
 
 __________________________________________________
-Please be aware that this is an unmonitored email alias, so please do not reply to this email.
+Please be aware that this is a testing email, so please reply if have any issue.
 To contact ABES EC use the {{ domail }} contact Web page
 {% endautoescape %}

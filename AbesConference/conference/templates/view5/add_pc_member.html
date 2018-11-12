@@ -1,28 +1,51 @@
 {% extends "base.html" %}{% load staticfiles %}{% block head_title %}Add PC Member | {{ block.super }}{% endblock %}
 {% block css %}{% endblock %}
 {% block content %}
-<div class="p-4 bg-white rounded shadow-sm">
-    <h2 style="margin: 0;">Add Pc Member</h2>
-    <form enctype="multipart/form-data" action="" method="post" class="px-md-2">{% csrf_token %}
-        <h3 style="margin: 0">Author Information</h3>
-        <p class="px-2">Using this page you can invite PC members on your program committee.<br>
-            Write down PC members, one per line (max 10 line), using the following format:</p>
-        <h5>FirstName,LastName,EmailAddress</h5>
-        Pc Members Name & Emails:{{ form.emails }}<br>
-        Add Message (optional){{ form.message }}<br>
-        <div class="pb-4">{{ form.file }} Pdf File Only</div>
-        <div class="clearfix">
-            <button type="submit" class="px-md-5 btn btn-outline-primary">Send Email</button>
-            <button type="reset" class="btn btn-outline-danger">Reset</button>
-            <a href="{% url 'conference:manage_pc_member' slug=slug %}"
-               class="btn btn-outline-primary float-right">Pc Member List</a>
+    <div class="p-4 bg-white rounded shadow-sm">
+        <h2 style="margin: 0;">Add Pc Member</h2>
+        <div class="p-2">{% if list1 %}Successfully Email send to:<br>
+            {% for li in list1 %}{{ li }}, {% endfor %}{% endif %}
         </div>
-    </form>
-    <div class="p-2">{% if list1 %}Successfully Email send to:<br>
-        {% for li in list1 %}{{ li }}, {% endfor %}{% endif %}
+        <div class="p-2">{% if list2 %}Does not send Email to:<br>
+            {% for li in list2 %}{{ li }}, {% endfor %} It may be already exit or incorrect email{% endif %}
+        </div>
+        <form enctype="multipart/form-data" action="" method="post" class="p-md-2">{% csrf_token %}
+            <h3 style="margin: 0">Author Information</h3>
+            <p class="px-2">Using this page you can invite PC members on your program committee.<br>
+                Write down PC members, one per line using the following format: <strong>Without space</strong></p>
+            <h5>FirstName,LastName,EmailAddress <strong>(max 10 line at a time)</strong></h5>
+            Pc Members Name & Emails:{{ form.emails }}<br>
+            <a class="btn btn-sm btn-outline-info mb-3" data-toggle="modal" data-target="#myModal1">Show Mail
+                Template
+            </a>
+            <br>Add Message (optional){{ form.message }}<br>
+            <div class="pb-4">Attach pdf Document to send PC Member: {{ form.file }} Pdf File Only</div>
+            <div class="clearfix">
+                <button type="submit" class="px-md-5 btn btn-outline-primary">Send Email</button>
+                <button type="reset" class="btn btn-outline-danger">Reset</button>
+                <a href="{% url 'conference:manage_pc_member' slug=slug %}"
+                   class="btn btn-outline-primary float-right">Pc Member List</a>
+            </div>
+        </form>
+        <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title px-1" id="myModalLabel1">Mail Template</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body px-4">
+                        <p>This letter of invitation to the program committee of "Conference name" was sent to you by
+                            Submission System user "Chair Person Name" "Chair Person Email".<br>
+                            To accept or decline this invitation and/or answer the letter please access "link"<br>
+                            -----------------------------------<br>
+                            Dear "Sender Name",<br><strong>"message"</strong><br>...<br><br>Best regards,<br>
+                            "Chair Person Name" "Chair Person Email"<br><br>-----------------------------------</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="p-2">{% if list2 %}Does not send Email to:<br>
-        {% for li in list2 %}{{ li }}, {% endfor %} It may be already exit or incorrect email{% endif %}
-    </div>
-</div>
 {% endblock %}

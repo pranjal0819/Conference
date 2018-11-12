@@ -2,6 +2,7 @@
 
 from django.conf import settings
 from django.contrib import messages, auth
+from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail, BadHeaderError, EmailMessage, send_mass_mail
 from django.core.validators import validate_email
@@ -67,7 +68,7 @@ class AddPcMember(TemplateView):
                         try:
                             i = i + 1
                             if i >= self.max_email:
-                                raise ValidationError("Only 10 email")
+                                raise ValidationError("Only 10 emails at a time")
                             info[2] = info[2].lower()
                             validate_email(info[2])
                             name = info[0] + ' ' + info[1]
@@ -127,6 +128,13 @@ class PcConfirmation(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
             email = force_text(urlsafe_base64_decode(kwargs['uidb64']))
+            try:
+                u = User.objects.get(email=email)
+            except ObjectDoesNotExist:
+                u = None
+            if u is None or not u.is_active:
+                messages.info(request, 'Must have an Account')
+                return redirect('account:signup')
             conference, owner = get_conference(request, kwargs['slug'], 'X5EB01')
             user = get_pc_member(conference, email, 'X5EB02')
             if account_activation_token.check_token(user, kwargs['token']):
