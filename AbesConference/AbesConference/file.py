@@ -1,7 +1,7 @@
 TLS = True
 HOST = 'smtp.gmail.com'
 USER = 'xxxxxxx'
-PASSWORD = '*******'
+PASSWORD = '********'
 PORT = 587
 
 PRIVATE_KEY = 'xxxxxxx'
