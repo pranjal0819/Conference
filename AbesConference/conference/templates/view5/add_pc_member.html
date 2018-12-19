@@ -7,7 +7,7 @@
             {% for li in list1 %}{{ li }}, {% endfor %}{% endif %}
         </div>
         <div class="p-2">{% if list2 %}Does not send Email to:<br>
-            {% for li in list2 %}{{ li }}, {% endfor %} It may be already exit or incorrect email{% endif %}
+            {% for li in list2 %}{{ li }}, {% endfor %} It may be already in list or incorrect email{% endif %}
         </div>
         <form enctype="multipart/form-data" action="" method="post" class="p-md-2">{% csrf_token %}
             <h3 style="margin: 0">Author Information</h3>
