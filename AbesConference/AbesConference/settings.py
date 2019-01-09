@@ -1,7 +1,7 @@
 import os
 
-# from .file import *
-from media.file import *
+from .file import *
+# from media.file import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -108,7 +108,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = os.path.join(BASE_DIR, "static"),
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+    '/var/www/static/',
+]
 # STATIC_ROOT = os.path.join(BASE_DIR,"static/")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
@@ -118,7 +121,7 @@ LOGIN_URL = "/account/login"
 # SESSION_COOKIE_AGE = 600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-# PASSWORD_RESET_TIMEOUT_DAYS = 1
+PASSWORD_RESET_TIMEOUT_DAYS = 1
 
 EMAIL_USE_TLS = TLS
 EMAIL_HOST = HOST
