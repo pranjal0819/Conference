@@ -27,7 +27,7 @@
                         <td>{{ list.paper.title }}</td>
                         <td style="text-align: center; vertical-align: middle;">
                             <a href="{% url 'conference:view_detail' slug=slug pk=list.paper.pk %}">
-                                <img src="{% static 'images/icons8-document.png' %}"></a></td>
+                                <img src="{% static 'images/icons8-document.png' %}" alt="Detail"></a></td>
                         <td style="text-align: center; vertical-align: middle;">
                             <a href="{% url 'conference:profile_pc_member' slug=slug email=list.reviewUser.pcEmail %}">{{ list.reviewUser.name }}</a>
                         </td>

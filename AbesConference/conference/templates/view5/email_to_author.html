@@ -42,19 +42,15 @@
                                 <td>{{ list.keywords }}</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <a href="{% url 'conference:view_detail' slug=slug pk=list.pk %}">
-                                        <i class="material-icons table-icon">&#xe88f;</i></a></td>
-                                <td style="text-align: center; vertical-align: middle;">
-                                    {% if list.status == 5 %}
-                                        <i class="material-icons table-icon" style="color: #00bb00">&#xe876;</i>
-                                    {% elif list.status == 3 %}
-                                        <i class="material-icons table-icon" style="color: #3eb1ff">&#xe15b;</i>
-                                    {% else %}
-                                        <i class="material-icons table-icon" style="color: red">&#xe5cd;</i>
-                                    {% endif %}
-                                </td>
+                                        <img src="{% static 'images/icons8-document.png' %}" alt="Detail"></a></td>
+                                <td style="text-align: center; vertical-align: middle;">{% if list.status == 5 %}
+                                    <img src="{% static 'images/icons8-check.png' %}">{% elif list.status == 3 %}
+                                    <img src="{% static 'images/icons8-horizontal-line.png' %}">{% else %}
+                                    <img src="{% static 'images/icons8-delete.png' %}">{% endif %}</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <input type="checkbox" name="check{{ forloop.counter }}" value="{{ list.pk }}"
-                                           title="Select"></td>
+                                           title="Select">
+                                </td>
                             </tr>
                         {% endfor %}</tbody>
                     </table>
